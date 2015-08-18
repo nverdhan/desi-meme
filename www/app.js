@@ -53,14 +53,14 @@ MemeApp.controller('CreateMemeController', ['$scope', '$upload', 'TagService', f
 		var tag = $scope.tagInput.toLowerCase();
 		TagService.get(tag)
 			.success(function(data) {
-				$scope.tagResults = data;
+				$scope.tagResults = data.tag;
 				$scope.showTags = true;
 			});
 	}
 	$scope.showTags = false;
 	$scope.selectTag = function(a) {
-		if ($scope.tagSelected.indexOf(a.tag) == -1) {
-			$scope.tagSelected.push(a.tag);
+		if ($scope.tagSelected.indexOf(a.name) == -1) {
+			$scope.tagSelected.push(a.name);
 		}
 		$scope.tagInput = '';
 		$scope.showTags = false;

@@ -65,12 +65,15 @@
 						<div class="alert alert-danger ng-binding ng-hide" ng-show="invalidCredentials" aria-hidden="true"></div>
 						<div class="slide-tags">
 							<!-- ngRepeat: tag in tagSelected -->
+							<span class="color-6" ng-repeat="tag in tagSelected">
+								<span class="tag-name">{{ tag }}&nbsp;<i class="fa fa-times tag-remove" ng-click="removeTag(tag)"></i></span>
+							</span>
 						</div>
 						<input id="slide-tags" class="slide-input ng-pristine ng-untouched ng-valid" autocomplete="off" name="enter tags" placeholder="tags" ng-model="tagInput" ng-keyup="getTags()" value="" tabindex="0" aria-invalid="false">
 						<div class="alert alert-danger relative ng-hide" ng-show="invalidTag" aria-hidden="true">tag can be only alphanumeric</div>
 						<ul class="ul-tags" ng-if="showTags">
 							<li ng-click = "addTag(tagInput)">add "{{ tagInput }}"</li>
-							<li ng-repeat = "tag in tagResults" ng-click="selectTag(tag)">{{ tag.tag }}</li>
+							<li ng-repeat = "tag in tagResults" ng-click="selectTag(tag)">{{ tag.name }}</li>
 						</ul>
 						<!-- ngIf: showTags -->
 						<input type="hidden" name="tags" value="">
