@@ -140,10 +140,12 @@ MemeApp.controller('CreateMemeController', ['$scope', '$upload', 'TagService', f
 	$scope.saveFormNext = function() {
 		$scope.showOverlay();
 		$scope.showSaveFormDialog = true;
+		$scope.showBrowseImgDialog = false;
 	}
 	$scope.showImgSelector = function() {
 		$scope.showOverlay();
 		$scope.showBrowseImgDialog = true;
+		$scope.showSaveFormDialog = false;
 	}
 	$scope.hideImgSelector = function() {
 		$scope.hideOverlay();

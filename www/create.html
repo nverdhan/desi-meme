@@ -5,7 +5,8 @@
 		Create Memes
 	</title>
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css">
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css"> -->
+	<link rel="stylesheet" type="text/css" href="public/css/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="public/css/style.css">
 	<link rel="stylesheet" type="text/css" href="public/js/social/angular-social.css">
@@ -19,10 +20,10 @@
 			<div ng-show="showBrowseImgDialog" class="browse-images">
 				<i class="fa fa-close fa-2x close-button" ng-click="hideImgSelector()"></i>
 				<div class="upload-img">
-					<h1>Upload your own image</h2>
+					<h1>Upload your own image</h1>
 				</div>
 				<div class="select-img">
-					<div class=" container lightbox open" id="searchDialog">
+					<div class=" container lightbox open" id="searchDialog" ng-controller="searchCtrl">
 						<div class="search-header">
 							<!--h1>search</h1-->
 							<form class="form-horizontal">
@@ -110,7 +111,8 @@
 		</div>
 	</div>
 </body>
-<script type="text/javascript" src="/public/js/angular.min.js"></script>
+<script type="text/javascript" src="public/js/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="public/js/angular.min.js"></script>
 <script type="text/javascript" src="public/js/angular-file-upload-shim.min.js"></script>
 <script type="text/javascript" src="public/js/angular-file-upload-shim.min.js"></script>
 <script type="text/javascript" src="public/js/angular-file-upload.min.js"></script>
@@ -148,6 +150,8 @@ MemeApp.directive('innerhtml', function() {
 </script>
 
 <script type="text/javascript" src="public/app/services/TagService.js"></script>
+<script type="text/javascript" src="public/app/services/SearchService.js"></script>
+<script type="text/javascript" src="public/app/controllers/SearchController.js"></script>
 <script type="text/javascript" src="app.js"></script>
 
 </html>

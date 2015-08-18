@@ -1,4 +1,4 @@
-ViaSlide.factory('SearchService', ['$http', function ($http){
+MemeApp.factory('SearchService', ['$http', function ($http){
 	return{
 		get: function(page){
 				return $http.get(ApiPrefix+'/api/search?page='+page);
@@ -13,7 +13,7 @@ ViaSlide.factory('SearchService', ['$http', function ($http){
 			});
 		}*/
 		search: function(inputStr, page){
-			return $http.get(ApiPrefix+'/api/search/'+inputStr+'?page='+page);
+			return $http.get(ApiPrefix+'/api/search/?searchString='+inputStr+',&page='+page);
 		}
 	}
 }])

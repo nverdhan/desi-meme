@@ -1,4 +1,4 @@
-ViaSlide.controller('searchCtrl', ['$http', '$scope','$rootScope', 'SearchService', function ($http, $scope, $rootScope, SearchService) {
+MemeApp.controller('searchCtrl', ['$http', '$scope','$rootScope', 'SearchService', function ($http, $scope, $rootScope, SearchService) {
 	$scope.results;
     $scope.page = 1;
     $scope.showNoResults = false;

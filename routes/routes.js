@@ -1,21 +1,11 @@
 var Tag = require('../models/tag');
-// var Meme = require('../models/meme');
 var Meme = require('../models/meme');
 var User = require('../models/user');
+var savedImg = require('../models/savedImg');
 var passport = require('passport');
 
-// Create tags
-var createTag;
-var tagNames = ['hot', 'sexy', 'dude', 'nv', 'mongo', 'walter', 'white', 'x', 'xx', 'xxx', 'django', 'xango', 'alpha', 'charlie', 'bravo', 'delta', 'omega', 'phi', 'chi', 'omicron', 'beta', 'gamma', 'superman', 'dark knight', 'anil kapoor', 'bond', 'guchhu', 'nero']
-for (var i = 0; i < tagNames.length; i++) {
-	createTag = new Tag({
-		_id: i,
-		name: tagNames[i]
-	})
-	createTag.save(function(err) {
-		if (err) return handleError(err);
-	})
-};
+require('./addToDB'); // adds default values to database
+
 module.exports = function(app, passport) {
 		/**
 		 * Route to get Logged in User Object
@@ -60,9 +50,13 @@ module.exports = function(app, passport) {
 					'tag': tags
 				});
 			});
-			// res.json({
-			// 	'tag': tagName
-			// });
+		});
+		app.get('/api/search', function(req, res) {
+			var searchString = req.query.searchString;
+			var page = req.query.page;
+			savedImg.getImgById(parseInt(searchString), function(err, imgpath) {
+				console.log(imgpath);
+			});
 		});
 		/**
 		 * Home 

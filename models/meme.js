@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var MemeSchema = new Schema({
 	_id: Number,
-	name: String,
+	title: String,
+	path: String,
 	_tags: [{
 		type: Number,
 		ref: 'Tag'
