@@ -1,0 +1,25 @@
+<div class="container-fluid">
+	<div class="row" ng-controller="ForgotPwdCtrl">
+		<form name = "signInForm" method="post" class="form-horizontal form-signin" ng-submit="forgotPwd(credentials)" novalidate>
+			<h1 class="heading-1">forgot password ?</h1>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="inputSigninEmail" type="email" class="form-control solid-bdr overlay-input" ng-model="credentials.email" name="email" placeholder="email" required>
+					<span class="fa fa-envelope form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="signInForm.email.$invalid && !signInForm.email.$pristine">Please enter a valid Email address</div>
+				<div class="alert alert-danger" ng-show="showError">{{ errorMessage }}</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12">
+            	<div class="vs-input text-right">
+              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+            	</div>
+          	</div>
+          	<div class="form-group col-lg-12 col-xs-12 col-md-12">
+				<span class="pointer pull-left" ng-click="$parent.switchLogin()"><strong>log in</strong></span>
+				<span class="pointer pull-right" ng-click="$parent.switchRegister()"><strong>register?</strong></span>
+          	</div>
+          	<div class="clearfix"></div>
+		</form>
+	</div>
+</div>

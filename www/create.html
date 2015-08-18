@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html ng-app="MemeApp">
+<head>
+	<title>
+		Create Memes
+	</title>
+	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="public/css/style.css">
+	<link rel="stylesheet" type="text/css" href="public/js/social/angular-social.css">
+	<link rel="stylesheet" type="text/css" href="public/js/social/angular-social.css">
+	<link rel="stylesheet" type="text/css" href="public/css/slide.css">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body ng-controller="CreateMemeController">
+	<div class="outer-box">
+		<div class="overlay" ng-show="OverlayVisible">
+			<div ng-show="showBrowseImgDialog" class="browse-images">
+				<i class="fa fa-close fa-2x close-button" ng-click="hideImgSelector()"></i>
+				<div class="upload-img">
+					<h1>Upload your own image</h2>
+				</div>
+				<div class="select-img">
+					<div class=" container lightbox open" id="searchDialog">
+						<div class="search-header">
+							<!--h1>search</h1-->
+							<form class="form-horizontal">
+								<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+									<div class="controls">
+										<input ng-model="searchStr" ng-change="updateResults(searchStr)" class="search-input" type="text" data-tour-id="searchinput" autocomplete="off" id="q" name="q" placeholder="start typing..." autofocus>
+										<i id="search-feedback" class="fa fa-search form-control-feedback"></i>
+									</div>
+								</div>
+							</form>	
+						</div>
+						<p class="correctionHint hide results-message">
+							<span class="">DID YOU MEAN</span>
+							<span class="correctionString"></span>
+						</p>
+						<p class="results-message" ng-if="showNoResults">sorry, we have no items in our stock for your query</p>
+						<div class="horizontalContent" id="searchResults">
+							<div class="itemsContainer">
+								<div style="display:block;width: 160px; height:160px;float:left" ng-repeat="post in results" class="shadow">
+									 <div class="media">
+						                    <a class="pull-left results-body-pic">
+						                        <img src=" {{ post.img_url }}" width="100%" height="100%"/>
+						                    </a>
+						                </div>
+								</div>
+								<div style="clear:both;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-show="showSaveFormDialog" class="save-form">
+				<i class="fa fa-close fa-2x close-button" ng-click="hideSaveMemeSelector()"></i>
+				<div class="col-md-12 create-slide-form form-signin">
+					<form name="createMemeForm" role="form" method="post" ng-submit="submitSlideForm($event)" novalidate="" class="ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse">
+						<input class="slide-input slide-heading ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse" id="slide-heading" type="text" autocomplete="off" ng-model="title" name="title" placeholder="enter a title" required="" ng-minlength="6" ng-maxlength="48" tabindex="0" aria-required="true" aria-invalid="true">
+						<div class="alert alert-danger ng-hide" ng-show="showTitleRequired" aria-hidden="true">please enter title</div>
+						<div class="alert alert-danger ng-hide" ng-show="createMemeForm.title.$error.minlength" aria-hidden="true">too short title</div>
+						<div class="alert alert-danger ng-hide" ng-show="createMemeForm.title.$error.maxlength" aria-hidden="true">too long title</div>
+						<div class="alert alert-danger ng-binding ng-hide" ng-show="invalidCredentials" aria-hidden="true"></div>
+						<div class="slide-tags">
+							<!-- ngRepeat: tag in tagSelected -->
+						</div>
+						<input id="slide-tags" class="slide-input ng-pristine ng-untouched ng-valid" autocomplete="off" name="enter tags" placeholder="tags" ng-model="tagInput" ng-keyup="getTags()" value="" tabindex="0" aria-invalid="false">
+						<div class="alert alert-danger relative ng-hide" ng-show="invalidTag" aria-hidden="true">tag can be only alphanumeric</div>
+						<ul class="ul-tags" ng-if="showTags">
+							<li ng-click = "addTag(tagInput)">add "{{ tagInput }}"</li>
+							<li ng-repeat = "tag in tagResults" ng-click="selectTag(tag)">{{ tag.tag }}</li>
+						</ul>
+						<!-- ngIf: showTags -->
+						<input type="hidden" name="tags" value="">
+						<input class="btn btn-default btn-ok pull-right" type="submit" value="next">
+					</form></div>
+				</div>
+			</div>
+			<div class="menu-items inner-box">
+				<div class="selectors">
+					<div class="select-theme" ng-click="selectMemeTheme(0)" ng-class="{'selected-theme': selectedTheme == 0}">
+						<div class="title first-title"></div>
+					</div>
+					<div class="select-theme" ng-click="selectMemeTheme(1)" ng-class="{'selected-theme': selectedTheme == 1}">
+						<div class="title second-title"></div>
+					</div>
+					<div class="select-theme selected" ng-click="selectMemeTheme(2)" ng-class="{'selected-theme': selectedTheme == 2}">
+						<div class="title first-title"></div>
+						<div class="title second-title"></div>
+					</div>
+				</div>
+			</div>
+			<div class="meme-img-holder inner-box">
+				<div class="text-box text-box-1" ng-show="showText1" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text1"></div>
+				<div class="img-bkg" ng-click="showImgSelector()">
+					<i class="fa fa-picture-o fa-5x"></i>
+					<h2>CLick to upload Image</h2>
+				</div>
+				<div class="text-box text-box-2" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2"></div>
+			</div>
+			<div class="meme-form-options inner-box text-center">
+				<span class="btn btn-default btn-ok" ng-click="saveFormNext()">Save</span>
+				
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/public/js/angular.min.js"></script>
+<script type="text/javascript" src="public/js/angular-file-upload-shim.min.js"></script>
+<script type="text/javascript" src="public/js/angular-file-upload-shim.min.js"></script>
+<script type="text/javascript" src="public/js/angular-file-upload.min.js"></script>
+<script type="text/javascript" src="public/js/ngProgress.min.js"></script>
+<script type="text/javascript" src="public/js/angular-ui-router.min.js"></script>
+
+<script type="text/javascript">
+	var ApiPrefix = '';
+
+var MemeApp = angular.module('MemeApp', ['angularFileUpload', 'ui.router', 'ngProgress']);
+MemeApp.directive('innerhtml', function() {
+	return {
+		restrict: 'A',
+		require: '?ngModel',
+		link: function(scope, element, attrs, ngModel) {
+			if (!ngModel) return;
+			ngModel.$render = function() {
+				element.html(ngModel.$viewValue || '');
+			};
+			element.on('blur keyup change', function() {
+				scope.$apply(read);
+			});
+			read();
+
+			function read() {
+				var html = element.html();
+				if (attrs.stripBr && html == '<br>') {
+					html = '';
+				}
+				ngModel.$setViewValue(html);
+			}
+		}
+	};
+});
+</script>
+
+<script type="text/javascript" src="public/app/services/TagService.js"></script>
+<script type="text/javascript" src="app.js"></script>
+
+</html>

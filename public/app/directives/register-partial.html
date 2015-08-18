@@ -1,0 +1,35 @@
+<div class="container-fluid" ng-controller="registerCtrl">
+	<div class="row">
+		<form name = "signUpForm" method="post" class="form-horizontal form-signin" ng-submit="register(credentials)" action="" novalidate>
+			<h1 class="heading-1">sign up</h1>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="inputSigninName" type="text" class="form-control solid-bdr overlay-input" ng-model="credentials.name" name="name" placeholder="name" required ng-minlength="6" ng-maxlength="12">
+					<span class="fa fa-user form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="signUpForm.name.$error.minlength">name should be at least 6 characters long</div>
+				<div class="alert alert-danger" ng-show="signUpForm.name.$error.maxlength">name should not more than 12 characters long</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="inputSigninEmail" type="email" class="form-control solid-bdr overlay-input" ng-model="credentials.email" name="email" placeholder="email" required>
+					<span class="fa fa-envelope form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="signUpForm.email.$invalid && !signUpForm.email.$pristine">please enter a valid Email address</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="inputSigninPwd" type="password" class="form-control" ng-model="credentials.password" name="password" placeholder="password" ng-minlength="6" ng-maxlength="12">
+					<span class="fa fa-lock form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="signUpForm.password.$error.minlength">password should be at least 6 characters long</div>
+				<div class="alert alert-danger" ng-show="signUpForm.password.$error.maxlength">password should not more than 12 characters long</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12">
+				<div class="vs-input text-right">
+              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+            	</div>
+          	</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,273 @@
+<section id="progress" class="section-loading hidden">
+	<div class="section-progress">
+	    <div class="progress progress-striped">
+	      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+	        <span class="sr-only">0% complete</span>
+	      </div>
+	    </div>
+	    <h3 class="text-center">uploading...</h3>
+	</div>
+</section>
+<div ng-click = 'hideOpenOptions()'>
+<div class="side-menu-nav">
+			<div class="side-menu-bar-bg"></div>
+			<div class="side-menu-bar-heading">
+				<a href="#"><h1 class="nav-slide-heading">flowslides</h1></a>
+			</div>
+			<ul ng-if="slideToolbar" class="active-toolbar-menu">
+				<li ng-click="activateToolbar('bg')">
+					<div class="toolbar-sub-menu">background</div>
+				</li>
+				<li ng-click="activateToolbar()">style</li>
+				<li ng-click="activateToolbar()">background</li>
+				<li ng-click="addText()">+ add text</li> 
+				<li ng-click="enableRealign()">realign</li>
+				<li ng-if="realignEnabled" ng-click="disableRealign()" class="btn btn-default btn-ok">done</li>
+			</ul>
+			<!--ul ng-if="divToolbar">
+				<li ng-click="activateToolbar()"><div class="toolbar-sub-menu">animation</div>
+					<div class="active-toolbar-sub-menu">asdf</div>
+				</li>
+				<li ng-click="activateToolbar()">style</li>
+				<li ng-click="activateToolbar()">background</li>
+				<li ng-click="activateToolbar()">font</li>
+				<li ng-click="addText()">color</li> 
+				<li ng-click="addText()">opacity</li> 
+			</ul-->
+			<div class="nav-footer">
+		        <button class="nav-btn btn btn-primary" onclick="sendFormContent('publish');" title="Publish">
+		          <i class="fa fa-upload fa-2x faX"></i>
+		           <!-- <h6>Publish</h6> -->
+		        </button>
+		        <button class="nav-btn btn btn-primary" onclick="sendFormContent('save');" title="Save">
+		          <i class="fa fa-save fa-2x faX"></i>
+		           <!-- <h6>Save</h6> -->
+		        </button>
+				<button class="nav-btn btn btn-primary" onclick="sendFormContent('preview');" title="Priview">
+		            <i class="fa fa-eye fa-2x faX"></i>
+		           <!-- <h6>Preview</h6> -->
+		        </button>
+			</div>
+		</div>
+		
+		<div class="slide-show-section" class="container">
+			<div class="slide-outer">
+				<div class="arrows slide-arrows arrow-left"><span ng-click = "prevSlide()">prev</span></div>
+					<div class="slide-show">
+						<div class="slide-show-heading text-center">
+							<a href="#">
+								<h2>Slide {{ activeId + 1 }}</h2>
+							</a>
+						</div>
+						<wysiwyg textarea-id="editor" textarea-class="textArea" ng-keydown="formatP($event)" textarea-height="100%" textarea-name="textareaQuestion" textarea-required ng-model="question.question" enable-bootstrap-title="true" style="height:100%"></wysiwyg>
+					</div>
+				<div class="arrows slide-arrows arrow-left"><span ng-click = "nextSlide()">next</span></div>
+			</div>
+			<div class="slide-show-controls text-center">
+				<span class="btn btn-default btn-ok" ng-click="addSlide()">add</span>
+				<span class="btn btn-default btn-cancel" ng-click="removeSlide()">remove</span>
+			</div>
+		</div>
+		<div class="side-menu-sub-nav" ng-show="showToolbar">
+			<div class="section-toolbar">
+				<div class="toolbar-menu-content" ng-show = "toolbarMenuHeading == 'content'"></div>
+					<div class="toolbar-menu-style" ng-show = "toolbarMenuHeading == 'bg'">
+						<div>
+							<h4>Background Color</h4>
+							<ul class="color-settings-block">
+								<li ng-repeat = "color in colors" ng-class="{'active-bg-color-block': color.colorLight == activeSlide.style.backgroundColor}" ng-click="selectBkgColor(color)">
+									<span class="color-block" ng-style ='getSettingsBGColor(color)'></span>
+								</li>
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+						<hr>
+						<h4>Background Image
+						<span class="pull-right pointer" ng-if="activeSlide.style.backgroundImage" ng-click="removeBgImage()">
+							<i class="fa fa-times" style="color:red;"></i>
+						</span>
+						</h4>
+						<div>
+							<div ng-if="!activeSlide.style.backgroundImage || activeSlide.style.backgroundImage==''" ng-click="selectBkgImage()" class="text-center">
+								<div class="settings-image-logo" onclick="document.getElementById('bgImageUpload').click()">
+									<i class="fa fa-picture-o fa-5x"></i>
+								</div>
+								<h5>Click to add image</h5>
+							</div>
+
+							<input id="bgImageUpload" name="file" type="file" ng-file-select="onFileSelect($files, item)" style="display:none;">
+							<div ng-if="activeSlide.style.backgroundImage">
+								<div class="bg-thumb-options block-center text-center customMenu" data-toggle="off" ng-style="activeSlide.style">  
+			                      	<span id="fontFamily" class="bg-option-btn inlineTools btn" ng-click="toggleBgOptions($event)">{{ activeSlide.style.backgroundSize }}&nbsp;
+			                      		<i class="fa fa-angle-down" style="position:relative;"></i>
+		                      		</span>
+			                      <ul ng-show="showBgOptions" class="toggle-list-items">
+			                        <li class="list-item" ng-click="setBgImageSize('Stretched')" >Stretched</li>
+			                        <li class="list-item" ng-click="setBgImageSize('Cover')">Cover</li>
+			                      </ul>
+			                </div> 
+							</div>
+						</div>
+						<hr>
+						<div>
+							<h4>Advanced Color Options</h4>
+				            <div class="background-advanced-color-settings">
+				              <div id="changeBGC" data-target="changeBackGClr">
+				                <div class="red"></div>
+				                <div class="green"></div>
+				                <div class="blue"></div>
+				                <div class="swatch ui-widget-content ui-corner-all"></div>  
+				              </div>
+				            </div>
+						</div>
+						
+					</div>
+				<div class="toolbar-menu-background" ng-show = "toolbarMenuHeading == 'background'"></div>
+				<div class="toolbar-menu-transition" ng-show = "toolbarMenuHeading == 'transition'"></div>
+			</div>
+		</div>
+	</div>
+<style type="text/css">
+	.navbar-default{
+		display: none;
+	}
+	#wrap{
+		padding-top: 0;
+	}
+	.color-settings-block li{
+		list-style: none;
+		margin : 4px;
+		float: left;
+		display: block;
+		cursor: pointer;
+		border: 2px solid transparent;
+	}
+	.color-block{
+		display: block;
+		width: 20px;
+		height: 20px;	
+	}
+	.active-bg-color-block{
+		border: 2px solid #eee !important;
+	}
+	.toolbar-menu-style h4{
+		margin: 12px 10px 10px 6px;
+	}
+	.section-toolbar hr{
+		border-top: 1px solid #3e3e3e;
+		width: 90%;	
+	}
+	.settings-image-logo{
+		cursor: pointer;
+		width: 50%;
+		position: relative;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+	}
+	.red, .green, .blue {
+    /**/
+    float: left;
+    clear: left;
+    width: 60%;
+    margin: 8px;
+  }
+  .swatch {
+    width: 50px;
+    height: 50px;
+    /*margin-top: 18px;
+    margin-left: 350px;*/
+    margin-left: 70%;
+    background-image: none;
+  }
+  .red .ui-slider-range { background: #ef2929; }
+  .red .ui-slider-handle { border-color: #ef2929; }
+  .green .ui-slider-range { background: #8ae234; }
+  .green .ui-slider-handle { border-color: #8ae234; }
+  .blue .ui-slider-range { background: #729fcf; }
+  .blue .ui-slider-handle { border-color: #729fcf; }
+
+  #changeBGC{
+    width: 200px;
+  }
+  #addPicture{
+    height: 200px;
+    width: 100%;
+   /* position: absolute;*/
+	}
+	#changeBGC .red .ui-state-default  {
+	  background: red;
+	}
+	#changeBGC .green .ui-state-default  {
+	  background: green;
+	}
+	#changeBGC .blue .ui-state-default  {
+	  background: blue;
+	}
+	.ui-widget-content .ui-state-default  {
+	  top: -0.5em;
+	  border: none;
+	  width: 1em;
+	  height: 1em;
+	  border-radius: 50%;
+	}
+	.ui-slider-horizontal {
+  		height: 2px;
+	}
+	.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+  		border-radius: 0px;
+	}
+	.ui-slider-horizontal .ui-slider-range {
+		top: -1px;
+		height: 2px;
+		left: -1px;
+	}
+	.bg-thumb-options{
+		width: 180px;
+		height: 120px;
+	}
+	.block-center{
+		position: relative;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+	}
+	.bg-option-btn{
+		padding: 4px 8px;
+		font-size: 12px;
+		color: #fff;
+		line-height: 1.2;
+		border-radius: 3px;
+		background-color: #94c23d;
+		border-color: #81b226
+	}
+	.toggle-list-items li{
+		list-style: none;
+		padding: 4px 8px;
+		font-size: 12px;
+		color: #272727;
+		line-height: 1.2;
+		border-radius: 3px;
+		background-color: #eee;
+		cursor: pointer;
+		width: 75%;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+	}
+	.toggle-list-items li:hover{
+		background-color: #ddd;
+	}
+	.pointer{
+		cursor: pointer;
+	}
+	*, body, html {
+		outline:none;
+		-webkit-user-select: none; /* Chrome/Safari */        
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* IE10+ */
+		
+	}
+	
+
+</style>

@@ -1,0 +1,29 @@
+<div ng-conttroller="tagCtrl">
+	<div class="lightbox open" id="searchDialog">
+		<div class="search-header">
+			<h1><i class="fa fa-tag"></i>&nbsp;&nbsp;&nbsp;{{ tag }}</h1>
+		</div>
+		<div class="container horizontalContent" id="searchResults">
+		<p ng-if="showNoResults">Your search did not return any results. Please try again.</p>
+			<ul class="items itemsContainer">
+				<li ng-repeat="post in results" class="strip shadow">
+		            <div class="boxStrip" style="background-image:url('{{ post.img_url }}')">
+			            <div class="boxStripMedia">
+			            	<a href="#slide/{{ post.id }}"></a>
+			            </div>
+		            <div class="boxStripInfo">
+		            <h4 class="boxStripTitle">
+		                <a href="#slide/{{ post.id }}/{{ post.slug }}">{{ post.post }}</a>
+		            </h4>
+		            <h4 class="boxStripAddInfo">
+		            	<span class="pull-left"><i class="fa fa-clock-o"></i>&nbsp;<span class="slide-time">{{ ago(post.created_at) }}, </span></span>
+		                <span class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;{{ post.views }}&nbsp;</span>
+		            	<div class="clearfix"></div>
+		            </h4>
+		            </div>
+		    		</div>
+				</li>
+			</ul>
+		</div>
+</div>
+</div>

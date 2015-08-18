@@ -1,0 +1,19 @@
+var ActionConstants = {
+	'LIBRARY' : {
+		'VIEW' : 'VIEW_LIBRARY',
+		'UPDATE' : 'UPDATE_LIBRARY',
+		'DELETE' : 'DELETE_LIBRARY'
+	},
+	'BOOK' : {
+		'VIEW' : 'VIEW_BOOK',
+		'UPDATE' : 'UPDATE_BOOK',
+		'DELETE' : 'DELETE_BOOK',
+		'EXCHANGE' : 'EXCHANGE_BOOK'	
+	},
+	'USER' : {
+		'VIEW' : 'VIEW_USER',
+		'UPDATE' : 'UPDATE_USER',
+		'DELETE' : 'DELETE_USER',
+		'EXCHANGE' : 'EXCHANGE_USER'	
+	}
+}

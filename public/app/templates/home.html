@@ -1,0 +1,23 @@
+<div ng-controller="homeCtrl" class="results container">
+	<ul class="items itemsContainer" style="margin-left:2px;">
+			<li ng-repeat="post in results" class="strip shadow">
+            <div class="boxStrip" style="background-image:url('{{ post.img_url }}')">
+	            <a href="slide/{{ post.id }}/{{ post.slug }}">
+	            	<div class="boxStripMedia"></div>
+	            </a>
+            <div class="boxStripInfo">
+            <div ng-if="post.type == 'article'"><small class="block-article">article</small></div>
+            <div ng-if="post.type == 'forum'"><small class="block-forum">forum</small></div>
+            <h4 class="boxStripTitle">
+                <a href="slide/{{ post.id }}/{{ post.slug }}">{{ post.post }}</a>
+            </h4>
+            <h4 class="boxStripAddInfo">
+            	<span class="pull-left"><i class="fa fa-clock-o"></i>&nbsp;<span class="slide-time">{{ ago(post.created_at) }}, </span></span>
+                <span class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;{{ post.views }}&nbsp;</span>
+            	<div class="clearfix"></div>
+            </h4>
+            </div>
+    		</div>
+		</li>
+	</ul>
+</div>

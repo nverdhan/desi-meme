@@ -1,0 +1,33 @@
+<div class="container-fluid">
+	<div class="row" ng-controller="LogInCtrl">
+		<form name = "signInForm" method="post" class="form-horizontal form-signin" ng-submit="login(credentials)" novalidate>
+			<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1">log in</h1>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="inputSigninEmail" type="email" class="form-control solid-bdr overlay-input" ng-model="credentials.username" name="email" placeholder="email" required>
+					<span class="fa fa-envelope form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="signInForm.email.$invalid && !signInForm.email.$pristine">Please enter a valid Email address</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="inputSigninPwd" type="password" class="form-control" ng-model="credentials.password" name="password" placeholder="password" required ng-minlength="6" ng-maxlength="12">
+					<span class="fa fa-lock form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="signInForm.password.$error.minlength">Password should be at least 6 characters long</div>
+				<div class="alert alert-danger" ng-show="signInForm.password.$error.maxlength">Password should not more than 12 characters long</div>
+				<div class="alert alert-danger" ng-show="invalidCredentials">{{ errorMessage }}</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12">
+            	<div class="vs-input text-right">
+              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+            	</div>
+          	</div>
+          	<div class="form-group col-lg-12 col-xs-12 col-md-12">
+				<span class="pointer pull-left" ng-click="$parent.switchRegister()"><strong>register</strong></span>
+				<span class="pointer pull-right" ng-click="$parent.switchForgotPwd()"><strong>forgot password?</strong></span>
+          	</div>
+          	<div class="clearfix"></div>
+		</form>
+	</div>
+</div>

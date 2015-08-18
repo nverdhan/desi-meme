@@ -1,0 +1,105 @@
+<div ng-controller="EditSlideCtrl" class="slide-show-section">
+		<div class="slide-show-heading text-center">
+			<span class="btn btn-default btn-cancel" ng-click="removeSlide()" title="remove"><i class="fa fa-minus"></i></span>
+			<span class="h5">Slide {{ activeId + 1 }}/{{ slides.length }}</span>
+			<span class="btn btn-default btn-ok" ng-click="addSlide($event)" title="add"><i class="fa fa-plus"></i></span>
+			
+		</div>
+		<div class="slide-outer container">
+				<div class="slide-show">
+					<div class="select-media text-center color-6">
+						<span class="fa fa-angle-left" ng-click = "prevSlide()"></span>
+						<span ng-if="activeSlide.type" class="fa fa-picture-o" ng-click="insertImgLink()"></span>
+						<span ng-if="activeSlide.type" class="fa fa-youtube" ng-click="insertYtLink()"></span>
+						<span class="fa fa-angle-right" ng-click="nextSlide()"></span>
+					</div>
+					
+					<input ng-model="activeSlide.title" class="search-input slide-title" data-tour-id="searchinput" id="slide-title" autocomplete="off" name="q" placeholder="title" type="text">
+					<div class="album-strip">
+						<div class="present-slide edit-slide" style="float:none;">
+							<div ng-if="!activeSlide.type" class="select-media text-center color-6">
+								<span class="fa fa-picture-o" ng-click="insertImgLink()" style="font-size:132px;" title="select image"></span>
+								<span class="fa fa-youtube" ng-click="insertYtLink()" style="font-size:132px;" title="select video"></span>
+							</div>
+							<media ng-if="activeSlide.type == 'Image'" content="activeSlide"></media>
+							<media ng-if="activeSlide.type == 'YouTubeVideo'" content="activeSlide"></media>	
+						</div>
+					</div>
+					<!--div contenteditable innerhtml ng-model="activeSlide.description" id="slide-desc" class="editor" placeholder="sub-title" strip-br="true"></div-->
+					<div contenteditable="true" innerhtml ng-model="activeSlide.description" id="slide-desc" class="editor" placeholder="sub-title" strip-br="true"></div>
+					<!--textarea class="slide-input-desc" ng-model="activeSlide.description" placeholder="description" style="height:100px;"></textarea-->
+					<!--slide-show content="activeSlide"></slide-show-->
+				</div>
+			<!--div class="arrows slide-arrows arrow-left"><span ng-click = nextSlide()>next</span></div-->
+		</div>
+		<div class="clearfix"></div>
+		<div class="slide-show-controls text-center">
+			<span class="btn btn-default btn-ok" ng-click="saveSlide()">save</span>
+			<!--span class="btn btn-default btn-cancel" ng-click="publishSlide()">publish</span-->
+		</div>
+	
+		<div class="modal" ng-show="showModal">
+		<div ng-click="closeModal()" class="close-overlay"><i class="fa fa-times"></i></div>
+		<div class="show-yt" ng-show="showYtModal">
+			<form name = "ytlink" class="form-horizontal form-signin" ng-submit="insertYouTubeLink(link)" novalidate>
+			<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1">enter youtube link</h1>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+				<div class="controls">
+					<input id="youtubelink" type="text" class="form-control solid-bdr overlay-input" ng-model="link" name="link" placeholder="youtube link" required>
+					<span class="fa fa-chain form-control-feedback"></span>
+				</div>
+				<div class="alert alert-danger" ng-show="invalidYoutubeLink">Does not seem to be a valid youtube link</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12">
+            	<div class="vs-input text-right">
+              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+            	</div>
+          	</div>
+          	<div class="clearfix"></div>
+			</form>
+		</div>
+		<div class="show-image" ng-show="showImageModal">
+			<form name = "imagelink" class="form-horizontal form-signin" ng-submit="insertImageLink(imageUrl, imageSrc)" novalidate>
+			
+			<label class="radio-inline">
+			  <input type="radio" ng-model="imgOption" value="local"> local
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" ng-model="imgOption" value="web"> web
+			</label>
+			<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1" ng-show="imgOption == 'local'">browse</h1>
+			<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1" ng-show="imgOption == 'web'">enter image url</h1>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12" ng-show="imgOption == 'local'">
+				<div class="controls">
+					<input class="form-control" id="fileUpload" type="file" ng-file-select="onFileSelect($files, item)" name="file" placeholder="title">
+				</div>
+				<div class="alert alert-danger" ng-show="selectImage">please select an image or cancel</div>
+				<div class="alert alert-danger" ng-show="noImage">does not seem to be a valid image</div>
+				<h3 class="pad-top5 pad-btm5">source</h3>
+					<input type="text" class="form-control solid-bdr overlay-input" ng-model="imageSrc" name="imageSrc" placeholder="http://mywebspace.com" required>
+					<span class="fa fa-chain form-control-feedback"></span>
+					<span class="pull-left pad-top5 pad-btm5"><small>*please specify source and make sure the image is public and not copyright protected</small></span>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback" ng-show="imgOption == 'web'">
+				<div class="controls">
+					<input id="imageUrl" type="text" class="form-control solid-bdr overlay-input" ng-model="imageUrl" name="imageUrl" placeholder="http://mywebspace.com/image.jpg" required>
+					<span class="fa fa-chain form-control-feedback"></span>
+					<div class="row-20px"></div>
+					<h3 class="pad-top5 pad-btm5">source</h3>
+					<input type="text" class="form-control solid-bdr overlay-input" ng-model="imageSrc" name="imageSrc" placeholder="http://mywebspace.com" required>
+					<span class="fa fa-chain form-control-feedback"></span>
+					<span class="pull-left pad-top5 pad-btm5"><small>*please specify source and make sure the image is public and not copyright protected</small></span>
+				</div>
+				<div class="alert alert-danger" ng-show="invalidImageURL">does not seem to be a valid image link</div>
+			</div>
+			<div class="form-group col-lg-12 col-xs-12 col-md-12">
+            	<div class="vs-input text-right">
+              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+            	</div>
+          	</div>
+          	<div class="clearfix"></div>
+		</form>
+		</div>
+	</div>
+</div>
+

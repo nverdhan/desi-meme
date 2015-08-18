@@ -1,0 +1,46 @@
+<div ng-controller="searchCtrl">
+	<div class=" container lightbox open" id="searchDialog">
+		<div class="search-header">
+			<h1>search</h1>
+			<form class="form-horizontal">
+				<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+					<div class="controls">
+						<input ng-model="searchStr" ng-change="updateResults(searchStr)" class="search-input" type="text" data-tour-id="searchinput" autocomplete="off" id="q" name="q" placeholder="start typing..." autofocus>
+						<i id="search-feedback" class="fa fa-search form-control-feedback"></i>
+					</div>
+				</div>
+			</form>	
+		</div>
+		<p class="correctionHint hide results-message">
+			<span class="">DID YOU MEAN</span>
+			<span class="correctionString"></span>
+		</p>
+		<p class="results-message" ng-if="showNoResults">sorry, we have no items in our stock for your query</p>
+		<div class="horizontalContent" id="searchResults">
+			<ul class="itemsContainer">
+				<li ng-repeat="post in results" class="shadow">
+	            	<hr>
+					<div class="media">
+					    <a class="pull-left results-body-pic">
+					        <img src=" {{ post.img_url }}" width="100%" height="100%"/>
+					    </a>
+					    <div class="media-body" style="display:line-height:0px;">
+					        <h2 class="media-heading color-1">
+					            <a class="results-body-h" href="slide/{{ post.id }}/{{ post.slug }}">{{ post.post }}</a>
+					        </h2>
+					        <div class="results-body-small">
+					        	<span class="pull-left"><i class="fa fa-clock-o"></i>&nbsp;<span class="slide-time">{{ ago(post.created_at) }}, </span></span>
+							<span class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;{{ post.views }}&nbsp;</span>
+							<div class="clearfix"></div>
+					        </div>
+							<div class="results-body-small">
+								<span class="pull-left">by &nbsp; {{ post.user.name }}&nbsp;</span>	
+								<div class="clearfix"></div>
+							</div>
+					    </div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

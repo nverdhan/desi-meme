@@ -1,0 +1,147 @@
+.img-bkg {
+	text-align: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	top: 40%
+}
+
+.outer-box {
+	display: flex;
+	position: relative;
+	top: 10%;
+	width: 60%;
+	height: 80%;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 auto;
+	border: 1px solid #272727;
+	vertical-align: middle
+}
+
+.text-box {
+	position: absolute;
+	font-size: 2em;
+	max-width: 90%;
+	min-width: 30%;
+	border: 1px solid #272727;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	padding: 12px;
+	text-align: center;
+	vertical-align: middle
+}
+
+.text-box-1 {
+	top: 10%
+}
+
+.text-box-2 {
+	bottom: 10%
+}
+
+.selectors {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center
+}
+
+.inner-box {
+	width: 100%
+}
+
+.meme-img-holder {
+	position: relative;
+	flex-grow: 8
+}
+
+.meme-form-options {
+	flex-grow: 1
+}
+
+.menu-items {
+	background-color: yellow
+}
+
+.select-theme {
+	margin: 4px;
+	position: relative;
+	width: 64px;
+	height: 48px;
+	background: #aaa;
+	border: 2px solid #ffffff;
+	cursor: pointer
+}
+
+.select-theme .title {
+	position: absolute;
+	text-align: center;
+	width: 80%;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	background: #3c3c3c;
+	height: 10px;
+	border: 1px solid #eee
+}
+
+.select-theme.selected-theme {
+	border: 2px solid #3c3c3c
+}
+
+.selected-theme:after {
+	display: block;
+	content: "";
+	background-color: #1E90FF;
+	opacity: 0.6;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%
+}
+
+.first-title {
+	top: 12%
+}
+
+.second-title {
+	bottom: 12%
+}
+.browse-images{
+	width: 96%;
+	height: 96%;
+	position: relative;
+	top: 2%;
+	left: 2%;
+	background-color: #fff;		
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+}
+.select-img{
+	width: 100%;
+	height: 80%;
+	/*background-color: red;*/
+	overflow: auto;
+}
+.upload-img{
+	width: 100%;
+	height: 20%;
+	background-color: white;
+}
+.close-button{
+	position: absolute;
+	top: 2px;
+	right: 6px;
+	cursor: pointer;
+}
+.browse-images h1{
+	text-align: center;
+	padding: 4px;
+}

@@ -1,0 +1,30 @@
+<div class="container asdf">
+	<div class="back-panel">
+				<div class="col-md-12 create-slide-form">
+					<form name="createSlideForm" role="form" method="post" ng-submit="submitSlideForm($event)" novalidate>
+							<input class="slide-input slide-heading" id="slide-heading" type="text" autocomplete="off" ng-model="title" name="title" placeholder="enter a title" required ng-minlength="6" ng-maxlength="48">
+							<div class="alert alert-danger" ng-show="showTitleRequired">please enter title</div>
+							<div class="alert alert-danger" ng-show="createSlideForm.title.$error.minlength">too short title</div>
+							<div class="alert alert-danger" ng-show="createSlideForm.title.$error.maxlength">too long title</div>
+							<div class="alert alert-danger" ng-show="invalidCredentials">{{ errorMessage }}</div>
+							<div class="slide-tags">
+								<span class="color-6" ng-repeat="tag in tagSelected">
+								<span class="tag-name">{{ tag }}&nbsp;<i class="fa fa-times tag-remove" ng-click="removeTag(tag)"></i></span>
+							</span>
+							</div>
+							<input id="slide-tags" class="slide-input" autocomplete="off" name="enter tags" placeholder="tags"  ng-model="tagInput" ng-keyup="getTags()" value="">
+							<div class="alert alert-danger relative" ng-show="invalidTag">tag can be only alphanumeric</div>
+							
+								<ul class="ul-tags" ng-if="showTags">
+									<li ng-click = "addTag(tagInput)">add "{{ tagInput }}"</li>
+									<li ng-repeat = "tag in tagResults" ng-click="selectTag(tag)">{{ tag.tag }}</li>
+								</ul>
+							<input type="hidden" name="tags" value="{{  tagSelectedString }}">
+							<input class="btn btn-default btn-ok pull-right" type="submit" value="next">
+						</div>
+
+						<div class="clearfix"></div>
+					</form>
+				</div>
+	</div>
+</div>

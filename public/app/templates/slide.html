@@ -1,0 +1,286 @@
+<div ng-controller="SlideCtrl" id="slide-body">
+	<div class="wrapper" ng-class="{true:'container',false:'container-fluid slide-body'}[slides.length == 0]">
+	<div class="row">
+		<div class="col-md-3 related-slides" ng-if="slides.length > 0">
+			<div class="row-20px"></div>
+			<div class="row-20px"></div>
+			<div class="row-20px"></div>
+			<ul class="itemsContainer">
+				<li ng-repeat="post in related" class="shadow related-block c">
+		                <div class="boxStrip" style="background-image:url('{{ post.img_url }}')">
+				            <a href="slide/{{ post.id }}/{{ post.slug }}">
+				            	<div class="boxStripMedia"></div>
+				            </a>
+			            <div class="boxStripInfo">
+			            <div ng-if="post.type == 'article'"><small class="block-article">article</small></div>
+			            <div ng-if="post.type == 'forum'"><small class="block-forum">forum</small></div>
+			            <h4 class="boxStripTitle">
+			                <a href="slide/{{ post.id }}/{{ post.slug }}">{{ post.post }}</a>
+			            </h4>
+			            <h4 class="boxStripAddInfo">
+			            	<span class="pull-left"><i class="fa fa-clock-o"></i>&nbsp;<span class="slide-time">{{ ago(post.created_at) }}, </span></span>
+			                <span class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;{{ post.views }}&nbsp;</span>
+			            	<div class="clearfix"></div>
+			            </h4>
+			            </div>
+			    		</div>
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+		<div ng-class="{true:'col-md-12 pad-top100', false:'col-md-6'}[slides.length == 0]">
+			<h1 class="slideshow-title pull-left">{{ title }}</h1>
+      			<span class="tab"></span>
+				<div class="tags pull-left">
+				<span class="h5 fa fa-tag"></span>
+				<span class="h5" ng-repeat = "tag in tags">
+					<a class="color-6 block-article" href="tag/{{ tag.tag }}">{{ tag.tag }}</a>
+				</span>
+				</div>
+				<div class="clearfix"></div>
+				<div ng-if="slideType == 'forum' && (slides.length == 0)">
+					<hr>
+					<div class="h2 fw200">no slide added yet</div>
+					<div class="h1 fw200 pointer" ng-click="showAddPost()"><i class="fa fa-plus-circle"></i>&nbsp;add a slide</div>
+					<hr>
+				</div>
+
+				<div class="add-slide" ng-show="showAddSlide">
+					<div class="slide-outer">
+						<div class="slide-show">
+							<div ng-if="activeSlide.type" class="select-media text-center color-6">
+								<span class="fa fa-picture-o" ng-click="insertImgLink()" title="change image"></span>
+								<span class="fa fa-youtube" ng-click="insertYtLink()" title="change youtube video"></span>
+							</div>
+							<input ng-model="activeSlide.title" class="search-input slide-title" data-tour-id="searchinput" id="slide-title" autocomplete="off" name="q" placeholder="title" type="text">
+							<div class="album-strip">
+								<div class="present-slide edit-slide" style="float:none;">
+									<div ng-if="!activeSlide.type" class="select-media text-center color-6">
+										<span class="fa fa-picture-o" ng-click="insertImgLink()" style="font-size:132px;" title="select image"></span>
+										<span class="fa fa-youtube" ng-click="insertYtLink()" style="font-size:132px;" title="select video"></span>
+									</div>
+									<media ng-if="activeSlide.type == 'Image'" content="activeSlide"></media>
+									<media ng-if="activeSlide.type == 'YouTubeVideo'" content="activeSlide"></media>	
+								</div>
+							</div>
+							<div contenteditable="true" innerhtml ng-model="activeSlide.description" id="slide-desc" class="editor" placeholder="sub-title" strip-br="true"></div>
+							<!--slide-show content="activeSlide"></slide-show-->
+						</div>
+						<!--div class="arrows slide-arrows arrow-left"><span ng-click = nextSlide()>next</span></div-->
+					</div>
+					<div class="clearfix"></div>
+					<div class="slide-show-controls text-center">
+						<span class="btn btn-default btn-ok" ng-click="saveSlide()">add</span>
+						<span class="btn btn-default btn-cancel" ng-click="cancelAddPost()">cancel</span>
+					</div>	
+					<div class="modal" ng-show="showModal">
+						<div ng-click="closeModal()" class="close-overlay"><i class="fa fa-times"></i></div>
+						<div class="show-yt" ng-show="showYtModal">
+							<form name = "ytlink" class="form-horizontal form-signin" ng-submit="insertYouTubeLink(link)" novalidate>
+							<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1">enter youtube link</h1>
+							<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback">
+								<div class="controls">
+									<input id="youtubelink" type="text" class="form-control solid-bdr overlay-input" ng-model="link" name="link" placeholder="youtube link" required>
+									<span class="fa fa-chain form-control-feedback"></span>
+								</div>
+								<div class="alert alert-danger" ng-show="invalidYoutubeLink">Does not seem to be a valid youtube link</div>
+							</div>
+							<div class="form-group col-lg-12 col-xs-12 col-md-12">
+				            	<div class="vs-input text-right">
+				              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+				            	</div>
+				          	</div>
+	          				<div class="clearfix"></div>
+							</form>
+						</div>
+						<div class="show-image" ng-show="showImageModal">
+							<form name = "imagelink" class="form-horizontal form-signin" ng-submit="insertImageLink(imageUrl, imageSrc)" novalidate>
+							
+							<label class="radio-inline">
+							  <input type="radio" ng-model="imgOption" value="local"> local
+							</label>
+							<label class="radio-inline">
+							  <input type="radio" ng-model="imgOption" value="web"> web
+							</label>
+							<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1" ng-show="imgOption == 'local'">browse</h1>
+							<h1 class="form-group col-lg-12 col-xs-12 col-md-12 heading-1" ng-show="imgOption == 'web'">enter image url</h1>
+							<div class="form-group col-lg-12 col-xs-12 col-md-12" ng-show="imgOption == 'local'">
+								<div class="controls">
+									<input class="form-control" id="fileUpload" type="file" ng-file-select="onFileSelect($files, item)" name="file" placeholder="title">
+								</div>
+								<div class="alert alert-danger" ng-show="selectImage">please select an image or cancel</div>
+								<div class="alert alert-danger" ng-show="noImage">does not seem to be a valid image</div>
+								<h3 class="pad-top5 pad-btm5">source</h3>
+									<input type="text" class="form-control solid-bdr overlay-input" ng-model="imageSrc" name="imageSrc" placeholder="http://mywebspace.com" required>
+									<span class="fa fa-chain form-control-feedback"></span>
+									<span class="pull-left pad-top5 pad-btm5"><small>*please specify source and make sure the image is public and not copyright protected</small></span>
+							</div>
+							<div class="form-group col-lg-12 col-xs-12 col-md-12 has-feedback" ng-show="imgOption == 'web'">
+								<div class="controls">
+									<input id="imageUrl" type="text" class="form-control solid-bdr overlay-input" ng-model="imageUrl" name="imageUrl" placeholder="http://mywebspace.com/image.jpg" required>
+									<span class="fa fa-chain form-control-feedback"></span>
+									<div class="row-20px"></div>
+									<h3 class="pad-top5 pad-btm5">source</h3>
+									<input type="text" class="form-control solid-bdr overlay-input" ng-model="imageSrc" name="imageSrc" placeholder="http://mywebspace.com" required>
+									<span class="fa fa-chain form-control-feedback"></span>
+									<span class="pull-left pad-top5 pad-btm5"><small>*please specify source and make sure the image is public and not copyright protected</small></span>
+								</div>
+								<div class="alert alert-danger" ng-show="invalidImageURL">does not seem to be a valid image link</div>
+							</div>
+							<div class="form-group col-lg-12 col-xs-12 col-md-12">
+				            	<div class="vs-input text-right">
+				              		<input type="submit" class="btn btn-default btn-ok" value="submit">
+				            	</div>
+				          	</div>
+				          	<div class="clearfix"></div>
+						</form>
+						</div>
+					</div>
+				</div>
+				<div class="row-10px"></div>
+				<div ng-show = "showSlides">
+					
+					<div ng-show="showNextBtn()" ng-click="goNextSlide()" class="arrows arrow-right"><i class="fa fa-angle-right"></i></div>
+					<div ng-repeat="slide in slides" ng-show="showSlide(slide)">
+						<div class="slideshow-user-info">
+						<a href="user/{{ userInfo.id }}">
+							<span ng-if="!slide.user.image" class="pull-left slide-user-pic" href="#">
+				                <i class="fa fa-user"></i>
+				            </span>
+				            <span ng-if="slide.user.image" class="pull-left slide-user-pic" href="#">
+				                <img class="img-responsive" src="{{ slide.user.image }}"  width="100%" height="100%">
+				            </span>
+							<!--span class="slide-show-user-pic" style="background-image: url('{{ userInfo.image }}');"></span-->
+							<h4 class="slide-user-info" style="display:inline">{{ slide.user.name }}</h4>
+						</a>
+						</div>
+						<div class="gen-info">
+							<div class="pull-right">
+								<span><i class="fa fa-eye"></i>&nbsp;<h6 class="inline">{{ slideViews }}, </h6>&nbsp;&nbsp;</span>
+								<span><i class="fa fa-clock-o"></i>&nbsp;<h6 class="inline">{{ date }}</h6></span>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<hr class="hr-top-margin0">
+						<div class="album-strip">
+							<div class="present-slide">
+								<media ng-if="slide.type == 'Image'" content="slide"></media>
+								<media ng-if="slide.type == 'YouTubeVideo'" content="slide"></media>
+							</div>
+						</div>
+						<hr>	
+						<h2 class="slideshow-heading">{{ slide.title }}</h2>
+						<div class="row-20px"></div>
+						<p class="slide-description" ng-bind-html="slide.description"></p>
+					</div>
+					<div ng-show="showPrevBtn()" ng-click="goPrevSlide()" class="arrows arrow-left"><i class="fa fa-angle-left"></i></div>
+				</div>
+			</div>
+		<div class="col-md-3 side-info" ng-if="slides.length > 0">
+			<div class="row-20px"></div>
+			<div ng-if="slideType == 'forum'">
+				<h2 class="pointer" ng-click="showAddPost()"><i class="fa fa-plus-circle"></i>&nbsp;add slide</h2>
+				<hr class="hr-top-margin5">
+			</div>
+			<h2><i class="fa fa-share-alt"></i>&nbsp;share</h2>
+			<div class="row-20px"></div>
+			<ul class="" ng-social-buttons data-url="url" data-title="'{{ title }}'" data-description="'{{ description }}'" data-image="'{{ img_url }}'">
+			    <li class="ng-social-facebook">Facebook</li>
+			    <li class="ng-social-google-plus">Google+</li>
+			    <li class="ng-social-twitter">Twitter</li>
+			    <li class="ng-social-pinterest">Pinterest</li>
+			    <li class="ng-social-stumbleupon">Stumble Upon</li>
+			</ul>
+			<hr>
+			
+			<h2 class="pointer" ng-click="commentLoginOption()"><i class="fa fa-plus-circle"></i>&nbsp;add a note</h2>
+			<div class="comments-body">
+				<div ng-if="currentUser.id" ng-show="showAddComment">
+						<div class="media shadow comment-box">
+				            <a ng-if="!currentUser.image" class="pull-left comment-body-pic" href="#">
+				                <i class="fa fa-user"></i>
+				            </a>
+				            <a ng-if="currentUser.image" class="pull-left comment-body-pic" href="#">
+				                <img class="img-responsive" src="{{ currentUser.image }}"  width="100%" height="100%">
+				            </a>
+				            <div class="media-body comment-body">
+				            	<!--h6 class="media-heading color-1 comment-body-h">
+		                            <a class="comment-user-title" href="user/{{ currentUser.id }}"> {{ currentUser.name }}</a>
+		                        </h6-->
+				                <form role="form" class="form" ng-submit="submitComment(comment)">
+										<textarea id="comment-input" class="comment-input" ng-model="comment" placeholder="comment" strip-br="true"></textarea>
+										<input id="comment_submit" name="comment_submit" type="submit" value="submit" class="button pull-right btn btn-default btn-ok btn-xs"/>
+				            	</form>
+				            </div>
+				        </div>
+					</div>
+				<div class="comments-div" ng-repeat = "comment in comments">
+					<hr>
+					 <div class="media comment-box">
+					 		<a ng-if="!comment.user.image" class="pull-left comment-body-pic" href="#">
+				                <i class="fa fa-user"></i>
+				            </a>
+				            <a ng-if="comment.user.image" class="pull-left comment-body-pic" href="#">
+				                <!--img class="img-responsive" src="{{ currentUser.image }}"  width="100%" height="100%"-->
+				                <img src=" {{ comment.user.image }}" width="100%" height="100%"/>
+				            </a>
+		                    <div class="media-body" style="display:line-height:0px;">
+		                        <h6 class="media-heading color-1 comment-body-h">
+		                            <a class="comment-user-title" href="user/{{ comment.user.id }}"> {{ comment.user.name }}</a>
+		                            <small>{{ ago(comment.created_at) }}</small>
+		                        </h6>
+		                    <p class="comment-body-p">{{  comment.comment }}</p>
+		                    </div>
+		                    <a href="javascript:;" class="pull-right comment-reply"><small>reply concersation</small></a>
+		                    <comment-reply ng-if="showCommentReply(comment)"></comment-reply>
+		                </div>			
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="album-thumbnails" ng-if="slides.length > 0">
+		<ul style="left:{{ ulLeft() }}">
+			<li ng-repeat="slide in prevStack" ng-click="makeActive(slide)">
+				<div class="blurred"></div>
+				<div class="slide-thumb" style="background-image:url('{{ slide.thumb_url }}')">
+					<div class="slide-thumb c" style="background-image:url('{{ slide.thumb_url }}')">
+					<div class="boxStripInfo">
+			            <h4 class="boxStripTitle">
+			                {{ slide.title }}
+			            </h4>
+            		</div>
+				</div>
+				</div>
+			</li>
+			<li>
+				<div ng-click="goPrevSlide()" class="arrows arrow-left"><i class="fa fa-angle-left"></i></div>
+				<div class="slide-thumb" style="background-image:url('{{ slides[activeId].thumb_url }}')">
+					<div class="slide-thumb c" style="background-image:url('{{ slide.thumb_url }}')">
+					<div class="boxStripInfo">
+			            <h4 class="boxStripTitle">
+			                {{ slide.title }}
+			            </h4>
+            		</div>
+
+				</div>
+				</div>
+				<div ng-click="goNextSlide()" class="arrows arrow-right"><i class="fa fa-angle-right"></i></div>
+			</li>
+			<li ng-repeat="slide in nextStack" ng-click="makeActive(slide)" title="{{ slide.title }}">
+				<div class="blurred"></div>
+				<div class="slide-thumb c" style="background-image:url('{{ slide.thumb_url }}')">
+					<div class="boxStripInfo">
+			            <h4 class="boxStripTitle">
+			                {{ slide.title }}
+			            </h4>
+            		</div>
+
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<style>
+
+</style>

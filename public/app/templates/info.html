@@ -1,0 +1,65 @@
+<div class="asdf" ng-controller="InfoCtrl">
+				<div class="info-panel">
+					<div class="h3 pull-left"><i class="fa fa-gears"></i>&nbsp;settings</div>
+					<div class="clearfix"></div>
+					<hr>
+					<div class="info-menu-h h5">
+						 <div class="pull-left" class="text-right" ng-class="{true: 'active'}[showAboutMeTab]" ng-click="activateIt('showAboutMeTab')"><i class="fa fa-info"></i>&nbsp;basic info</div>
+						<div  class="pull-left" class="text-right" ng-class="{true: 'active'}[showChangePwdPanel]" ng-click="activateIt('showChangePwdPanel')"><i class="fa fa-lock"></i>&nbsp;change password</div>
+						<div class="clearfix"></div>
+					</div>
+					<br>
+					<div class="">
+						<div class="info-panel-about" ng-show="showAboutMeTab">
+							<form class="" ng-submit="submitInfoForm(user)">
+							<div class="row user-div form-body">
+								<div class="col-xs-12 col-md-4 col-lg-4">
+									<div ng-show="user.image==undefined || user.image==''" class="user-pic sub-panel" ng-click="uploadImage()">
+										<i class="fa fa-user"></i>
+									</div>
+									<div ng-show="user.image!=undefined && user.image!=''" id="user-pic" class="user-pic img-thumbnail" ng-click="uploadImage()">
+										<img src="{{ user.image }}" width="100%" height="100%">
+									</div>
+								</div>
+								<div class="col-xs-12 col-md-8 col-lg-8">
+									<input name="name" type="text" class="input-info" placeholder="name" ng-model="user.name" autocomplete="off">
+									<div contenteditable="true" class="input-info" innerhtml ng-model="user.about" class="input-info" strip-br="true"></div>
+								</div>
+							</div>
+							<hr>
+							<div class="form-group">
+								<input type="submit" class="btn btn-default btn-ok pull-right" value="update">
+							</div>
+								
+								
+							</form>
+						</div>
+						<div class="info-panel-change-pwd" ng-show="showChangePwdPanel">
+							<form name="pwdForm" role="form" ng-submit="submitPwdForm()" novalidate>
+								<div class="form-body">
+									<div class="alert alert-success" ng-show="showPwdSuccess">{{ showPwdSuccessMsg }}</div>
+									<input class="input-info" name="oldPwd" type="password" placeholder="old password" ng-model="oldPwd" ng-minlength="6" ng-maxlength="12" required>
+									<div class="alert alert-danger" ng-show="showPwdError">{{ showPwdErrorMsg }}</div>
+									<div class="alert alert-danger" ng-show="pwdForm.oldPwd.$error.minlength">Password should be at least 6 characters long</div>
+									<div class="alert alert-danger" ng-show="pwdForm.oldPwd.$error.maxlength">Password should not more than 12 characters long</div>
+									<input class="input-info" name="newPwd1" type="password" placeholder="new password" ng-model="newPwd1" ng-minlength="6" ng-maxlength="12" required>
+									<div class="alert alert-danger" ng-show="pwdForm.newPwd1.$error.minlength">Password should be at least 6 characters long</div>
+									<div class="alert alert-danger" ng-show="pwdForm.newPwd1.$error.maxlength">Password should not more than 12 characters long</div>
+									<input class="input-info" name="newPwd2" type="password" placeholder="confirm password" ng-model="newPwd2" ng-minlength="6" ng-maxlength="12" required>
+									<div class="alert alert-danger" ng-show="pwdForm.newPwd2.$error.minlength">Password should be at least 6 characters long</div>
+									<div class="alert alert-danger" ng-show="pwdForm.newPwd2.$error.maxlength">Password should not more than 12 characters long</div>
+									<div class="alert alert-danger" ng-show="passwordUnmatch">Passwords do not Match</div>
+									<input id="file-type" ng-show="false" type="file" ng-file-select="onFileSelect($files)" class="form-horizantal" name="file" ng-model="image">
+								</div>
+								<hr>
+								<div class="form-group">
+									<input type="submit" class="btn btn-default btn-ok pull-right" value="update">
+								</div>
+								
+								<div class="clearfix"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+	
+</div>

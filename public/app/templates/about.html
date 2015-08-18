@@ -1,0 +1,22 @@
+<div class="asdf" ng-controller="AboutCtrl">
+				<div class="info-panel">
+					<div class="h3 pull-left"><i class="fa fa-info"></i>&nbsp;about</div>
+					<div class="clearfix"></div>
+					<hr>
+					<div class="info-menu-h h5">
+						 <div class="pull-left" class="text-right" ng-class="{true: 'active'}[showPrivacyTab]" ng-click="activateIt('showPrivacyTab')">privacy</div>
+						<div  class="pull-left" class="text-right" ng-class="{true: 'active'}[showAboutTab]" ng-click="activateIt('showAboutTab')">about</div>
+						<div class="clearfix"></div>
+					</div>
+					<br>
+					<div class="">
+						<div class="info-panel-about" ng-show="showPrivacyTab">
+							
+						</div>
+						<div class="info-panel-change-pwd" ng-show="showAboutTab">
+							
+						</div>
+					</div>
+				</div>
+	
+</div>
