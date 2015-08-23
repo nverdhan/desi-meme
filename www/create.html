@@ -17,11 +17,22 @@
 <body ng-controller="CreateMemeController">
 	<div class="outer-box">
 		<div class="overlay" ng-show="OverlayVisible">
+			<div id="progress" class="hidden">
+				<div class="section-progress">
+				    <div class="progress progress-striped">
+				      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+				        <span class="sr-only">0% complete</span>
+				      </div>
+				    </div>
+				    <h3 class="text-center">uploading...</h3>
+				</div>
+			</div>
 			<div ng-show="showBrowseImgDialog" class="browse-images">
 				<i class="fa fa-close fa-2x close-button" ng-click="hideImgSelector()"></i>
 				<div class="upload-img">
-					<h1>Upload your own image</h1>
+					<h1 onclick="document.getElementById('file-upload').click()"><i class="fa fa-picture-o"></i>&nbsp;click to add your own image</h1>
 				</div>
+				<input type="file" id="file-upload" name="file" type="file" ng-file-select="onFileSelect($files, item)" style="display:none;">
 				<div class="select-img">
 					<div class=" container lightbox open" id="searchDialog" ng-controller="searchCtrl">
 						<div class="search-header">
@@ -96,13 +107,15 @@
 					</div>
 				</div>
 			</div>
-			<div class="meme-img-holder inner-box">
-				<div class="text-box text-box-1" ng-show="showText1" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text1"></div>
-				<div class="img-bkg" ng-click="showImgSelector()">
+			<div id="meme-img-holder" class="meme-img-holder inner-box">
+				<div ng-style="getImageDivCSS()"></div>
+				<div class="text-box text-box-1 text-box-border" ng-show="showText1" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text1"></div>
+				<div ng-show="!imageUrl" class="img-bkg" ng-click="showImgSelector()">
 					<i class="fa fa-picture-o fa-5x"></i>
-					<h2>CLick to upload Image</h2>
+					<h2>Click to add Image</h2>
+					<div class="alert alert-danger" ng-show="errors.image.show">{{errors.image.text}}</div>
 				</div>
-				<div class="text-box text-box-2" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2"></div>
+				<div class="text-box text-box-2 text-box-border" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2"></div>
 			</div>
 			<div class="meme-form-options inner-box text-center">
 				<span class="btn btn-default btn-ok" ng-click="saveFormNext()">Save</span>
@@ -118,10 +131,12 @@
 <script type="text/javascript" src="public/js/angular-file-upload.min.js"></script>
 <script type="text/javascript" src="public/js/ngProgress.min.js"></script>
 <script type="text/javascript" src="public/js/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="public/js/html2canvas.min.js"></script>
+
+
 
 <script type="text/javascript">
-	var ApiPrefix = '';
-
+var ApiPrefix = '';
 var MemeApp = angular.module('MemeApp', ['angularFileUpload', 'ui.router', 'ngProgress']);
 MemeApp.directive('innerhtml', function() {
 	return {

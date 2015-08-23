@@ -9,6 +9,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var redis = require('redis');
 
+var multer  = require('multer');
+// var upload = multer();
+
 var redisStore = require('connect-redis')(session);
 
 // var routes = require('./routes/index');
@@ -17,7 +20,7 @@ var redisStore = require('connect-redis')(session);
 var redisClient = redis.createClient();
 
 var flash = require('connect-flash');
-var port = process.env.PORT || 4000;
+var port = process.env.PORT || 5000;
 
 var passport = require('passport');
 var GoodreadsStrategy = require('passport-goodreads').Strategy;
@@ -49,6 +52,9 @@ var allowCrossDomain = function (req, res, next) {
 };
 app.use(allowCrossDomain);
 
+// app.use(express.json({limit: '50mb'}));
+// app.use(express.urlencoded({limit: '50mb'}));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,10 +69,8 @@ app.set('rootDir', __dirname);
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb'}));
 app.use(cookieParser(config.session.secret));
 // app.use(express.static(path.join(__dirname, 'www/app')));
 app.set('rootDir', __dirname);

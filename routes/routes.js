@@ -4,6 +4,23 @@ var User = require('../models/user');
 var savedImg = require('../models/savedImg');
 var passport = require('passport');
 
+var multer  = require('multer')
+// var upload = multer({ 
+// 	dest: 'uploads/', 
+// 	rename : 'asd'
+// })
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+  	console.log(123)
+    cb(null, '../memes/uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now()+file.originalname)
+  }
+});
+var upload = multer({ storage: storage })
+
+
 require('./addToDB'); // adds default values to database
 
 module.exports = function(app, passport) {
@@ -56,6 +73,16 @@ module.exports = function(app, passport) {
 			var page = req.query.page;
 			savedImg.getImgById(parseInt(searchString), function(err, imgpath) {
 				console.log(imgpath);
+			});
+		});
+		app.post('/api/upload', upload.single('file'), function (req, res, next){
+			res.json({filename : req.file.filename});
+		});
+		app.post('/api/upload2', function (req, res){
+			var filename = Date.now();
+			var base64Data = req.body.file.replace(/^data:image\/jpeg;base64,/, "");
+			require("fs").writeFile("uploads/"+filename+".jpeg", base64Data, 'base64', function(err) {
+			  console.log(err);
 			});
 		});
 		/**
