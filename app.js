@@ -40,7 +40,8 @@ require('./models/user');
 
 var app = express();
 
-
+var paginate = require('express-paginate');
+app.use(paginate.middleware(10, 50));
 
 // Enable CORS
 var allowCrossDomain = function (req, res, next) {

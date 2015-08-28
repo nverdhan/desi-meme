@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html ng-app="MemeApp">
 <head>
@@ -5,8 +6,8 @@
 		Create Memes
 	</title>
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css"> -->
-	<link rel="stylesheet" type="text/css" href="public/css/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css">
+	<!-- <link rel="stylesheet" type="text/css" href="public/css/font-awesome/css/font-awesome.css"> -->
 	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="public/css/style.css">
 	<link rel="stylesheet" type="text/css" href="public/js/social/angular-social.css">
@@ -53,10 +54,10 @@
 						<p class="results-message" ng-if="showNoResults">sorry, we have no items in our stock for your query</p>
 						<div class="horizontalContent" id="searchResults">
 							<div class="itemsContainer">
-								<div style="display:block;width: 160px; height:160px;float:left" ng-repeat="post in results" class="shadow">
+								<div style="display:block;width: 160px; height:160px;float:left" ng-repeat="img in results" class="shadow">
 									 <div class="media">
-						                    <a class="pull-left results-body-pic">
-						                        <img src=" {{ post.img_url }}" width="100%" height="100%"/>
+						                    <a class="pull-left results-body-pic" ng-click="selectImg(img.path)">
+						                        <img src=" {{ img.path }}" width="100%" height="100%"/>
 						                    </a>
 						                </div>
 								</div>
@@ -70,7 +71,7 @@
 				<i class="fa fa-close fa-2x close-button" ng-click="hideSaveMemeSelector()"></i>
 				<div class="col-md-12 create-slide-form form-signin">
 					<form name="createMemeForm" role="form" method="post" ng-submit="submitSlideForm($event)" novalidate="" class="ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse">
-						<input class="slide-input slide-heading ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse" id="slide-heading" type="text" autocomplete="off" ng-model="title" name="title" placeholder="enter a title" required="" ng-minlength="6" ng-maxlength="48" tabindex="0" aria-required="true" aria-invalid="true">
+						<input class="slide-input slide-heading ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse" id="slide-heading" type="text" autocomplete="off" ng-model="memeObj.title" name="title" placeholder="enter a title" required="" ng-minlength="6" ng-maxlength="48" tabindex="0" aria-required="true" aria-invalid="true" ng-change="$scope.$parent.checkTitleErr()"/>
 						<div class="alert alert-danger ng-hide" ng-show="showTitleRequired" aria-hidden="true">please enter title</div>
 						<div class="alert alert-danger ng-hide" ng-show="createMemeForm.title.$error.minlength" aria-hidden="true">too short title</div>
 						<div class="alert alert-danger ng-hide" ng-show="createMemeForm.title.$error.maxlength" aria-hidden="true">too long title</div>
@@ -89,7 +90,9 @@
 						</ul>
 						<!-- ngIf: showTags -->
 						<input type="hidden" name="tags" value="">
-						<input class="btn btn-default btn-ok pull-right" type="submit" value="next">
+						<input class="btn btn-default btn-ok pull-right" type="submit" value="save" ng-click="saveFormNext()">
+						<div class="alert alert-danger ng-hide" ng-show="memeTitleReqErr" aria-hidden="true">Meme title required</div>
+						<div class="alert alert-danger ng-hide" ng-show="memeTagsReqErr" aria-hidden="true">Meme tags required</div>
 					</form></div>
 				</div>
 			</div>
@@ -118,7 +121,7 @@
 				<div class="text-box text-box-2 text-box-border" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2"></div>
 			</div>
 			<div class="meme-form-options inner-box text-center">
-				<span class="btn btn-default btn-ok" ng-click="saveFormNext()">Save</span>
+				<span class="btn btn-default btn-ok" ng-click="askForDetails()">Save</span>
 				
 			</div>
 		</div>

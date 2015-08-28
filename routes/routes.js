@@ -4,21 +4,23 @@ var User = require('../models/user');
 var savedImg = require('../models/savedImg');
 var passport = require('passport');
 
-var multer  = require('multer')
-// var upload = multer({ 
-// 	dest: 'uploads/', 
-// 	rename : 'asd'
-// })
+var multer = require('multer')
+	// var upload = multer({ 
+	// 	dest: 'uploads/', 
+	// 	rename : 'asd'
+	// })
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-  	console.log(123)
-    cb(null, '../memes/uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now()+file.originalname)
-  }
+	destination: function(req, file, cb) {
+		console.log(123)
+		cb(null, 'uploads')
+	},
+	filename: function(req, file, cb) {
+		cb(null, Date.now() + file.originalname)
+	}
 });
-var upload = multer({ storage: storage })
+var upload = multer({
+	storage: storage
+})
 
 
 require('./addToDB'); // adds default values to database
@@ -71,19 +73,64 @@ module.exports = function(app, passport) {
 		app.get('/api/search', function(req, res) {
 			var searchString = req.query.searchString;
 			var page = req.query.page;
-			savedImg.getImgById(parseInt(searchString), function(err, imgpath) {
-				console.log(imgpath);
+			savedImg.getImgBySearchStr(searchString, function(err, imgs) {
+				res.json({
+					imgs: imgs
+				});
 			});
 		});
-		app.post('/api/upload', upload.single('file'), function (req, res, next){
-			res.json({filename : req.file.filename});
+		app.get('/tags', function(req, res, next) {
+
+		  Tag.paginate({}, { page: req.query.page, limit: req.query.limit }, function(err, tags, pageCount, itemCount) {
+
+		    if (err) return next(err);
+
+		    res.format({
+		      html: function() {
+		        res.render('tags', {
+		          tags: tags,
+		          pageCount: pageCount,
+		          itemCount: itemCount
+		        });
+		      },
+		      json: function() {
+		        // inspired by Stripe's API response for list objects
+		        res.json({
+		          object: 'list',
+		          has_more: paginate.hasNextPages(req)(pageCount),
+		          data: tags
+		        });
+		      }
+		    });
+
+		  });
+
 		});
-		app.post('/api/upload2', function (req, res){
+		app.post('/api/upload', upload.single('file'), function(req, res, next) {
+			res.json({
+				filename: req.file.filename
+			});
+		});
+		app.post('/api/upload2', function(req, res) {
+			var filepath = 'uploads/';
 			var filename = Date.now();
 			var base64Data = req.body.file.replace(/^data:image\/jpeg;base64,/, "");
-			require("fs").writeFile("uploads/"+filename+".jpeg", base64Data, 'base64', function(err) {
-			  console.log(err);
+			title = req.body.tags;
+			tags = req.body.title;
+			var memeObj = {
+				title: req.body.title,
+				tags: req.body.tags,
+				path: filepath+filename+'.jpeg'
+			};
+			require("fs").writeFile(filepath + filename + ".jpeg", base64Data, 'base64', function(err) {
+				if(err){
+					console.log(err);
+				}
+				Meme.saveMeme(memeObj, function(err) {
+					console.log('kkk');
+				})
 			});
+			res.status(200).send('OK')
 		});
 		/**
 		 * Home 

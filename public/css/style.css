@@ -1816,7 +1816,7 @@ input[type='checkbox']+label {
 }
 #searchResults{
 	position: relative;
-	top:180px;
+	top:10px;
 	padding-bottom: 20px;
 }
 #searchResults ul{
@@ -2360,8 +2360,8 @@ h1{
 	color: #666;
 }
 .results-body-pic{
-	width: 100px;
-	height: 100px;
+	width: 150px;
+	height: 150px;
 }
 .results-body-small{
 	padding-top: 12px;

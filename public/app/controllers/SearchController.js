@@ -51,6 +51,7 @@ MemeApp.controller('searchCtrl', ['$http', '$scope','$rootScope', 'SearchService
             $scope.page = 1;
             SearchService.search(inputStr, $scope.page).success(function(data){
             $scope.results = [];
+            data = data.imgs;
             if(data.length > 0){
                 $scope.page++;
                 $scope.showNoResults = false;
@@ -60,6 +61,8 @@ MemeApp.controller('searchCtrl', ['$http', '$scope','$rootScope', 'SearchService
             }else{
                 $scope.showNoResults = true;
             }
+            // console.log($scope.results);
         });    
 	}
+    $scope.$on('UPDATE_IMG_RESULTS', $scope.updateResults);
 }]);

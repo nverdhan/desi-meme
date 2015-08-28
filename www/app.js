@@ -1,4 +1,4 @@
-MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagService', function($scope, $http, $upload, TagService) {
+MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$upload', 'TagService', function($scope, $rootScope, $http, $upload, TagService) {
 
 	/**This section is copy pasted -- Start*/
 	$scope.catValue = '';
@@ -12,12 +12,30 @@ MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagSe
 	$scope.showCoverImageRequired = false;
 	$scope.showTitleRequired = false;
 	$scope.coverImage = '';
+	$scope.memeTagsReqErr = false;
 	$scope.postOption = 'article';
 	$scope.invalidTag = false;
-	$scope.title = '';
 
 	$scope.catResults = function() {
 		return ($scope.cats.length > 0);
+	}
+	$scope.checkTagErr = function() {
+		if ($scope.tagSelected.length == 0) {
+			$scope.memeTagsReqErr = true;
+			return true;
+		} else {
+			$scope.memeTagsReqErr = false;
+			return false;
+		}
+	}
+	$scope.checkTitleErr = function() {
+		if ($scope.memeObj.title == undefined || $scope.memeObj.title.length == 0) {
+			$scope.showTitleRequired = true;
+			return true;
+		} else {
+			$scope.showTitleRequired = false;
+			return false;
+		}
 	}
 	$scope.showResults = function() {
 		var url = '';
@@ -64,10 +82,12 @@ MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagSe
 		}
 		$scope.tagInput = '';
 		$scope.showTags = false;
+		$scope.checkTagErr();
 	}
 	$scope.removeTag = function(tag) {
 		var i = $scope.tagSelected.indexOf(tag);
 		$scope.tagSelected.splice(i, 1);
+		$scope.checkTagErr();
 	}
 	$scope.addTag = function(a) {
 		if ($scope.tagSelected.indexOf(a) == -1) {
@@ -75,25 +95,26 @@ MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagSe
 		}
 		$scope.tagInput = '';
 		$scope.showTags = false;
+		$scope.checkTagErr();
 	}
-	$scope.getImageDivCSS = function (argument) {
-	 	return {
-				height : '100%',
-				width : '100%',
-				position : 'absolute',
-				background : 'url('+$scope.imageUrl+')',
-				backgroundPosition : '50% 50%',
-				backgroundSize : 'cover',
-	 	}
-	 }
+	$scope.getImageDivCSS = function(argument) {
+		return {
+			height: '100%',
+			width: '100%',
+			position: 'absolute',
+			background: 'url(' + $scope.imageUrl + ')',
+			backgroundPosition: '50% 50%',
+			backgroundSize: 'cover',
+		}
+	}
 	$scope.onFileSelect = function($files, item) {
 		if ($scope.coverImage) {
 			// DeleteFileService.delete($scope.coverImage).then(function(res) {});
 		}
 		var allowedFileTypes = ["image/jpeg", "image/png", "image/bmp"];
-		for (var i = 0; i < $files.length; i++){
+		for (var i = 0; i < $files.length; i++) {
 			var file = $files[i];
-			if(allowedFileTypes.indexOf(file.type) == -1){
+			if (allowedFileTypes.indexOf(file.type) == -1) {
 				$scope.errors.image.show = true;
 				$scope.errors.image.text = 'Invalid Image';
 				$scope.OverlayVisible = false;
@@ -158,44 +179,53 @@ MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagSe
 		$scope.OverlayVisible = false;
 	}
 	$scope.memeObj = {
-		image : '',
-		title : '',
-		tags : []
+		image: '',
+		title: '',
+		tags: []
 	}
 	$scope.errors = {
-		image : {
-			show : false,
-			text : ''
+		image: {
+			show: false,
+			text: ''
 		}
 	}
+	$scope.titleE
 	$scope.saveFormNext = function() {
-		if(!$scope.memeObj.image){
+		if (!$scope.checkTitleErr() && !$scope.checkTagErr()) {
+			var c3 = document.getElementById('meme-img-holder');
+			var x = c3.innerHTML;
+			console.log(123);
+			/*Convert Div Content to Image/Jpeg and Send server side via ajax*/
+			angular.element('.text-box').removeClass('text-box-border')
+			html2canvas(c3, {
+				onrendered: function(canvas) {
+					var serverSideURL = 'api/upload2';
+					document.body.appendChild(canvas);
+					var canvasc = angular.element("canvas");
+					canvasc.attr('id', 'myCanvas');
+					var canvasx = document.getElementById("myCanvas");
+					canvasx.setAttribute('style', 'transform:scale(4,4)');
+					var file = canvasx.toDataURL("image/jpeg", 1);
+					$http.post(serverSideURL, {
+						file: file,
+						title: $scope.memeObj.title,
+						tags: $scope.tagSelected
+					}, function(data) {
+						// $('.saving-progress').addClass('hidden');  
+						// location.reload();
+						// console.log(data);
+					});
+					angular.element("#myCanvas").remove();
+				},
+			});
+		}
+	}
+	$scope.askForDetails = function() {
+		if (!$scope.memeObj.image) {
 			$scope.errors.image.show = true;
 			$scope.errors.image.text = 'Please add Image first';
 			return false;
 		}
-		var c3 = document.getElementById('meme-img-holder');
-	    var x = c3.innerHTML;
-	    // console.log(123);
-	    /*Convert Div Content to Image/Jpeg and Send server side via ajax*/
-	    angular.element('.text-box').removeClass('text-box-border')
-	    html2canvas(c3, {
-	      onrendered: function(canvas) {
-	        var serverSideURL = 'api/upload2';
-	        document.body.appendChild(canvas);
-	        var canvasc = angular.element("canvas");
-	        canvasc.attr('id','myCanvas');
-	        var canvasx = document.getElementById("myCanvas");
-	        canvasx.setAttribute('style','transform:scale(4,4)');
-	        var file = canvasx.toDataURL("image/jpeg", 1);
-	        $http.post(serverSideURL, {file : file}, function(data){
-	          // $('.saving-progress').addClass('hidden');  
-	          // location.reload();
-	          // console.log(data);
-	        });
-	        angular.element("#myCanvas").remove();
-	      },
-	    });
 		$scope.showOverlay();
 		$scope.showSaveFormDialog = true;
 		$scope.showBrowseImgDialog = false;
@@ -204,6 +234,7 @@ MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagSe
 		$scope.showOverlay();
 		$scope.showBrowseImgDialog = true;
 		$scope.showSaveFormDialog = false;
+		$rootScope.$broadcast('UPDATE_IMG_RESULTS');
 	}
 	$scope.hideImgSelector = function() {
 		$scope.hideOverlay();
@@ -212,5 +243,10 @@ MemeApp.controller('CreateMemeController', ['$scope','$http',  '$upload', 'TagSe
 	$scope.hideSaveMemeSelector = function() {
 		$scope.hideOverlay();
 		// $scope.showBrowseImgDialog = false;
+	}
+	$scope.selectImg = function(url) {
+		$scope.memeObj.image = url;
+		$scope.imageUrl = url;
+		$scope.OverlayVisible = false;
 	}
 }])

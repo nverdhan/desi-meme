@@ -13,7 +13,7 @@ MemeApp.factory('SearchService', ['$http', function ($http){
 			});
 		}*/
 		search: function(inputStr, page){
-			return $http.get(ApiPrefix+'/api/search/?searchString='+inputStr+',&page='+page);
+			return $http.get(ApiPrefix+'/api/search/?searchString='+inputStr+'&page='+page);
 		}
 	}
 }])
