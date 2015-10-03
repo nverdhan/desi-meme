@@ -13,11 +13,15 @@
 	<link rel="stylesheet" type="text/css" href="public/js/social/angular-social.css">
 	<link rel="stylesheet" type="text/css" href="public/js/social/angular-social.css">
 	<link rel="stylesheet" type="text/css" href="public/css/slide.css">
-	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/colorpicker.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/jquery.qtip.min.css">
+	<link rel="stylesheet" type="text/css" href="node_modules/guillotine/css/jquery.guillotine.css">
+
 </head>
 <body ng-controller="CreateMemeController">
-	<div class="outer-box">
-		<div class="overlay" ng-show="OverlayVisible">
+	<div id="outer-box" class="outer-box">
+		<div class="overlay" id="overlay" ng-show="OverlayVisible">
 			<div id="progress" class="hidden">
 				<div class="section-progress">
 				    <div class="progress progress-striped">
@@ -33,7 +37,7 @@
 				<div class="upload-img">
 					<h1 onclick="document.getElementById('file-upload').click()"><i class="fa fa-picture-o"></i>&nbsp;click to add your own image</h1>
 				</div>
-				<input type="file" id="file-upload" name="file" type="file" ng-file-select="onFileSelect($files, item)" style="display:none;">
+				<input type="file" id="file-upload" name="file" type="file" ng-file-select="onFileSelect($files, item)" style="display:none;" single>
 				<div class="select-img">
 					<div class=" container lightbox open" id="searchDialog" ng-controller="searchCtrl">
 						<div class="search-header">
@@ -54,7 +58,7 @@
 						<p class="results-message" ng-if="showNoResults">sorry, we have no items in our stock for your query</p>
 						<div class="horizontalContent" id="searchResults">
 							<div class="itemsContainer">
-								<div style="display:block;width: 160px; height:160px;float:left" ng-repeat="img in results" class="shadow">
+								<div ng-if="results" style="display:block;width: 160px; height:160px;float:left" ng-repeat="img in results" class="shadow">
 									 <div class="media">
 						                    <a class="pull-left results-body-pic" ng-click="selectImg(img.path)">
 						                        <img src=" {{ img.path }}" width="100%" height="100%"/>
@@ -68,8 +72,8 @@
 				</div>
 			</div>
 			<div ng-show="showSaveFormDialog" class="save-form">
-				<i class="fa fa-close fa-2x close-button" ng-click="hideSaveMemeSelector()"></i>
 				<div class="col-md-12 create-slide-form form-signin">
+					<i class="fa fa-close fa-2x close-button" ng-click="hideSaveMemeSelector()"></i>
 					<form name="createMemeForm" role="form" method="post" ng-submit="submitSlideForm($event)" novalidate="" class="ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse">
 						<input class="slide-input slide-heading ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse" id="slide-heading" type="text" autocomplete="off" ng-model="memeObj.title" name="title" placeholder="enter a title" required="" ng-minlength="6" ng-maxlength="48" tabindex="0" aria-required="true" aria-invalid="true" ng-change="$scope.$parent.checkTitleErr()"/>
 						<div class="alert alert-danger ng-hide" ng-show="showTitleRequired" aria-hidden="true">please enter title</div>
@@ -90,13 +94,14 @@
 						</ul>
 						<!-- ngIf: showTags -->
 						<input type="hidden" name="tags" value="">
-						<input class="btn btn-default btn-ok pull-right" type="submit" value="save" ng-click="saveFormNext()">
+						<div class='checkbox-center'><input style="margin: 0 5px" type="checkbox" name="vehicle" ng-model="privateSavedImg" ng-change="abcd()">This is my private picture, do not save<br></div>
+						<input class="btn btn-default btn-ok pull-right" type="submit" value="{{saveMsg}}" ng-click="saveFormNext()">
 						<div class="alert alert-danger ng-hide" ng-show="memeTitleReqErr" aria-hidden="true">Meme title required</div>
 						<div class="alert alert-danger ng-hide" ng-show="memeTagsReqErr" aria-hidden="true">Meme tags required</div>
 					</form></div>
 				</div>
 			</div>
-			<div class="menu-items inner-box">
+			<div id="menu-items" class="menu-items inner-box">
 				<div class="selectors">
 					<div class="select-theme" ng-click="selectMemeTheme(0)" ng-class="{'selected-theme': selectedTheme == 0}">
 						<div class="title first-title"></div>
@@ -109,26 +114,47 @@
 						<div class="title second-title"></div>
 					</div>
 				</div>
+				<div class="color-pickers">
+					<div class="picker-box bgcolor" colorpicker="rgba" title="Select background color" ng-model="bgcolor" ng-style="{'background-color':bgcolor}"></div>
+					<div class="picker-box fgcolor" colorpicker="rgba" title="Select foreground color" ng-model="fgcolor" ng-style="{'background-color':fgcolor}"> </div>	
+				</div>
+				<div class="text-sizers">
+					<div class="sizer-box smaller" title="Decrease text size" ng-click="decreaseTextSize()">T</div>
+					<div class="sizer-box larger" title="Increase text size" ng-click="increaseTextSize()">T</div>
+				</div>
 			</div>
 			<div id="meme-img-holder" class="meme-img-holder inner-box">
-				<div ng-style="getImageDivCSS()"></div>
-				<div class="text-box text-box-1 text-box-border" ng-show="showText1" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text1"></div>
+				<i class="fa fa-picture-o fa-2x close-button" ng-click="showImgSelector()" style='color: #1E90FF; box-shadow: 0px 0px 20px #fff; top:5px;' ng-if='imageUrl' title="Select another image"></i>
+				<img id="thepicture">
+				<div select-on-click class="text-box text-box-1 text-box-border" ng-show="showText1" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text1" ng-bind-html="memeContent.Text1 | unsafe">Enter Top Text</div>
 				<div ng-show="!imageUrl" class="img-bkg" ng-click="showImgSelector()">
 					<i class="fa fa-picture-o fa-5x"></i>
 					<h2>Click to add Image</h2>
 					<div class="alert alert-danger" ng-show="errors.image.show">{{errors.image.text}}</div>
 				</div>
-				<div class="text-box text-box-2 text-box-border" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2"></div>
+				<div select-on-click class="text-box text-box-2 text-box-border" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2" ng-bind-html="memeContent.Text2 | unsafe">Enter Bottom Text</div>
 			</div>
-			<div class="meme-form-options inner-box text-center">
-				<span class="btn btn-default btn-ok" ng-click="askForDetails()">Save</span>
+			<div id="form-options" class="meme-form-options inner-box text-center">
+				 <div id="controls" class="">
+			      <a href="#" id="rotate_left" title="Rotate left"><i class="fa fa-rotate-left"></i></a>
+			      <a href="#" id="zoom_out" title="Zoom out"><i class="fa fa-search-minus"></i></a>
+			      <a href="#" id="fit" title="Fit image"><i class="fa fa-arrows-alt"></i></a>
+			      <a href="#" id="zoom_in" title="Zoom in"><i class="fa fa-search-plus"></i></a>
+			      <a href="#" id="rotate_right" title="Rotate right"><i class="fa fa-rotate-right"></i></a>
+			    </div>
+			   	<span class="btn btn-default btn-ok" ng-click="askForDetails()">Save and share</span>
+			 </div>
+				
 				
 			</div>
 		</div>
 	</div>
 </body>
 <script type="text/javascript" src="public/js/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.qtip.min.js"></script>
+<script type="text/javascript" src="node_modules/guillotine/js/jquery.guillotine.min.js"></script>
 <script type="text/javascript" src="public/js/angular.min.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-colorpicker-module.min.js"></script>
 <script type="text/javascript" src="public/js/angular-file-upload-shim.min.js"></script>
 <script type="text/javascript" src="public/js/angular-file-upload-shim.min.js"></script>
 <script type="text/javascript" src="public/js/angular-file-upload.min.js"></script>
@@ -139,8 +165,23 @@
 
 
 <script type="text/javascript">
+$(document).ready(function()
+ {	
+ 	$('[title!=""]').qtip({style : {classes: 'qtip-blue qtip-rounded'}});
+    $('#thepicture').qtip({
+         content: 'Drag to reposition image',
+         position: {
+             target: 'mouse', // Track the mouse as the positioning target
+             adjust: { x: 5, y: 5 } // Offset it slightly from under the mouse
+         },
+         style: {
+         	classes: 'qtip-blue qtip-rounded'
+         }
+     });
+ });
+
 var ApiPrefix = '';
-var MemeApp = angular.module('MemeApp', ['angularFileUpload', 'ui.router', 'ngProgress']);
+var MemeApp = angular.module('MemeApp', ['angularFileUpload', 'ui.router', 'ngProgress', 'colorpicker.module']);
 MemeApp.directive('innerhtml', function() {
 	return {
 		restrict: 'A',
@@ -170,6 +211,6 @@ MemeApp.directive('innerhtml', function() {
 <script type="text/javascript" src="public/app/services/TagService.js"></script>
 <script type="text/javascript" src="public/app/services/SearchService.js"></script>
 <script type="text/javascript" src="public/app/controllers/SearchController.js"></script>
-<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="assets/js/app.js"></script>
 
 </html>

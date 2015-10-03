@@ -1,0 +1,23 @@
+.pager {
+    padding-left: 0;
+    margin: 20px 0;
+    text-align: center;
+    list-style: none;
+}
+.pager:before, .pager:after{
+	display: table;
+    content: " ";
+}
+.pager li {
+    display: inline;
+}
+.pager li>a, .pager li>span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
+.pager:after{
+	clear:both;
+}

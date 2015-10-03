@@ -20,7 +20,7 @@ var redisStore = require('connect-redis')(session);
 var redisClient = redis.createClient();
 
 var flash = require('connect-flash');
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 3000;
 
 var passport = require('passport');
 var GoodreadsStrategy = require('passport-goodreads').Strategy;

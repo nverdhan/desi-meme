@@ -1,21 +1,21 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 var Tag = require('../models/tag');
 var async = require('async');
 var Schema = mongoose.Schema;
 var MemeSchema = new Schema({
 	title: String,
 	path: String,
-	// _tags: [{
-	// 	type: Schema.ObjectId,
-	// 	ref: 'Tag'
-	// }],
+	ifSave: Boolean,
 	likes: Number
 });
+MemeSchema.plugin(mongoosePaginate);
 
 MemeSchema.statics.saveMeme = function(memeObj, cb) {
 	var meme = new this({
 		title: memeObj.title,
 		path: memeObj.path,
+		ifSave: memeObj.ifSave,
 		likes: 0
 	});
 	meme.save(function(err) {
@@ -38,10 +38,10 @@ MemeSchema.statics.saveMeme = function(memeObj, cb) {
 				} else {
 					tagArr.forEach(function(tagReturned) {
 						tagReturned.updateTag(tag, function(updatedTag) {
-							console.log(updatedTag);
-							updatedTag.selfPopulate(function(tag) {
-								// console.log(tag);
-							});
+							// console.log(updatedTag);
+							// updatedTag.selfPopulate(function(tag) {
+							// 	// console.log(tag);
+							// });
 						});
 					})
 				}
@@ -49,6 +49,13 @@ MemeSchema.statics.saveMeme = function(memeObj, cb) {
 		})
 	})
 	cb();
+}
+
+MemeSchema.statics.findByID = function(_id, cb){
+	var ObjectId = require('mongoose').Types.ObjectId; 
+	return this.find({
+		_id: new ObjectId(_id)
+	}, cb);
 }
 
 module.exports = mongoose.model('Meme', MemeSchema);

@@ -1,9 +1,17 @@
+//- index.jade
+doctype html
+html
+  head
+    style
+      include style.css
+  body
 h1 Tags
 
 //- this will simply generate a link to sort by name
 //- note how we only have to pass the querystring param
 //- that we want to modify here, not the entire querystring
-a(href=paginate.href({ sort: 'name' })) Sort by name
+a(href='/create') Create your own
+//-a(href=paginate.href({ sort: 'name' })) Create your own
 
 //- this assumes you have `?age=1` or `?age=-1` in the querystring
 //- so this will basically negate the value and give you
@@ -11,7 +19,9 @@ a(href=paginate.href({ sort: 'name' })) Sort by name
 //- a(href=paginate.href({ sort: req.query.age === '1' ? -1 : 1 })) Sort by age
 
 ul
-  each tag in tags
-    li= tag.name
-
+  each meme in memes
+    if meme.ifSave
+      li
+        a(href= baseUrl + 'memes/' + meme._id) #{meme.title}
+        img(src = baseUrl+meme.path)
 include _paginate

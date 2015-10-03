@@ -1,0 +1,36 @@
+//- index.jade
+doctype html
+html
+  head
+      title=meme.title + "by Shudh Desi Memes"
+      meta(property='og:title', content='#{meme.title}')
+      meta(property="fb:app_id", content="1646291515639257")
+      meta(property="article:author", content="https://www.facebook.com/shudhdesimeme")
+      meta(property="article:publisher", content="https://www.facebook.com/shudhdesimeme")
+      meta(property="description", content="Create memes from your favorite Indian celebrities and share them on the internet.")
+      meta(property='og:image', content='#{picUrl}')
+      meta(property='og:type', content='article')
+      meta(property='og:url', content='#{pageUrl}')
+      meta(property='og:site_name', content='Shudh Desi Memes')
+      
+    style
+      include style.css
+
+  body
+
+    div#fb-root
+
+    script(src="../assets/js/socialshare.js")
+    script(src="https://apis.google.com/js/platform.js")
+    h1 Meme
+
+    a(href='/create') Create your own
+
+    h2= meme.title
+    img(src = picUrl)
+    
+    div.fb-share-button(data-href=pageUrl, data-layout="button")
+    a.twitter-share-button(href="https://twitter.com/share", data-url=pageUrl, data-text=meme.title, data-via="shudhdesimemes", data-hashtags="shudhdesi")
+    div.g-plus(data-action="share", data-href=pageUrl, data-annotation='none')
+    su:badge(layout="5")
+    a.wa_btn(href="whatsapp://send", data-text=meme.title, data-href=pageUrl, style="{display:none;}")

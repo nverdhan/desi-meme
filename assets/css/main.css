@@ -9,18 +9,27 @@
 }
 
 .outer-box {
-	display: flex;
-	position: relative;
-	top: 10%;
-	width: 720px;
-	height: 80%;
-	flex-flow: column nowrap;
-	align-items: center;
-	justify-content: space-between;
+	position: absolute;
+	top: 5%;
+	left: 0;
+	right: 0;
 	margin: 0 auto;
-	vertical-align: middle
+	width: 60%;
+	height: 80%;
 }
-
+.meme-img-holder {
+	position: relative;
+	margin: 0 auto;
+	width: 100%;
+}
+.meme-img{
+	border: 3px solid black;
+}
+/*.meme-img-holder:before {
+  display: block;
+  content: "";
+  padding-top: 75%;
+}*/
 .text-box {
 	position: absolute;
 	font-size: 3em;
@@ -33,10 +42,11 @@
 	text-align: center;
 	font-weight: 600;
 	color: #ffffff;
-	vertical-align: middle
+	vertical-align: middle;
+	text-shadow: 2px 2px 1px black;
 }
 .text-box-border{
-	border: 1px solid #272727;
+	border: 1px dashed #ccc;
 }
 .text-box-1 {
 	top: 10%
@@ -50,24 +60,31 @@
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: center;
-	justify-content: center
+	justify-content: center;
+	margin: auto 10px;
 }
 
 .inner-box {
 	width: 100%
 }
 
-.meme-img-holder {
-	position: relative;
-	flex-grow: 8
-}
+
 
 .meme-form-options {
-	flex-grow: 1
 }
 
 .menu-items {
+	display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
 	background-color: #eeeeee;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .select-theme {
@@ -140,7 +157,7 @@
 	cursor: pointer;
     border-bottom: 1px solid #dddddd;
     transition: 0.2s linear all;
-    width: 320px;
+    width: 450px;
     padding: 12px !important;
     margin: 0 auto;
     
@@ -155,8 +172,91 @@
 	top: 2px;
 	right: 6px;
 	cursor: pointer;
+	z-index: 10;
 }
 .browse-images h1{
 	text-align: center;
 	padding: 4px;
+}
+.pager {
+    padding-left: 0;
+    margin: 20px 0;
+    text-align: center;
+    list-style: none;
+}
+.fa-picture-o.fa-2x.close-button.invisible{
+	display: none;
+}
+.visible{
+	display: block;
+}
+#controls {
+	background-color: #1b1b1b;
+	text-align: center
+}
+#controls a {
+	display: inline-block;
+	padding: 0 5%;
+	height: 50px;
+	line-height: 50px;
+	font-size: 20px;
+	font-weight: 300;
+	color: #888
+}
+#controls a:hover {
+	color: #fff;
+	text-decoration: none
+}
+.picker-box{
+	position: relative;
+	width: 20px;
+	height: 20px;
+	border: 1px solid white;
+	box-shadow: 1px 1px 1px #888888;
+	cursor: pointer;
+}
+.bgcolor{
+	top: 8px;
+	left: 8px;
+}
+.fgcolor{
+	top: 0;
+	left: 0;
+	box-shadow: 1px 1px 2px #888888;
+}
+.color-pickers{
+	width: 40px;
+	height: 48px;
+	margin: auto 20px;
+}
+.text-sizers{
+	width: 40px;
+	margin: auto 20px;
+}
+.sizer-box{
+	position: relative;
+	width: 20px;
+	height: 15px;
+	cursor: pointer;
+}
+.larger{
+	font-size: 2em;
+	left: 0;
+    bottom: 7px
+}
+.larger:hover{
+	font-size: 2.2em;
+}
+.smaller{
+	font-size: 1em;
+    top: 4px;
+    left: 15px
+}
+.smaller:hover{
+	font-size: 0.7em;
+}
+.checkbox-center{
+	text-align: center;
+	margin-top: 10px;
+	line-height: 90%;
 }

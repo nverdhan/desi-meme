@@ -3,7 +3,7 @@ var Meme = require('../models/meme');
 var User = require('../models/user');
 var savedImg = require('../models/savedImg');
 var passport = require('passport');
-
+var baseUrl = 'http://127.0.0.1:3000/';
 var multer = require('multer')
 	// var upload = multer({ 
 	// 	dest: 'uploads/', 
@@ -79,16 +79,39 @@ module.exports = function(app, passport) {
 				});
 			});
 		});
-		app.get('/tags', function(req, res, next) {
+		app.get('/memes/:id', function(req, res) {
+			var _id = req.params.id;
+			var mongoose = require('mongoose');
+			if(mongoose.Types.ObjectId.isValid(_id)){
+				Meme.findByID(_id, function(err, meme){
+				if(meme.length != 0){
+					var pageUrl = baseUrl+'memes/'+meme[0]._id;
+					var picUrl = baseUrl+meme[0].path;
+					res.render('memeone', {
+						meme: meme[0],
+						pageUrl: pageUrl,
+						picUrl: picUrl
+					});
+				}else{
+					console.log('aaa');
+					res.status(404).send('Not found');
+				}
+				
+				});
+			}else{
+				res.status(404).send('Not found');
+			}
+			
+		});
+		app.get('/memes', function(req, res, next) {
 
-		  Tag.paginate({}, { page: req.query.page, limit: req.query.limit }, function(err, tags, pageCount, itemCount) {
-
+		  Meme.paginate({}, { page: req.query.page, limit: req.query.limit }, function(err, memes, pageCount, itemCount) {
 		    if (err) return next(err);
-
 		    res.format({
 		      html: function() {
-		        res.render('tags', {
-		          tags: tags,
+		        res.render('memes', {
+		          memes: memes,
+		          baseUrl: baseUrl,
 		          pageCount: pageCount,
 		          itemCount: itemCount
 		        });
@@ -98,7 +121,7 @@ module.exports = function(app, passport) {
 		        res.json({
 		          object: 'list',
 		          has_more: paginate.hasNextPages(req)(pageCount),
-		          data: tags
+		          data: memes
 		        });
 		      }
 		    });
@@ -120,17 +143,19 @@ module.exports = function(app, passport) {
 			var memeObj = {
 				title: req.body.title,
 				tags: req.body.tags,
-				path: filepath+filename+'.jpeg'
+				path: filepath+filename+'.jpeg',
+				ifSave: !req.body.doNotSave
 			};
 			require("fs").writeFile(filepath + filename + ".jpeg", base64Data, 'base64', function(err) {
 				if(err){
 					console.log(err);
 				}
 				Meme.saveMeme(memeObj, function(err) {
-					console.log('kkk');
+					res.json({
+						fileurl: memeObj.path
+					});
 				})
 			});
-			res.status(200).send('OK')
 		});
 		/**
 		 * Home 

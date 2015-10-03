@@ -70,7 +70,7 @@ body {
     background: #F4F4F4;
     color: #666;
     font-size: .75em;
-    font-family: Lato, sans-serif;
+    /*font-family: Lato, sans-serif;*/
     /*font-family: BentonSans,"Lucida Sans","Lucida Grande",sans-serif;*/
     font-smooth: always;
     -webkit-font-smoothing: subpixel-antialiased;
@@ -1325,7 +1325,7 @@ color: #aaa;
 input{
 
 }
-@import url(//fonts.googleapis.com/css?family=Lato:400);
+/*@import url(//fonts.googleapis.com/css?family=Lato:400);*/    /*NV*/
 .form-signin{
 position: relative;
 min-width: 300px;
