@@ -3,15 +3,13 @@
 //- This examples makes use of Bootstrap 3.x pagination classes
 
 if paginate.hasPreviousPages || paginate.hasNextPages(pageCount)
-  .navigation.well-sm#pagination
-    ul.pager
+  #pagination.pagination
+    ul
       if paginate.hasPreviousPages
         li.previous
           a(href=paginate.href(true)).prev
-            i.fa.fa-arrow-circle-left
             |  Previous
       if paginate.hasNextPages(pageCount)
         li.next
           a(href=paginate.href()).next
             | Next&nbsp;
-            i.fa.fa-arrow-circle-right

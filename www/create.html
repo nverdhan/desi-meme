@@ -20,6 +20,7 @@
 
 </head>
 <body ng-controller="CreateMemeController">
+	<div class="meme-header"><img src="assets/img/sdm-logo.svg" class="sdm-logo"><div class="header-link"><a href="/create" class="create-link">Create meme</a><a href="/memes" class="browse-link">Browse</a><hr></div></div>
 	<div id="outer-box" class="outer-box">
 		<div class="overlay" id="overlay" ng-show="OverlayVisible">
 			<div id="progress" class="hidden">
@@ -133,6 +134,9 @@
 					<div class="alert alert-danger" ng-show="errors.image.show">{{errors.image.text}}</div>
 				</div>
 				<div select-on-click class="text-box text-box-2 text-box-border" ng-show="showText2" class="text-input" innerhtml contenteditable="true" ng-model="memeContent.Text2" ng-bind-html="memeContent.Text2 | unsafe">Enter Bottom Text</div>
+				<div id="watermark" class="watermark invisible">
+					<img src="assets/img/created-using.svg">
+				</div>
 			</div>
 			<div id="form-options" class="meme-form-options inner-box text-center">
 				 <div id="controls" class="">

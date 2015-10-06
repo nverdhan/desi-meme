@@ -4,14 +4,13 @@ var User = require('../models/user');
 var savedImg = require('../models/savedImg');
 var passport = require('passport');
 var baseUrl = 'http://127.0.0.1:3000/';
-var multer = require('multer')
+var multer = require('multer');
 	// var upload = multer({ 
 	// 	dest: 'uploads/', 
 	// 	rename : 'asd'
 	// })
 var storage = multer.diskStorage({
 	destination: function(req, file, cb) {
-		console.log(123)
 		cb(null, 'uploads')
 	},
 	filename: function(req, file, cb) {
@@ -21,8 +20,36 @@ var storage = multer.diskStorage({
 var upload = multer({
 	storage: storage
 })
-
-
+var getTopTags = function(limit, cb) {
+	Tag.getTop(limit, function(tags){
+		var topTagList = [];
+		for (var i = 0; i < tags.length; i++) {
+			topTagList.push({
+							link: baseUrl + 'tag/' + tags[i].name,
+							usage: tags[i].usage,
+							name: tags[i].name
+						});
+		};
+		cb(topTagList);
+	})
+}
+var updateTagsInMemes = function(memes, cb) {
+	if(memes.length!=0){
+		var updatedMemes = [];
+		var updateLen = 0;
+		for (var j = 0; j < memes.length; j++) {
+			Tag.populateMeme(baseUrl, memes[j], function(meme){
+				updatedMemes.push(meme);
+				updateLen++;
+				if(updateLen == memes.length){
+					cb(updatedMemes);
+				}
+			})
+		}
+	}else{
+		cb([]);
+	}
+}
 require('./addToDB'); // adds default values to database
 
 module.exports = function(app, passport) {
@@ -87,13 +114,28 @@ module.exports = function(app, passport) {
 				if(meme.length != 0){
 					var pageUrl = baseUrl+'memes/'+meme[0]._id;
 					var picUrl = baseUrl+meme[0].path;
-					res.render('memeone', {
-						meme: meme[0],
-						pageUrl: pageUrl,
-						picUrl: picUrl
+					var memeTags = [];
+					var updateMemeTags = function(tag){
+						memeTags.push(tag);
+					}
+					Tag.findByMeme(meme[0], function(err, tags){
+						for (var i = 0; i < tags.length; i++) {
+							updateMemeTags({
+								        	link: baseUrl+'tag/'+tags[i].name,
+								        	name: tags[i].name
+										});
+						}
+						getTopTags(10, function(toptags){
+							res.render('memeone', {
+								meme: meme[0],
+								pageUrl: pageUrl,
+								picUrl: picUrl,
+								tags: memeTags,
+								toptags: toptags
+							});
+						})
 					});
 				}else{
-					console.log('aaa');
 					res.status(404).send('Not found');
 				}
 				
@@ -104,30 +146,83 @@ module.exports = function(app, passport) {
 			
 		});
 		app.get('/memes', function(req, res, next) {
-
 		  Meme.paginate({}, { page: req.query.page, limit: req.query.limit }, function(err, memes, pageCount, itemCount) {
 		    if (err) return next(err);
-		    res.format({
-		      html: function() {
-		        res.render('memes', {
-		          memes: memes,
-		          baseUrl: baseUrl,
-		          pageCount: pageCount,
-		          itemCount: itemCount
-		        });
-		      },
-		      json: function() {
-		        // inspired by Stripe's API response for list objects
-		        res.json({
-		          object: 'list',
-		          has_more: paginate.hasNextPages(req)(pageCount),
-		          data: memes
-		        });
-		      }
-		    });
-
+		    updateTagsInMemes(memes, function(updatedMemes){
+		    	getTopTags(10, function(toptags){
+			    	res.format({
+				      html: function() {
+				        res.render('memes', {
+				          memes: updatedMemes,
+				          baseUrl: baseUrl,
+				          pageCount: pageCount,
+				          itemCount: itemCount,
+				          toptags: toptags,
+						  req: {
+								type: 'memes',
+							    name: 'Popular Shudh Desi Memes'
+							    }
+							});
+				      },
+				      json: function() {
+				        // inspired by Stripe's API response for list objects
+				        res.json({
+				          object: 'list',
+				          has_more: paginate.hasNextPages(req)(pageCount),
+				          data: memes
+				        });
+				      }
+				    });	
+			    });
+		    })
 		  });
 
+		});
+		app.get('/tag/:name', function(req, res, next){
+			var name = req.params.name;
+			Tag.findByName(name, function(err, tag){
+				if(err) console.log(err);
+				if(tag.length == 0){
+					res.status('404').send('Tag not found');
+				}else{
+					var memeIds = [];
+					for (var i = 0; i < tag[0]._memes.length; i++) {
+						memeIds.push(tag[0]._memes[i].meme);
+					};
+					Meme.paginate({
+						_id: {$in: memeIds}
+					}, { page: req.query.page, limit: req.query.limit }, function(err, memes, pageCount, itemCount) {
+					    if (err) return next(err);
+					    updateTagsInMemes(memes, function(updatedMemes){
+						    getTopTags(10, function(toptags){
+						    	res.format({
+							      html: function() {
+							        res.render('memes', {
+							          memes: updatedMemes,
+							          baseUrl: baseUrl,
+							          pageCount: pageCount,
+							          itemCount: itemCount,
+							          toptags: toptags,
+							          req: {
+							          	type: 'tag',
+							          	name: name
+							          }
+							        });
+							      },
+							      json: function() {
+							        // inspired by Stripe's API response for list objects
+							        res.json({
+							          object: 'list',
+							          has_more: paginate.hasNextPages(req)(pageCount),
+							          data: memes
+							        });
+							      }
+							    });	
+						    });
+						});
+					});
+				}
+			})
 		});
 		app.post('/api/upload', upload.single('file'), function(req, res, next) {
 			res.json({
@@ -150,9 +245,9 @@ module.exports = function(app, passport) {
 				if(err){
 					console.log(err);
 				}
-				Meme.saveMeme(memeObj, function(err) {
+				Meme.saveMeme(memeObj, function(_id) {
 					res.json({
-						fileurl: memeObj.path
+						redirectUrl: baseUrl+'memes/'+_id
 					});
 				})
 			});

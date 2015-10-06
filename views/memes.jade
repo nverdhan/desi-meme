@@ -2,26 +2,73 @@
 doctype html
 html
   head
+    if(req.type == "memes")
+      title="Popular Shudh Desi Memes"
+    else if(req.type == "tag")
+      title="Memes with tag #"+req.name
+    else
+      title="Shudh Desi Memes"
     style
       include style.css
+      include ../assets/socialshare1.0.6/css/social-share-kit.css
   body
-h1 Tags
-
-//- this will simply generate a link to sort by name
-//- note how we only have to pass the querystring param
-//- that we want to modify here, not the entire querystring
-a(href='/create') Create your own
-//-a(href=paginate.href({ sort: 'name' })) Create your own
-
-//- this assumes you have `?age=1` or `?age=-1` in the querystring
-//- so this will basically negate the value and give you
-//- the opposite sorting order (desc with -1 or asc with 1)
-//- a(href=paginate.href({ sort: req.query.age === '1' ? -1 : 1 })) Sort by age
-
-ul
-  each meme in memes
-    if meme.ifSave
-      li
-        a(href= baseUrl + 'memes/' + meme._id) #{meme.title}
-        img(src = baseUrl+meme.path)
-include _paginate
+    script(src="../assets/socialshare1.0.6/js/social-share-kit.js")
+    script(src="../public/js/jquery/jquery-1.10.2.min.js")
+    script(src="../assets/js/socialshare.js")
+    div.header
+      img.sdm-logo(src="../assets/img/sdm-logo.svg")
+      div.header-link
+        a.create-link(href='/create') Create meme
+        a.browse-link(href='/memes') Browse
+        hr
+    div.memes-container
+      if(req.type == "memes")
+        h1 Newest Memes
+      else if(req.type == "tag")
+        h1.bold-text Memes with tag 
+          span.oblique ##{req.name}
+        a(href='/memes') View all
+      else
+        h1 Shudh Desi Memes
+      ul
+        each meme in memes
+          if meme.ifSave
+          li.meme-li
+            a.meme-title(href= baseUrl + 'memes/' + meme._id) #{meme.title}
+              div.meme-holder
+                img.meme-img(src = baseUrl+meme.path)
+            //- a.disqus-comment-count(href= baseUrl + 'memes/' + meme._id+"#disqus_thread")
+            div.ssk-group.ssk-sm(data-url=baseUrl+'memes/'+meme._id, data-text=meme.title)
+              a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
+              a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
+              a.ssk.ssk-google-plus.ssk-text(href="")
+              a.ssk.ssk-email.ssk-text(href="")
+              a.ssk.ssk-whatsapp.ssk-text(href="")
+              a.ssk.ssk-download.ssk-text(href=baseUrl+meme.path, download)
+            div.comment-tag
+              div.tag-list
+                ul
+                  each tag in meme.tags
+                    li
+                      a.tag-name.oblique(href=tag.link) #{tag.name}
+              div.comment
+                span.fb-comments-count(data-href=baseUrl + 'memes/' + meme._id)
+                |  comments
+            hr      
+    div#toptags.toptags
+      span.bold-text Popular Tags
+      ul
+        each tag in toptags
+          li
+            if(req.type=="tag" && req.name == tag.name)
+              a.oblique.bold-text(href=tag.link) #{tag.name} (#{tag.usage})
+            else
+              a.oblique(href=tag.link) #{tag.name} (#{tag.usage})
+        li.space-above
+          a.bold-text(href='/memes') Browse all
+        li
+          a.bold-text(href='/create') Create your own
+    include _paginate
+    div.false-space
+    div.footer
+    //- script(src="../assets/js/disqus.js")

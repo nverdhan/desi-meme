@@ -18,6 +18,34 @@ TagSchema.statics.getSimilarTags = function(name, cb) {
 		name: new RegExp(name, 'i')
 	}, cb);
 }
+TagSchema.statics.findByMeme = function(meme, cb){
+	return this.find({_memes: {$elemMatch: {meme: meme._id}}}, cb);
+}
+TagSchema.statics.populateMeme = function(baseUrl, meme, cb){
+	return this.find({_memes: {$elemMatch: {meme: meme._id}}})
+				.exec(function(err, tags){
+					meme.tags = [];
+					for (var i = 0; i < tags.length; i++) {
+						meme.tags.push({
+						        	link: baseUrl+'tag/'+tags[i].name,
+						        	name: tags[i].name
+								});
+					};
+					cb(meme);
+				});
+}
+TagSchema.statics.findByName = function(name, cb){
+	return this.find({name: name}, cb);
+}
+TagSchema.statics.getTop = function(limit, cb){
+	return this.find({})
+				.sort({usage: -1})
+				.limit(limit)
+				.exec(function(err, tags){
+					if(err) console.log(err);
+					cb(tags);
+				})
+}
 TagSchema.methods.selfPopulate = function(cb) {
 	this.model('Tag').findOne({
 			name: this.name

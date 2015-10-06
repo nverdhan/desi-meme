@@ -22,8 +22,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
-    font: inherit;
+    /*font-size: 100%;*/
+    /*font: inherit;*/
     vertical-align: baseline;
 }
 
@@ -69,10 +69,10 @@ button::-moz-focus-inner {
 body {
     background: #F4F4F4;
     color: #666;
-    font-size: .75em;
+    /*font-size: .75em;*/
     /*font-family: Lato, sans-serif;*/
     /*font-family: BentonSans,"Lucida Sans","Lucida Grande",sans-serif;*/
-    font-smooth: always;
+    /*font-smooth: always;*/
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
@@ -2633,7 +2633,7 @@ media{
     display: table-cell;
     vertical-align: middle;
     position: absolute;
-    top: 22em;
+    top: 20%;
     max-width: 600px;
     text-align: center;
     left: 0;

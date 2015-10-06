@@ -288,6 +288,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 			/*Convert Div Content to Image/Jpeg and Send server side via ajax*/
 			angular.element('.text-box').removeClass('text-box-border');
 			angular.element('.fa-picture-o').addClass('invisible');
+			angular.element('#watermark').removeClass('invisible');
 			html2canvas(c3, {
 				onrendered: function(canvas) {
 					var extra_canvas = document.createElement("canvas");
@@ -298,14 +299,6 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 	                var dataURL = extra_canvas.toDataURL("image/jpeg",1);
 					$scope.setShareDataUrl(dataURL);
 					var serverSideURL = 'api/upload2';
-					// document.body.appendChild(canvas);
-					// var canvasc = angular.element("canvas");
-					// // console.log(canvasc);
-					// canvasc.attr('id', 'myCanvas');
-					// var canvasx = document.getElementById("myCanvas");
-					// // console.log(canvasx);
-					// canvasx.setAttribute('style', 'transform:scale(4,4)');
-					// var file = canvasx.toDataURL("image/jpeg", 1);
 					var file = dataURL;
 					$scope.saveMsg = 'Please wait';
 					$scope.saveStatus = true;
@@ -320,6 +313,9 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 						$scope.initCreateMeme();
 						angular.element('.text-box').addClass('text-box-border');
 						angular.element('.fa-picture-o').removeClass('invisible');
+						angular.element('.fa-picture-o').addClass('invisible');
+						// console.log(data.data.redirectUrl);
+						document.location.href=data.data.redirectUrl;
 					}, function(err) {
 						$scope.saveStatus = false;
 						$scope.saveMsg = 'error saving. Retry!'
