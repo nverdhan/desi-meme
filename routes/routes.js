@@ -256,9 +256,7 @@ module.exports = function(app, passport) {
 		 * Home 
 		 */
 		app.get('/', function(req, res) {
-			res.sendFile('www/index.html', {
-				root: app.get('rootDir')
-			});
+			res.redirect('/create');
 		});
 	}
 	// route middleware to make sure a user is logged in
