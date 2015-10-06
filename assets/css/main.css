@@ -69,8 +69,9 @@ body{
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	width: 60%;
+	width: 50%;
 	height: 80%;
+	min-width: 400px;
 }
 .meme-img-holder {
 	position: relative;
@@ -295,12 +296,12 @@ body{
 	cursor: pointer;
 }
 .larger{
-	font-size: 2em;
+	font-size: 1.5em;
 	left: 0;
     bottom: 7px
 }
 .larger:hover{
-	font-size: 2.2em;
+	font-size: 1.8em;
 }
 .smaller{
 	font-size: 1em;

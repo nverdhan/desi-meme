@@ -278,6 +278,27 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 	$scope.setShareDataUrl = function(shareDataUrl){
 		$scope.shareUrl = shareDataUrl;
 	}
+	// $scope.backingScale = function () {
+ //        if (window.devicePixelRatio && window.devicePixelRatio > 1) {
+ //            return window.devicePixelRatio;
+ //        }
+ //        return 1;
+ //    };
+ //    $scope.parsePixelValue = function (value) {
+ //            return parseInt(value, 10);
+ //        };
+ //    $scope.scaleCanvasForRetina = function (canvas) {
+ //            var scaleFactor = backingScale(),
+ //                canvasStyle = window.getComputedStyle(canvas);
+ //            canvas.width = parsePixelValue(canvasStyle.width) * scaleFactor;
+ //            canvas.height = parsePixelValue(canvasStyle.height) * scaleFactor;
+ //        };
+ //    $scope.drawHTML = function () {
+ //            var scaleFactor = backingScale();
+ //            rasterizeHTML.drawHTML(input.value, canvas, {
+ //                zoom: scaleFactor
+ //            });
+ //    };
 	$scope.saveFormNext = function() {
 		if (!$scope.checkTitleErr() && !$scope.checkTagErr() && !$scope.saveStatus) {
 			var c3 = document.getElementById('meme-img-holder');
@@ -303,10 +324,6 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 					var file = dataURL;
 					$scope.saveMsg = 'Please wait';
 					$scope.saveStatus = true;
-					console.log(file);
-					// for (var key in file)
-    	// 				if (file.hasOwnProperty(key))
-     //     					console.log(key,file[key]);
 					$http.post('http://edroot.com/shudhdesimemes/upload.php', {
 				        	img: dataURL
 				      }).then(function(data) {
@@ -345,6 +362,81 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 			});
 		}
 	}
+	// $scope.saveFormNext = function() {
+	// 	if (!$scope.checkTitleErr() && !$scope.checkTagErr() && !$scope.saveStatus) {
+	// 		var c3 = document.getElementById('meme-img-holder');
+	// 		var x = c3.innerHTML;
+	// 		var w = c3.clientWidth;
+	// 		var h = c3.clientHeight/c3.clientWidth*w;
+	// 		// console.log()
+	// 		/*Convert Div Content to Image/Jpeg and Send server side via ajax*/
+	// 		angular.element('.text-box').removeClass('text-box-border');
+	// 		angular.element('.fa-picture-o').addClass('invisible');
+	// 		angular.element('#watermark').removeClass('invisible');
+	// 		var canvas = document.createElement("canvas");
+	// 		console.log(c3);
+	// 		rasterizeHTML.drawHTML(c3, canvas, {width: 800, height: 600})
+	// 	      .then(function success(renderResult) {
+	// 	           console.log(renderResult);
+	// 	      }, function error(e) {
+	// 	          console.log(e);
+	// 	      });
+			// html2canvas(c3, {
+			// 	onrendered: function(canvas) {
+			// 		var extra_canvas = document.createElement("canvas");
+	  //               extra_canvas.setAttribute('width',800);
+	  //               extra_canvas.setAttribute('height',600);
+	  //               var ctx = extra_canvas.getContext('2d');
+	  //               ctx.drawImage(canvas,0,0,canvas.width, canvas.height,0,0,800,600);
+	  //               var dataURL = extra_canvas.toDataURL("image/jpeg",1);
+			// 		$scope.setShareDataUrl(dataURL);
+			// 		var serverSideURL = 'api/savememe';
+			// 		// var serverSideURL = 'http://localhost/shudhdesimemes/upload.php'
+			// 		var file = dataURL;
+			// 		$scope.saveMsg = 'Please wait';
+			// 		$scope.saveStatus = true;
+			// 		console.log(file);
+			// 		// for (var key in file)
+   //  	// 				if (file.hasOwnProperty(key))
+   //   //     					console.log(key,file[key]);
+			// 		$http.post('http://edroot.com/shudhdesimemes/upload.php', {
+			// 	        	img: dataURL
+			// 	      }).then(function(data) {
+			// 	        // file is uploaded successfully
+			// 	        if(data.data.status){
+			// 	        	$http.post(serverSideURL, {
+			// 					filepath: data.data.filename,
+			// 					title: $scope.memeObj.title,
+			// 					tags: $scope.tagSelected,
+			// 					doNotSave: $scope.privateSavedImg
+			// 				}).then( function(data) {
+			// 				// cons
+			// 					$scope.saveMsg = 'Done!';
+			// 					$scope.initCreateMeme();
+			// 					angular.element('.text-box').addClass('text-box-border');
+			// 					angular.element('.fa-picture-o').removeClass('invisible');
+			// 					angular.element('.fa-picture-o').addClass('invisible');
+			// 					document.location.href=data.data.redirectUrl;
+			// 				}, function(err) {
+			// 					$scope.saveStatus = false;
+			// 					$scope.saveMsg = 'error saving. Retry!'
+			// 				});
+			// 	        }else{
+			// 	        	$scope.saveStatus = false;
+			// 				$scope.saveMsg = 'error saving. Retry later!'
+			// 	        }
+			// 	      }, function(err) {
+			// 	      		$scope.saveStatus = false;
+			// 				$scope.saveMsg = 'error saving. Retry later!'
+			// 	      })
+			// 		angular.element("#myCanvas").remove();
+			// 	},
+			// 	// width: 400,
+			// 	// height: 300,
+			// 	// logging: true
+			// });
+	// 	}
+	// }
 	$scope.askForDetails = function() {
 		if (!$scope.memeObj.image) {
 			$scope.errors.image.show = true;
