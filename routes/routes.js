@@ -113,7 +113,7 @@ module.exports = function(app, passport) {
 				Meme.findByID(_id, function(err, meme){
 				if(meme.length != 0){
 					var pageUrl = baseUrl+'memes/'+meme[0]._id;
-					var picUrl = baseUrl+meme[0].path;
+					var picUrl = "http://www.edroot.com/shudhdesimemes/images/"+meme[0].path;
 					var memeTags = [];
 					var updateMemeTags = function(tag){
 						memeTags.push(tag);
@@ -155,6 +155,7 @@ module.exports = function(app, passport) {
 				        res.render('memes', {
 				          memes: updatedMemes,
 				          baseUrl: baseUrl,
+				          picBaseUrl: "http://www.edroot.com/shudhdesimemes/images/",
 				          pageCount: pageCount,
 				          itemCount: itemCount,
 				          toptags: toptags,
@@ -200,6 +201,7 @@ module.exports = function(app, passport) {
 							        res.render('memes', {
 							          memes: updatedMemes,
 							          baseUrl: baseUrl,
+							          picBaseUrl: "http://www.edroot.com/shudhdesimemes/images/",
 							          pageCount: pageCount,
 							          itemCount: itemCount,
 							          toptags: toptags,
@@ -228,6 +230,19 @@ module.exports = function(app, passport) {
 			res.json({
 				filename: req.file.filename
 			});
+		});
+		app.post('/api/savememe', function(req, res){
+			var memeObj = {
+				title: req.body.title,
+				tags: req.body.tags,
+				path: req.body.filepath,
+				ifSave: !req.body.doNotSave
+			};
+			Meme.saveMeme(memeObj, function(_id) {
+					res.json({
+						redirectUrl: baseUrl+'memes/'+_id
+					});
+				})
 		});
 		app.post('/api/upload2', function(req, res) {
 			var filepath = 'uploads/';

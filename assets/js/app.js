@@ -298,28 +298,45 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 	                ctx.drawImage(canvas,0,0,canvas.width, canvas.height,0,0,800,600);
 	                var dataURL = extra_canvas.toDataURL("image/jpeg",1);
 					$scope.setShareDataUrl(dataURL);
-					var serverSideURL = 'api/upload2';
+					var serverSideURL = 'api/savememe';
+					// var serverSideURL = 'http://localhost/shudhdesimemes/upload.php'
 					var file = dataURL;
 					$scope.saveMsg = 'Please wait';
 					$scope.saveStatus = true;
-					$http.post(serverSideURL, {
-						file: file,
-						title: $scope.memeObj.title,
-						tags: $scope.tagSelected,
-						doNotSave: $scope.privateSavedImg
-					}).then( function(data) {
-						// cons
-						$scope.saveMsg = 'Done!';
-						$scope.initCreateMeme();
-						angular.element('.text-box').addClass('text-box-border');
-						angular.element('.fa-picture-o').removeClass('invisible');
-						angular.element('.fa-picture-o').addClass('invisible');
-						// console.log(data.data.redirectUrl);
-						document.location.href=data.data.redirectUrl;
-					}, function(err) {
-						$scope.saveStatus = false;
-						$scope.saveMsg = 'error saving. Retry!'
-					});
+					console.log(file);
+					// for (var key in file)
+    	// 				if (file.hasOwnProperty(key))
+     //     					console.log(key,file[key]);
+					$http.post('http://edroot.com/shudhdesimemes/upload.php', {
+				        	img: dataURL
+				      }).then(function(data) {
+				        // file is uploaded successfully
+				        if(data.data.status){
+				        	$http.post(serverSideURL, {
+								filepath: data.data.filename,
+								title: $scope.memeObj.title,
+								tags: $scope.tagSelected,
+								doNotSave: $scope.privateSavedImg
+							}).then( function(data) {
+							// cons
+								$scope.saveMsg = 'Done!';
+								$scope.initCreateMeme();
+								angular.element('.text-box').addClass('text-box-border');
+								angular.element('.fa-picture-o').removeClass('invisible');
+								angular.element('.fa-picture-o').addClass('invisible');
+								document.location.href=data.data.redirectUrl;
+							}, function(err) {
+								$scope.saveStatus = false;
+								$scope.saveMsg = 'error saving. Retry!'
+							});
+				        }else{
+				        	$scope.saveStatus = false;
+							$scope.saveMsg = 'error saving. Retry later!'
+				        }
+				      }, function(err) {
+				      		$scope.saveStatus = false;
+							$scope.saveMsg = 'error saving. Retry later!'
+				      })
 					angular.element("#myCanvas").remove();
 				},
 				// width: 400,

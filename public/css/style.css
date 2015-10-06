@@ -1010,9 +1010,9 @@ font-size: 16px;
 color: #fff;
 }
 
-.btn-ok:hover{
+.btn-ok:hover, .btn-ok:focus{
 /*background: #245dc1;*/
-background: #9ececc;
+background: #ed1c24;
 
 }
 .btn-cancel{
@@ -1342,10 +1342,7 @@ border: 0;
 padding: 11px 10px 11px 13px;;
 }
 .btn-ok{
-/*background: #529ecc;*/
-
-background: #8CBB30;
-/*background : linear-gradient(to bottom, #A2D73F 0%, #8CBB30 100%) repeat scroll 0% 0% transparent;*/
+background: #00adef;
 }
 .title{
 /*color: #cfcfcf;*/

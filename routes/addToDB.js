@@ -1,15 +1,15 @@
 // var Tag = require('../models/tag');
 // var savedImg = require('../models/savedImg');
 // var mongoose = require('mongoose');
-// // mongoose.connection.collections['savedimgs'].drop( function(err) {
-// //     console.log('collection dropped');
-// // });
-// // mongoose.connection.collections['tags'].drop( function(err) {
-// //     console.log('collection dropped');
-// // });
-// // mongoose.connection.collections['memes'].drop( function(err) {
-// //     console.log('collection dropped');
-// // });
+// mongoose.connection.collections['savedimgs'].drop( function(err) {
+//     console.log('collection dropped');
+// });
+// mongoose.connection.collections['tags'].drop( function(err) {
+//     console.log('collection dropped');
+// });
+// mongoose.connection.collections['memes'].drop( function(err) {
+//     console.log('collection dropped');
+// });
 // var createTag;
 // var tagNames = ['hot', 'sexy', 'dude', 'nv', 'mongo', 'shahrukh khan', 'walter', 'white', 'x', 'xx', 'xxx', 'django', 'xango', 'alpha', 'charlie', 'bravo', 'delta', 'omega', 'phi', 'chi', 'omicron', 'beta', 'gamma', 'superman', 'dark knight', 'anil kapoor', 'bond', 'guchhu', 'nero']
 // for (var i = 0; i < tagNames.length; i++) {

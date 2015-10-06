@@ -36,7 +36,7 @@ html
           li.meme-li
             a.meme-title(href= baseUrl + 'memes/' + meme._id) #{meme.title}
               div.meme-holder
-                img.meme-img(src = baseUrl+meme.path)
+                img.meme-img(src = picBaseUrl+meme.path)
             //- a.disqus-comment-count(href= baseUrl + 'memes/' + meme._id+"#disqus_thread")
             div.ssk-group.ssk-sm(data-url=baseUrl+'memes/'+meme._id, data-text=meme.title)
               a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
@@ -44,7 +44,7 @@ html
               a.ssk.ssk-google-plus.ssk-text(href="")
               a.ssk.ssk-email.ssk-text(href="")
               a.ssk.ssk-whatsapp.ssk-text(href="")
-              a.ssk.ssk-download.ssk-text(href=baseUrl+meme.path, download)
+              a.ssk.ssk-download.ssk-text(href=picBaseUrl+meme.path, download)
             div.comment-tag
               div.tag-list
                 ul
