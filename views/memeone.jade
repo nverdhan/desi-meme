@@ -27,23 +27,27 @@ html
     script(src="../assets/socialshare1.0.6/js/social-share-kit.js")
     script(src="../assets/js/socialshare.js")
     div.header
-      img.sdm-logo(src="../assets/img/sdm-logo.svg")
+      a(href="/")
+        img.sdm-logo(src="../assets/img/sdm-logo.svg")
       div.header-link
         a.create-link(href='/create') Create meme
-        a.browse-link(href='/memes') Browse
+        a.browse-link(href='/') Browse
         hr
-    div.memes-container.memeone
-      h1 #{meme.title}
-      h2.by-sdm by Shudh Desi Memes
+    div.memes-container.memeone       
+      div.meme-title-date          
+        div
+          h1 #{meme.title}
+          h2.by-sdm by Shudh Desi Memes
+        div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
       div.meme-holder
         img.meme-img(src = picUrl)
-      div.ssk-group.ssk-sm(data-url=baseUrl+'memes/'+meme._id, data-text=meme.title)
+      div.ssk-group.ssk-sm(data-url=pageUrl, data-text=meme.title)
         a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
         a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
-        a.ssk.ssk-google-plus.ssk-text(href="")
-        a.ssk.ssk-email.ssk-text(href="")
-        a.ssk.ssk-whatsapp.ssk-text(href="")
-        a.ssk.ssk-download.ssk-text(href=picUrl, download)
+        a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+        a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+        a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+pageUrl+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+        a.ssk.ssk-download.ssk-text(href=picUrl, download, title="Download this meme as image")
       div.tag-list
         ul
           each tag in tags
@@ -58,8 +62,8 @@ html
         each tag in toptags
           li
             a.oblique(href=tag.link) #{tag.name} (#{tag.usage})
-        li
-          a.bold-text(href='/memes') Browse all
+        li.space-above
+          a.bold-text(href='/') Browse all
         li
           a.bold-text(href='/create') Create your own
     div.footer

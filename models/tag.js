@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-var mongoosePaginate = require('mongoose-paginate');
+// var mongoosePaginate = require('mongoose-paginate');
+var timestamps = require('mongoose-timestamp');
 var Schema = mongoose.Schema;
 var TagSchema = new Schema({
 	name: String,
@@ -11,7 +12,8 @@ var TagSchema = new Schema({
 		}
 	}]
 });
-TagSchema.plugin(mongoosePaginate);
+// TagSchema.plugin(mongoosePaginate);
+TagSchema.plugin(timestamps);
 
 TagSchema.statics.getSimilarTags = function(name, cb) {
 	return this.find({

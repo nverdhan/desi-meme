@@ -1,0 +1,70 @@
+.container{
+	position: relative;
+	top: 100px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	width: 600px;
+	height: 100%;
+}
+.files {
+	width: 600px;
+	height: 450px;
+	background-color: #ddd;
+	position: absolute;
+	top: 60px;
+	left: 0;
+	z-index: 5;
+}
+.output{
+	position: absolute;
+	top: 60px;
+	left: 0;
+	width: 600px;
+	z-index: 10;
+}
+.output-img{
+	width: 600px;
+}
+.textinp {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 10px auto;
+	width: 600px;
+	height: 40px;
+	font-size: 1em;
+	padding: 5px;
+	z-index: 15;
+}
+.submit{
+	width: 150px;
+	height: 40px;
+	background-color: #00adef;
+	position: absolute;
+	top: -37px;
+	right: 0;
+	color: white;
+	font-size: 1em;
+}
+.reload{
+	width: 150px;
+	height: 40px;
+	background-color: #ed1c24;
+	position: absolute;
+	top: -37px;
+	left: 0;
+	color: white;
+	font-size: 1em;
+}
+.message{
+	position: absolute;
+	top: 2px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	font-size: 1.3em;
+	font-style: bold;
+	text-align: center;
+}

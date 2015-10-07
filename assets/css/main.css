@@ -71,7 +71,6 @@ body{
 	margin: 0 auto;
 	width: 50%;
 	height: 80%;
-	min-width: 400px;
 }
 .meme-img-holder {
 	position: relative;
@@ -88,7 +87,9 @@ body{
 }*/
 .text-box {
 	position: absolute;
-	font-size: 3em;
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 5vw;
 	max-width: 90%;
 	min-width: 30%;
 	left: 0;
@@ -99,7 +100,13 @@ body{
 	font-weight: 600;
 	color: #ffffff;
 	vertical-align: middle;
-	text-shadow: 2px 2px 1px black;
+	text-shadow: 1px 1px 2px black;	
+}
+.small-shadow {
+	text-shadow: 1px 1px 2px black;	
+}
+.large-shadow {
+	text-shadow: 10px 10px 20px black!important;
 }
 .text-box-border{
 	border: 1px dashed #ccc;
@@ -172,7 +179,7 @@ body{
 .selected-theme:after {
 	display: block;
 	content: "";
-	background-color: #1E90FF;
+	background-color: #00adef;
 	opacity: 0.6;
 	position: absolute;
 	top: 0;
@@ -317,11 +324,29 @@ body{
 	line-height: 90%;
 }
 .watermark {
-    width: 218px;
+    width: 2000px;
     position: absolute;
     bottom: 5px;
     right: 5px;
 }
 .watermark.invisible{
 	display: none;
+}
+.upload-msg.invisible{
+	display: none;
+}
+.watermark img{
+	width: 2000px;
+}
+.upload-msg{
+	position: absolute;
+	top: 20%;
+	left:0;
+	right: 0;
+	margin: 0 auto;
+	font-size: 2em;
+	font-size: 2vw;
+	text-align: center;
+	color: #ed1c24;
+	/*text-shadow: 1px 1px 2px white;*/
 }

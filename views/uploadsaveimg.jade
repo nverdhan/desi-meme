@@ -1,0 +1,25 @@
+html
+	head
+		style
+			include ../assets/css/uploadimgs.css
+		style.
+			.message {
+				color: #{msgColor};
+			}
+	body
+		div.message
+			if(uploadSuccess == "new")
+				| Add an image file (width 800px and height 600px) Also enter searchstring
+			if(uploadSuccess == "success")
+				| File uploaded and added to database successfully. Add another file now.
+			if(uploadSuccess == "errorinsave")
+				| File uploaded but not saved to database. Was your searchstring alright?
+		div.container
+			div#output.output
+			form(method="post" enctype="multipart/form-data" action="/mcconaughey")
+				input.textinp(type="text", name="searchStr", autofocus, placeholder="Enter search string separated by commas")
+				input.files#files(type="file", name="savedImg", single)
+				input.submit(type="submit", value="Upload")
+			button#reload.reload Reload
+		script(src="../assets/js/uploadimgs.js")
+		script(src="../public/js/jquery/jquery-1.10.2.min.js")

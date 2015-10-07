@@ -27,7 +27,7 @@ var GoodreadsStrategy = require('passport-goodreads').Strategy;
 
 var config = {
     'session': {
-      'secret': 'walterwhite'
+      'secret': 'walterwhitesaulgoodmanankitdude'
     }
   }
   /*db connect*/
@@ -42,6 +42,7 @@ var app = express();
 
 var paginate = require('express-paginate');
 app.use(paginate.middleware(10, 50));
+app.locals.moment = require('moment');
 
 // Enable CORS
 var allowCrossDomain = function (req, res, next) {

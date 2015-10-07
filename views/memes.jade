@@ -16,10 +16,11 @@ html
     script(src="../public/js/jquery/jquery-1.10.2.min.js")
     script(src="../assets/js/socialshare.js")
     div.header
-      img.sdm-logo(src="../assets/img/sdm-logo.svg")
+      a(href="/")
+        img.sdm-logo(src="../assets/img/sdm-logo.svg")
       div.header-link
         a.create-link(href='/create') Create meme
-        a.browse-link(href='/memes') Browse
+        a.browse-link(href='/') Browse
         hr
     div.memes-container
       if(req.type == "memes")
@@ -27,24 +28,26 @@ html
       else if(req.type == "tag")
         h1.bold-text Memes with tag 
           span.oblique ##{req.name}
-        a(href='/memes') View all
+        //- a(href='/') View all
       else
         h1 Shudh Desi Memes
       ul
         each meme in memes
           if meme.ifSave
           li.meme-li
-            a.meme-title(href= baseUrl + 'memes/' + meme._id) #{meme.title}
+            a(href= baseUrl + 'memes/' + meme._id)
+              div.meme-title-date
+                div.meme-title #{meme.title}
+                div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
               div.meme-holder
                 img.meme-img(src = picBaseUrl+meme.path)
-            //- a.disqus-comment-count(href= baseUrl + 'memes/' + meme._id+"#disqus_thread")
             div.ssk-group.ssk-sm(data-url=baseUrl+'memes/'+meme._id, data-text=meme.title)
               a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
               a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
-              a.ssk.ssk-google-plus.ssk-text(href="")
-              a.ssk.ssk-email.ssk-text(href="")
-              a.ssk.ssk-whatsapp.ssk-text(href="")
-              a.ssk.ssk-download.ssk-text(href=picBaseUrl+meme.path, download)
+              a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+              a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+              a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+'memes/'+meme._id+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+              a.ssk.ssk-download.ssk-text(href=picBaseUrl+meme.path, download, title="Download this meme as image")
             div.comment-tag
               div.tag-list
                 ul
@@ -65,7 +68,7 @@ html
             else
               a.oblique(href=tag.link) #{tag.name} (#{tag.usage})
         li.space-above
-          a.bold-text(href='/memes') Browse all
+          a.bold-text(href='/') Browse all
         li
           a.bold-text(href='/create') Create your own
     include _paginate

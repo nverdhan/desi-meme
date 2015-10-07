@@ -3,7 +3,7 @@ var Meme = require('../models/meme');
 var User = require('../models/user');
 var savedImg = require('../models/savedImg');
 var passport = require('passport');
-var baseUrl = 'http://127.0.0.1:3000/';
+var baseUrl = 'http://www.shudhdesimemes.com/';
 var multer = require('multer');
 	// var upload = multer({ 
 	// 	dest: 'uploads/', 
@@ -11,7 +11,7 @@ var multer = require('multer');
 	// })
 var storage = multer.diskStorage({
 	destination: function(req, file, cb) {
-		cb(null, 'uploads')
+		cb(null, 'savedimgs')
 	},
 	filename: function(req, file, cb) {
 		cb(null, Date.now() + file.originalname)
@@ -112,6 +112,7 @@ module.exports = function(app, passport) {
 			if(mongoose.Types.ObjectId.isValid(_id)){
 				Meme.findByID(_id, function(err, meme){
 				if(meme.length != 0){
+					console.log(meme[0].createdAt);
 					var pageUrl = baseUrl+'memes/'+meme[0]._id;
 					var picUrl = "http://www.edroot.com/shudhdesimemes/images/"+meme[0].path;
 					var memeTags = [];
@@ -145,8 +146,8 @@ module.exports = function(app, passport) {
 			}
 			
 		});
-		app.get('/memes', function(req, res, next) {
-		  Meme.paginate({}, { page: req.query.page, limit: req.query.limit }, function(err, memes, pageCount, itemCount) {
+		app.get('/', function(req, res, next) {
+		  Meme.paginate({}, { page: req.query.page, limit: req.query.limit, sortBy: {createdAt: -1} }, function(err, memes, pageCount, itemCount) {
 		    if (err) return next(err);
 		    updateTagsInMemes(memes, function(updatedMemes){
 		    	getTopTags(10, function(toptags){
@@ -192,7 +193,7 @@ module.exports = function(app, passport) {
 					};
 					Meme.paginate({
 						_id: {$in: memeIds}
-					}, { page: req.query.page, limit: req.query.limit }, function(err, memes, pageCount, itemCount) {
+					}, { page: req.query.page, limit: req.query.limit , sortBy: {createdAt: -1} }, function(err, memes, pageCount, itemCount) {
 					    if (err) return next(err);
 					    updateTagsInMemes(memes, function(updatedMemes){
 						    getTopTags(10, function(toptags){
@@ -231,6 +232,35 @@ module.exports = function(app, passport) {
 				filename: req.file.filename
 			});
 		});
+		
+		app.post('/mcconaughey', upload.single('savedImg'), function(req, res){
+    		img = new savedImg({
+    			path: req.file.path,
+    			searchStr: req.body.searchStr
+    		});
+    		img.save(function(err){
+    			if(err) {
+    				console.log(err);
+    				res.render('uploadsaveimg', {
+						uploadSuccess: "errorinsave",
+						msgColor: "red"
+						});
+    			}else{
+    				res.render('uploadsaveimg', {
+						uploadSuccess: "success",
+						msgColor: "green"
+						});
+    			}
+
+    			
+    		})
+		});
+		app.get('/mcconaughey', function(req,res){
+			res.render('uploadsaveimg', {
+				uploadSuccess: "new",
+				msgColor: "#00adef"
+			});
+		})
 		app.post('/api/savememe', function(req, res){
 			var memeObj = {
 				title: req.body.title,
@@ -270,9 +300,9 @@ module.exports = function(app, passport) {
 		/**
 		 * Home 
 		 */
-		app.get('/', function(req, res) {
-			res.redirect('/create');
-		});
+		// app.get('/', function(req, res) {
+		// 	res.redirect('/create');
+		// });
 	}
 	// route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {

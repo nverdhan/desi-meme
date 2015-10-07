@@ -3,6 +3,7 @@ var mongoosePaginate = require('mongoose-paginate');
 var Tag = require('../models/tag');
 var async = require('async');
 var request = require('request');
+var timestamps = require('mongoose-timestamp');
 var Schema = mongoose.Schema;
 var baseUrl = 'http://127.0.0.1:3000/'
 var MemeSchema = new Schema({
@@ -14,6 +15,7 @@ var MemeSchema = new Schema({
 	likes: Number
 });
 MemeSchema.plugin(mongoosePaginate);
+MemeSchema.plugin(timestamps);
 
 var shortenLink = function(longUrl, cb){	
 	var encodedLongUrl = encodeURIComponent(longUrl);

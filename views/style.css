@@ -13,7 +13,7 @@ h2.by-sdm{
     color: red;
     font-size: 1em;
     font-weight: 200;
-    margin-top: -17px;
+    margin-top: -10px;
 }
 ul{
     padding: 0;
@@ -74,7 +74,7 @@ a.ssk, a:visited.ssk{
 .header-link:hover hr{
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 173, 239, 0.8), rgba(237, 28, 36, 0.8), rgba(0, 0, 0, 0));
 }
-.memes-container > h1{
+.memes-container h1{
     color: #00adef;
 }
 .meme-title, .meme-title:visited{
@@ -82,11 +82,27 @@ a.ssk, a:visited.ssk{
     font-size: 1.3em;
     font-weight: 200;
     color: #424242;
-    padding: 20px 0;
+    /*padding: 20px 0;*/
 }
-.meme-title:hover, .meme-title:focus{
+.meme-title:hover, .meme-title:focus, .meme-li:hover .meme-title{
     color: #00adef;
     transition: all 0.3s ease 0.1s;
+}
+.meme-title-date {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 0.8em;
+    margin: 12px 0;
+}
+.meme-li:hover .meme-title-date{
+    color: #ed1c24;
+}
+.meme-createdAt {
+    font-size: 0.8em;
+    min-width: 150px;
+    text-align: right;
 }
 .meme-li hr{
     border: 0;
