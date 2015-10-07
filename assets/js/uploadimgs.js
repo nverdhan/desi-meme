@@ -6,14 +6,8 @@ function handleFileSelect(evt) {
         var reader = new FileReader();
         reader.onload = (function(theFile) {
         return function(e) {
-          // Render thumbnail.
-          // var span = document.createElement('span');
-          // span.innerHTML = ['<img class="thumb" src="', e.target.result,
-          //                   '" title="', escape(theFile.name), '"/>'].join('');
-          // document.getElementById('output').insertBefore(span, null);
           document.getElementById('output').innerHTML = ['<img class="output-img" src="', e.target.result,
                             '" title="', escape(theFile.name), '"/>'].join('');
-          // $("#files").css("background-color","#fff");
           document.getElementById("files").style.height="0px";
         };
       })(f);
