@@ -1,10 +1,7 @@
 {
-  "name": "bookApp",
-  "version": "0.0.0",
+  "name": "ShudhDesiMemes",
+  "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
   "dependencies": {
     "moment":"2.10.6",
     "mongoose-timestamp":"0.4.0",

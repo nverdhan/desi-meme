@@ -32,7 +32,7 @@ var config = {
   }
   /*db connect*/
 var mongoose = require('mongoose');
-var configDB = require('./config/dbConfig').local;
+var configDB = require('./config/dbConfig').prod;
 mongoose.connect(configDB.url);
 
 /*require models and config*/
