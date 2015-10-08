@@ -86,6 +86,13 @@ module.exports = function(app, passport) {
 				root: app.get('rootDir')
 			});
 		});
+
+		app.get('/privacy-policy', function(req, res) {
+			res.render("privacypolicy");
+		});
+		app.get('/terms-of-use', function(req, res) {
+			res.render("termsofuse");
+		});
 		/*
 		 *Get Tags Information
 		 */
