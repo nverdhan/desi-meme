@@ -87,6 +87,10 @@ module.exports = function(app, passport) {
 			});
 		});
 
+		app.get('/abc', function(req, res) {
+			res.render('abctry');
+		});
+
 		app.get('/privacy-policy', function(req, res) {
 			res.render("privacypolicy");
 		});
@@ -262,7 +266,7 @@ module.exports = function(app, passport) {
     			
     		})
 		});
-		app.get('/mcconaughey', function(req,res){
+		app.get('/mcconaughey', isLoggedIn, function(req,res){
 			res.render('uploadsaveimg', {
 				uploadSuccess: "new",
 				msgColor: "#00adef"
@@ -304,7 +308,15 @@ module.exports = function(app, passport) {
 				})
 			});
 		});
+		app.get('/auth/facebook', passport.authenticate('facebook', {display: 'popup'}));
+
+
+    	app.get('/auth/facebook/callback', 
+        	passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res){
+        		res.sendFile('views/after-auth.html',{ root: app.get('rootDir')});
+        	});
 		/**
+
 		 * Home 
 		 */
 		// app.get('/', function(req, res) {
@@ -313,9 +325,12 @@ module.exports = function(app, passport) {
 	}
 	// route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
+	// console.log(req);
 	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
+	if (req.isAuthenticated()){
 		return next();
+	}
 	// if they aren't redirect them to the home page
-	res.redirect('/');
+	res.redirect('/abc');
 }
+

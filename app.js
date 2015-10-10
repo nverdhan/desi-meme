@@ -7,23 +7,23 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var session = require('express-session');
-var redis = require('redis');
+// var redis = require('redis');
 
 var multer  = require('multer');
 // var upload = multer();
 
-var redisStore = require('connect-redis')(session);
+// var redisStore = require('connect-redis')(session);
 
 // var routes = require('./routes/index');
 // var user = require('./routes/user');
 
-var redisClient = redis.createClient();
+// var redisClient = redis.createClient();
 
 var flash = require('connect-flash');
 var port = process.env.PORT || 3000;
 
 var passport = require('passport');
-var GoodreadsStrategy = require('passport-goodreads').Strategy;
+// var GoodreadsStrategy = require('passport-goodreads').Strategy;
 
 var config = {
     'session': {
@@ -63,9 +63,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.set('config', config);
-app.set('sessionStore', new redisStore({
-  client: redisClient
-}));
+// app.set('sessionStore', new redisStore({
+//   client: redisClient
+// }));
 app.set('rootDir', __dirname);
 
 // uncomment after placing your favicon in /public
@@ -80,17 +80,20 @@ app.use(express.static(path.join(__dirname, 'www')));
 app.use(express.static(path.join(__dirname, '')));
 
 app.use(session({
-  key: 'bookTrade',
-  store: app.get('sessionStore'),
-  secret: 'crystalmeth'
+  // key: 'bookTrade',
+  // store: app.get('sessionStore'),
+  secret: 'crystalmeth',
+  cookie:{
+    secure: false
+  }
 }));
-app.use(flash());
+
 require('./models/user');
 require('./config/passport')(app, passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(flash());
 app.use(express.Router());
 // var routes = require('./routes/routes')(app, passport);
 // app.use('/', routes);

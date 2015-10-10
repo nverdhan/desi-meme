@@ -12,7 +12,11 @@ var MemeSchema = new Schema({
 	ifSave: Boolean,
 	link: String,
 	shortenedLink: String,
-	likes: Number
+	likes: Number,
+	_creator: {
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
 });
 MemeSchema.plugin(mongoosePaginate);
 MemeSchema.plugin(timestamps);

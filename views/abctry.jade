@@ -1,0 +1,8 @@
+html
+	head
+	body
+		a(href="" onClick="window.open('/auth/facebook', 'facebookauth')") facebookLogin;
+		form(method="post" enctype="multipart/form-data" action="/api/auth")
+			input.submit(type="submit", value="GETUSER")
+		form(method="post" enctype="multipart/form-data" action="/api/logout")
+			input.submit(type="submit", value="LOGOUT")
