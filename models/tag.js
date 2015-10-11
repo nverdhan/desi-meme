@@ -69,7 +69,7 @@ TagSchema.methods.updateTag = function(tagnew, cb) {
 	memesLen = this._memes.length;
 	this._memes.push({meme: ''});
 	this._memes[memesLen].meme = tagnew._memes[0].meme;
-	this.usage += 1;
+	this.usage += tagnew.usage;
 	var self = this;
 	this.save(function(err) {
 		if (err) console.log(err);

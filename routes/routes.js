@@ -3,7 +3,7 @@ var Meme = require('../models/meme');
 var User = require('../models/user');
 var savedImg = require('../models/savedImg');
 var passport = require('passport');
-var baseUrl = 'http://www.shudhdesimemes.com/';
+var baseUrl = 'http://localhost:3000/';
 var multer = require('multer');
 	// var upload = multer({ 
 	// 	dest: 'uploads/', 
@@ -50,6 +50,23 @@ var updateTagsInMemes = function(memes, cb) {
 		cb([]);
 	}
 }
+var updateUserInMemes = function(memes, cb) {
+	if(memes.length!=0){
+		var updatedMemes = [];
+		var updateLen = 0;
+		for (var i = 0; i < memes.length; i++) {
+			User.populateMeme(memes[i], function(meme){
+				updatedMemes.push(meme);
+				updateLen++;
+				if(updateLen == memes.length){
+					cb(updatedMemes);
+				}
+			})
+		}
+	}else{
+		cb([]);
+	}
+}
 require('./addToDB'); // adds default values to database
 
 module.exports = function(app, passport) {
@@ -57,25 +74,52 @@ module.exports = function(app, passport) {
 		 * Route to get Logged in User Object
 		 */
 		app.post('/api/auth', function(req, res) {
-			res.json({
-				'req': req.user
-			})
+			if(req.user){
+				res.json({
+					'userfb': req.user.facebook
+				});
+			}else{
+				res.json({'userfb' : null});
+			}
+			
 		});
 		/**
 		 * Log in User with User Object retrieved from Client Side
 		 */
-		app.post('/api/login', passport.authenticate('local'), function(req, res) {
-			res.json({
-				'req': req.user
-			});
-		});
+		// app.post('/api/login', passport.authenticate('local'), function(req, res) {
+		// 	res.json({
+		// 		'req': req.user
+		// 	});
+		// });
 		/**
 		 * Log out user and destroy Session
 		 */
 		app.post('/api/logout', function(req, res) {
 			req.logout();
 			res.json({
-				'req': req.user
+				'userfb': req.user
+			});
+		});
+
+		app.get('/api/logout', function(req,res) {
+			var url = req.query.url;
+			req.logout();
+			if(url){
+				res.redirect(url);
+			}else{
+				res.redirect('/');
+			}
+		})
+
+		app.post('/api/testuser', function(req, res) {
+
+			var id = req.user.id;
+			console.log(id);
+			User.findByID(id, function(err, user){
+				if(err) console.log(err);
+
+				console.log(user);
+				res.json({'user': user});
 			});
 		});
 		/**
@@ -92,10 +136,24 @@ module.exports = function(app, passport) {
 		});
 
 		app.get('/privacy-policy', function(req, res) {
-			res.render("privacypolicy");
+			if(req.user){
+				var user = req.user.facebook;
+			}else{
+				var user = false;
+			}
+			res.render("privacypolicy",{
+				user: user
+			});
 		});
 		app.get('/terms-of-use', function(req, res) {
-			res.render("termsofuse");
+			if(req.user){
+				var user = req.user.facebook;
+			}else{
+				var user = false;
+			}
+			res.render("termsofuse",{
+				user: user
+			});
 		});
 		/*
 		 *Get Tags Information
@@ -117,76 +175,160 @@ module.exports = function(app, passport) {
 				});
 			});
 		});
-		app.get('/memes/:id', function(req, res) {
-			var _id = req.params.id;
-			var mongoose = require('mongoose');
-			if(mongoose.Types.ObjectId.isValid(_id)){
-				Meme.findByID(_id, function(err, meme){
-				if(meme.length != 0){
-					console.log(meme[0].createdAt);
-					var pageUrl = baseUrl+'memes/'+meme[0]._id;
-					var picUrl = "http://www.edroot.com/shudhdesimemes/images/"+meme[0].path;
-					var memeTags = [];
-					var updateMemeTags = function(tag){
-						memeTags.push(tag);
-					}
-					Tag.findByMeme(meme[0], function(err, tags){
-						for (var i = 0; i < tags.length; i++) {
-							updateMemeTags({
-								        	link: baseUrl+'tag/'+tags[i].name,
-								        	name: tags[i].name
-										});
+		app.get('/user/:slug', function(req,res) {
+			var slug = req.params.slug;
+			User.findBySlug(slug, function(err, user){
+				if(err) console.log(err);
+				// console.log(user);
+				if(user[0]){
+					var user = user[0];
+					if(req.user && req.user._id.equals(user._id)){
+							var loggedin = true;
+						}else{
+							var loggedin = false;
 						}
-						getTopTags(10, function(toptags){
-							res.render('memeone', {
-								meme: meme[0],
-								pageUrl: pageUrl,
-								picUrl: picUrl,
-								tags: memeTags,
-								toptags: toptags
+						var memeIds = [];
+						var memeviews = 0;
+						for (var i = 0; i < user._memes.length; i++) {
+							memeIds.push(user._memes[i].meme);
+						};
+						Meme.paginate({
+							_id: {$in: memeIds}
+						}, { page: req.query.page, limit: req.query.limit , sortBy: {createdAt: -1} }, function(err, memes, pageCount, itemCount) {
+						    if (err) return next(err);
+						    updateTagsInMemes(memes, function(updatedMemes){
+							    // getTopTags(10, function(toptags){
+							    	// console.log(user);
+							    	res.format({
+								      html: function() {
+								      	if(req.user){
+											var loggedinuser = req.user.facebook;
+										}else{
+											var loggedinuser = false;
+										}
+								        res.render('userpage', {
+								          memes: updatedMemes,
+								          baseUrl: baseUrl,
+								          picBaseUrl: "http://www.edroot.com/shudhdesimemes/images/",
+								          pageCount: pageCount,
+								          itemCount: itemCount,
+								          loggedin: loggedin,
+								          loggedinuser: loggedinuser,
+								          user: user
+								        });
+								      },
+								      json: function() {
+								        // inspired by Stripe's API response for list objects
+								        res.json({
+								          object: 'list',
+								          has_more: paginate.hasNextPages(req)(pageCount),
+								          data: memes
+								        });
+								      }
+								    });	
+							    // });
 							});
-						})
-					});
-				}else{
-					res.status(404).send('Not found');
+						});
+					// user.populateMemes(function(userfilled){
+						// User.findOne({slug: user.slug})
+						// 	.populate("_memes.meme")
+						// 	.exec(function(err, userpop){
+						// 		console.log("The memes are "+userpop._memes);
+						// 		res.render('userpage', {
+						// 			baseUrl: baseUrl,
+						// 			user: user,
+						// 			memes: userpop._memes,
+						// 			loggedin: loggedin
+						// 		});
+
+						// 	})						
+						
+						
+						
 				}
-				
+			})
+		});
+		app.get('/memes/:slug', function(req, res) {
+			var slug = req.params.slug;
+			Meme.findBySlug(slug, function(err, meme){
+			if(meme.length != 0){
+				// console.log(meme[0].createdAt);
+				meme[0].views++;
+				meme[0].save(function(err){
+					if(err) console.log(err);
+				})
+				var pageUrl = baseUrl+meme[0].link;
+				var picUrl = meme[0].path;
+				var memeTags = [];
+				var updateMemeTags = function(tag){
+					memeTags.push(tag);
+				}
+				Tag.findByMeme(meme[0], function(err, tags){
+					for (var i = 0; i < tags.length; i++) {
+						updateMemeTags({
+							        	link: baseUrl+'tag/'+tags[i].name,
+							        	name: tags[i].name
+									});
+					}
+					getTopTags(10, function(toptags){
+						if(req.user){
+							var user = req.user.facebook;
+						}else{
+							var user = false;
+						}
+						res.render('memeone', {
+							meme: meme[0],
+							pageUrl: pageUrl,
+							picUrl: picUrl,
+							tags: memeTags,
+							toptags: toptags,
+							user: user
+						});
+					})
 				});
 			}else{
 				res.status(404).send('Not found');
 			}
 			
+			});
 		});
 		app.get('/', function(req, res, next) {
 		  Meme.paginate({}, { page: req.query.page, limit: req.query.limit, sortBy: {createdAt: -1} }, function(err, memes, pageCount, itemCount) {
 		    if (err) return next(err);
 		    updateTagsInMemes(memes, function(updatedMemes){
-		    	getTopTags(10, function(toptags){
-			    	res.format({
-				      html: function() {
-				        res.render('memes', {
-				          memes: updatedMemes,
-				          baseUrl: baseUrl,
-				          picBaseUrl: "http://www.edroot.com/shudhdesimemes/images/",
-				          pageCount: pageCount,
-				          itemCount: itemCount,
-				          toptags: toptags,
-						  req: {
-								type: 'memes',
-							    name: 'Popular Shudh Desi Memes'
-							    }
-							});
-				      },
-				      json: function() {
-				        // inspired by Stripe's API response for list objects
-				        res.json({
-				          object: 'list',
-				          has_more: paginate.hasNextPages(req)(pageCount),
-				          data: memes
-				        });
-				      }
-				    });	
-			    });
+		    	updateUserInMemes(updatedMemes, function(updatedMemes){
+			    	getTopTags(10, function(toptags){
+				    	res.format({
+					      html: function() {
+					      	if(req.user){
+									var loggedinuser = req.user.facebook;
+								}else{
+									var loggedinuser = false;
+								}
+					        res.render('memes', {
+					          memes: updatedMemes,
+					          baseUrl: baseUrl,
+					          pageCount: pageCount,
+					          itemCount: itemCount,
+					          toptags: toptags,
+					          loggedinuser: loggedinuser,
+							  req: {
+									type: 'memes',
+								    name: 'Popular Shudh Desi Memes'
+								    }
+								});
+					      },
+					      json: function() {
+					        // inspired by Stripe's API response for list objects
+					        res.json({
+					          object: 'list',
+					          has_more: paginate.hasNextPages(req)(pageCount),
+					          data: memes
+					        });
+					      }
+					    });	
+				    });
+			    })
 		    })
 		  });
 
@@ -210,6 +352,11 @@ module.exports = function(app, passport) {
 						    getTopTags(10, function(toptags){
 						    	res.format({
 							      html: function() {
+							      	if(req.user){
+										var loggedinuser = req.user.facebook;
+									}else{
+										var loggedinuser = false;
+									}
 							        res.render('memes', {
 							          memes: updatedMemes,
 							          baseUrl: baseUrl,
@@ -217,6 +364,7 @@ module.exports = function(app, passport) {
 							          pageCount: pageCount,
 							          itemCount: itemCount,
 							          toptags: toptags,
+							          loggedinuser: loggedinuser,
 							          req: {
 							          	type: 'tag',
 							          	name: name
@@ -266,22 +414,29 @@ module.exports = function(app, passport) {
     			
     		})
 		});
-		app.get('/mcconaughey', isLoggedIn, function(req,res){
+		app.get('/mcconaughey', function(req,res){
+			if(req.user){
+				var user = req.user.facebook;
+			}else{
+				var user = false;
+			}
 			res.render('uploadsaveimg', {
 				uploadSuccess: "new",
+				user: user,
 				msgColor: "#00adef"
 			});
 		})
-		app.post('/api/savememe', function(req, res){
+		app.post('/api/savememe', isLoggedIn, function(req, res){
 			var memeObj = {
 				title: req.body.title,
 				tags: req.body.tags,
+				userid: req.user.id,
 				path: req.body.filepath,
 				ifSave: !req.body.doNotSave
 			};
-			Meme.saveMeme(memeObj, function(_id) {
+			Meme.saveMeme(memeObj, function(link) {
 					res.json({
-						redirectUrl: baseUrl+'memes/'+_id
+						redirectUrl: baseUrl+link
 					});
 				})
 		});
@@ -312,7 +467,7 @@ module.exports = function(app, passport) {
 
 
     	app.get('/auth/facebook/callback', 
-        	passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res){
+        	passport.authenticate('facebook', { failureRedirect: '/auth/facebook' }), function(req, res){
         		res.sendFile('views/after-auth.html',{ root: app.get('rootDir')});
         	});
 		/**

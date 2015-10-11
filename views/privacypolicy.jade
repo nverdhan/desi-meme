@@ -2,15 +2,35 @@ doctype html
 html
 	head
 		title="Shudh Desi Memes Privacy Policy"
+		if(user)  
+			style.
+				.fb-photo{
+					background-image: url(#{user.img});
+				}
 		style
-			include staticcontent.css
+			include style.css
+			include ../assets/css/loginuser.css
 	body
+		script(src="../public/js/jquery/jquery-1.10.2.min.js")
 		div.header
 			a(href="/")
-			img.sdm-logo(src="../assets/img/sdm-logo.svg")
+				img.sdm-logo(src="../assets/img/sdm-logo.svg")
 			div.header-link
 				a.create-link(href='/create') Create meme
 				a.browse-link(href='/') Browse
+				hr
+		div.login-info#login-info
+			if(user)
+				div.loggedIn#loggedIn
+					div.vertical-1
+						div.fb-photo
+					div.user-items
+						ul
+							li#mymemeslink
+								|My Memes
+			else
+				div.login-button#loginButton
+					|Login
 		div.content
 			h1
 				|Privacy Policy
@@ -161,6 +181,9 @@ html
 				|Contact Us
 			p
 				|With any further questions and/or requests, regarding privacy issues and this privacy policy, please do not hesitate to contact us using the information below.
-
-			p
-				|http://shudhdesimemes.com mail@edroot.com
+			a(href="http://www.shudhdesimemes.com") www.shudhdesimemes.com
+			a(href="mailto:info@shudhdesimemes.com") info@shudhdesimemes.com
+		div.footer
+			a(href="/privacy-policy") Privacy policy
+			a(href="/terms-of-use") Terms of use
+		script(src="../assets/js/loginuser.js")					

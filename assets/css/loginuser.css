@@ -1,0 +1,110 @@
+.fblogin {
+	position: fixed;
+	top: 40%;
+	left:0;
+	right: 0;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 3em;
+	padding: 4px;
+	background-color: blue;
+	color: white;
+	z-index: 100;
+	width: 400px; 
+}
+div#login-info {
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 25;
+}
+.login-info .fb-photo{
+	left: 10px;
+	top: 10px;
+	position: relative;
+	border: 1px solid #ed1c24;
+	background-size: cover;
+	background-position: 50% 50%;
+	width : 50px;
+	height : 50px;
+	border-radius: 50%;
+	transition: all 0.2s ease;
+}
+.login-info:hover .fb-photo, .login-info:focus .fb-photo{
+	border: 1px solid #00adef;
+}
+.loggedIn{
+	width: 70px;
+	height: 70px;
+	display: block;
+	position: relative;
+    top: 0;
+    left: 0;
+	transition: all 0.2s ease;
+}
+.loggedInFull{
+	width: 160px;
+    height: 100px;
+    display: block;
+    padding: 0 10px;
+}
+.vertical-1 {
+    width: 70px;
+    display: inline-block;
+    /*background-color: blue;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 70px;
+}
+.loggedInFull .vertical-1 {
+    width: 60px;
+}
+.loggedInFull .fb-photo{
+	width: 40px;
+	height: 40px;
+}
+.loggedInFull .user-items{
+	opacity: 1;
+	left: 60px;
+	top: 0;
+	transition: all 0.2s ease 0.2s;
+}
+.user-items{
+	opacity: 0;
+	width: 100px;
+	padding-top: 15px;
+	height: 100px;
+	display: inline-block;
+	position: absolute;
+	left: 100px;
+	top: 0;
+	transition: all 0.2s ease 0s;
+}
+.user-items ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.user-items li {
+    padding: 5px;
+    font-size: 1em;
+    background-color: #eee;
+    cursor: pointer;
+    margin-bottom: 2px; 
+}
+.user-items li:hover {
+    background-color: #aaa;
+}
+.login-button{
+	font-size: 1em;
+	cursor: pointer;
+	position: relative;
+    top: 27px;
+    right: 10px; 
+    color: #424242;
+    text-decoration: none;
+}
+.login-button:hover, .login-button:focus{
+	color: #00adef;
+}

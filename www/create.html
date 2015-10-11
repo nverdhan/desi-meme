@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html ng-app="MemeApp" ng-cloak>
+<html ng-app="MemeApp">
 <head>
 	<title>
 		Create Memes
@@ -19,8 +19,24 @@
 	<link rel="stylesheet" type="text/css" href="node_modules/guillotine/css/jquery.guillotine.css">
 
 </head>
-<body ng-controller="CreateMemeController">
+<body ng-controller="CreateMemeController" ng-cloak>
 	<div class="meme-header"><a href="/"><img src="assets/img/sdm-logo.svg" class="sdm-logo"></a><div class="header-link"><a href="/create" class="create-link">Create meme</a><a href="/" class="browse-link">Browse</a><hr></div></div>
+	<div ng-if="showFBlogin" class="fblogin" ng-click = "fblogin()">Login via Facebook</div>
+	<div class="login-info" id="login-info" >
+		<div ng-if="loggedIn" class="loggedIn" ng-class="{loggedInFull: hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+			<div class="vertical-1">
+				<div class="fb-photo" ng-style="getFBPicStyle()"></div>
+			</div>	
+			<div class="user-items">
+				<ul>
+					<!-- <li> Profile </li> -->
+					<li> My Memes </li>
+					<!-- <li> Logout </li> -->
+				</ul>
+			</div>
+		</div>
+		<div ng-if="!loggedIn" class="login-button" ng-click="fblogin()">Login</div>
+	</div>
 	<div id="outer-box" class="outer-box">
 		<div class="overlay" id="overlay" ng-show="OverlayVisible">
 			<div id="progress" class="hidden">
@@ -174,6 +190,28 @@
 
 
 <script type="text/javascript">
+if (window.location.hash && window.location.hash == '#_=_') {
+        if (window.history && history.pushState) {
+            window.history.pushState("", document.title, window.location.pathname);
+        } else {
+            // Prevent scrolling by storing the page's current scroll offset
+            var scroll = {
+                top: document.body.scrollTop,
+                left: document.body.scrollLeft
+            };
+            window.location.hash = '';
+            // Restore the scroll offset, should be flicker free
+            document.body.scrollTop = scroll.top;
+            document.body.scrollLeft = scroll.left;
+        }
+}
+var loginCallBack = function(){
+	console.log('loginCallback called');
+	var scope = $(document.body).scope();
+	scope.$apply(function(){
+        scope.checkFBLogin();
+    })
+}
 window.mobileAndTabletcheck = function() {
             var isMobile = false; //initiate as false
 	// device detection
@@ -183,6 +221,9 @@ window.mobileAndTabletcheck = function() {
 }
 $(document).ready(function()
  {	
+ 	//  $(".loggedIn").hover(function () {
+  //   	$(this).addClass("loggedIn-full");
+ 	// });
  	$('[title!=""]').qtip({style : {classes: 'qtip-blue qtip-rounded'}});
     $('#thepicture').qtip({
          content: 'Drag to reposition image',

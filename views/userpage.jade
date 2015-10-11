@@ -1,0 +1,106 @@
+doctype html
+html
+      head
+            title="Shudh Desi Memes by " + user.facebook.name
+            meta(property='og:title', content='Shudh Desi Memes by #{user.facebook.name}')
+            meta(property="fb:app_id", content="1646291515639257")
+            meta(property="article:author", content="https://www.facebook.com/shudhdesimeme")
+            meta(property="article:publisher", content="https://www.facebook.com/shudhdesimeme")
+            meta(property="description", content="Create memes from your favorite Indian celebrities and share them on the internet.")
+            //- meta(property='og:image', content='#{}')
+            meta(property='og:type', content='article')
+            meta(property='og:url', content='#{baseUrl}/user/#{user.slug}')
+            meta(property='og:site_name', content='Shudh Desi Memes')
+            meta(name="twitter:card", content="summary_large_image")
+            meta(name="twitter:site", content="@shudhdesimemes")
+            meta(name="twitter:title", content='Shudh Desi Memes by #{user.facebook.name}')
+            //- meta(name="twitter:image", content="#{picUrl}")
+            if(loggedinuser)
+                  style.
+                        .fb-photo{
+                              background-image: url("#{loggedinuser.img}");
+                        }
+            style.
+                  .profile-fb-photo{
+                        background-image: url('https://graph.facebook.com/#{user.facebook.id}/picture?type=large');
+                  }
+            style
+                  include ../assets/css/loginuser.css
+                  include ../assets/socialshare1.0.6/css/social-share-kit.css
+                  include style.css
+      body
+            script(src="../assets/socialshare1.0.6/js/social-share-kit.js")
+            script(src="../public/js/jquery/jquery-1.10.2.min.js")
+            script(src="../assets/js/socialshare.js")
+            script(src="../assets/js/ga.js")
+            div.header
+                  a(href="/")
+                        img.sdm-logo(src="../assets/img/sdm-logo.svg")
+                  div.header-link
+                        a.create-link(href='/create') Create meme
+                        a.browse-link(href='/') Browse
+                        hr
+            if(!loggedin)                              
+                  div.login-info#login-info
+                        if(loggedinuser)
+                              div.loggedIn#loggedIn
+                                    div.vertical-1
+                                          div.fb-photo
+                                    div.user-items
+                                          ul
+                                                li#mymemeslink
+                                                      |My Memes
+                        else
+                              div.login-button#loginButton
+                                    |Login
+            else
+                  div.login-info#login-info
+                        div.login-button#logoutButton
+                              |Logout
+            div.memes-container
+                  div.user-profile
+                        div.profile-fb-photo
+                        div.profile-fb-details 
+                              div
+                                    if(loggedin)
+                                          h1
+                                                |My memes
+                                    else
+                                          h1 
+                                                |Memes by #{user.facebook.name}
+                  ul
+                        each meme in memes
+                              if(meme.ifSave || loggedin)
+                                    li.meme-li
+                                          a(href= baseUrl + meme.link)
+                                                div.meme-title-date
+                                                      div.meme-title #{meme.title} 
+                                                      if(!meme.ifSave) 
+                                                            div.private-meme-title(title="You are viewing this because you are online.") Unlisted Meme
+                                                      div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
+                                                div.meme-holder
+                                                      img.meme-img(src = meme.path)
+                                          div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
+                                                a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
+                                                a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
+                                                a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+                                                a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+                                                a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+                                                a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
+                                          div.comment-tag
+                                                div.tag-list
+                                                      ul
+                                                            each tag in meme.tags
+                                                                  li
+                                                                        a.tag-name.oblique(href=tag.link) #{tag.name}
+                                                div.comment
+                                                      span.fb-comments-count(data-href=baseUrl + meme.link)
+                                                            |  comments
+                                          hr
+            include _paginate
+            div.false-space
+            div.footer
+                  a(href="/privacy-policy") Privacy policy
+                  a(href="/terms-of-use") Terms of use
+            script(src="../assets/js/loginuser.js")
+                //- script(src="../assets/js/disqus.js")

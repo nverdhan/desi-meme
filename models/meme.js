@@ -1,10 +1,12 @@
 var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
 var Tag = require('../models/tag');
+var User = require('../models/user');
 var async = require('async');
 var request = require('request');
 var timestamps = require('mongoose-timestamp');
 var Schema = mongoose.Schema;
+var URLSlugs = require('mongoose-url-slugs');
 var baseUrl = 'http://127.0.0.1:3000/'
 var MemeSchema = new Schema({
 	title: String,
@@ -12,14 +14,11 @@ var MemeSchema = new Schema({
 	ifSave: Boolean,
 	link: String,
 	shortenedLink: String,
-	likes: Number,
-	_creator: {
-			type: Schema.ObjectId,
-			ref: 'User'
-		}
+	views: {type: Number, default: 0}
 });
 MemeSchema.plugin(mongoosePaginate);
 MemeSchema.plugin(timestamps);
+MemeSchema.plugin(URLSlugs('title', {field: 'slug', maxLength: 50}));
 
 var shortenLink = function(longUrl, cb){	
 	var encodedLongUrl = encodeURIComponent(longUrl);
@@ -46,40 +45,42 @@ MemeSchema.statics.saveMeme = function(memeObj, cb) {
 		ifSave: memeObj.ifSave,
 		likes: 0
 	});
-	var setId = function(id){
-		cb(id);
+	var redirectTo = function(link){
+		cb(link);
 	}
 	meme.save(function(err, meme) {
 		if (err) console.log(err);
-		meme.link = 'meme/'+meme._id;
+		meme.link = 'memes/'+meme.slug;
 		shortenLink(baseUrl+meme.link, function(shortenedLink){
 			meme.shortenedLink = shortenedLink;
 			meme.save(function(err, meme) {
-				setId(meme._id);
+
+				User.findByID(memeObj.userid, function(err, user){
+					if(err) console.log(err);
+					
+					if(user[0]){
+						user[0].addMeme(meme._id, function(){
+							redirectTo(meme.link);
+						})
+					}
+				})
+
+
 				memeObj.tags.forEach(function(tagname) {
 					var tag = new Tag({
 						name: tagname,
 						usage: 1,
 						_memes: {meme: meme._id}
 					});
+					if(!memeObj.ifSave){
+						tag.usage = 0;
+					}
 					tag.ifExists(function(err, tagArr) {
 						if (err) console.log(err);
 						if (tagArr.length == 0) {
-							tag.save(function(err) {
-								if (err) console.log(err);
-								// tag.selfPopulate(function(tag) {
-								// // 	// console.log(tag);
-								// });
-							});
+							tag.save(function(err) { if (err) console.log(err); });
 						} else {
-							tagArr.forEach(function(tagReturned) {
-								tagReturned.updateTag(tag, function(updatedTag) {
-									// console.log(updatedTag);
-									// updatedTag.selfPopulate(function(tag) {
-									// 	// console.log(tag);
-									// });
-								});
-							})
+							tagArr.forEach(function(tagReturned) { tagReturned.updateTag(tag, function(updatedTag) {}); })
 						}
 					})
 				})
@@ -92,6 +93,11 @@ MemeSchema.statics.findByID = function(_id, cb){
 	var ObjectId = require('mongoose').Types.ObjectId; 
 	return this.find({
 		_id: new ObjectId(_id)
+	}, cb);
+}
+MemeSchema.statics.findBySlug = function(slug, cb){
+	return this.find({
+		slug: slug
 	}, cb);
 }
 

@@ -22,6 +22,13 @@ MemeApp.filter('unsafe', ['$sce', function ($sce) {
 MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$upload', 'TagService', '$window', '$compile', function($scope, $rootScope, $http, $upload, TagService, $window, $compile) {
 
 	/**This section is copy pasted -- Start*/
+	$scope.showFBlogin = false;
+	$scope.loggedIn = false;
+	$scope.user = {
+			id: null,
+			name: null,
+			image: null,
+		};
 	$scope.initMemeVars = function(){
 		$scope.catValue = '';
 		$scope.catId = 0;
@@ -74,6 +81,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		}else{
 			$scope.mobileOrTablet = false;	
 		}
+		$scope.askForDetailsClicked = false;
 	}
 	$scope.shareUrl = '';
 	$scope.initMemeVars();
@@ -81,7 +89,20 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 	WINDOW.bind('resize', function () {
 		$scope.setTextSize();
 	});
-
+	$scope.destroyUser = function(){
+		$scope.user = {
+			id: null,
+			name: null,
+			image: null,
+		};
+	}
+	$scope.createUser = function(id, name, image){
+		$scope.user = {
+			id: id,
+			name: name, 
+			image: image
+		};
+	}
 	$scope.catResults = function() {
 		return ($scope.cats.length > 0);
 	}
@@ -156,8 +177,8 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		$scope.checkTagErr();
 	}
 	$scope.addTag = function(a) {
-		if ($scope.tagSelected.indexOf(a) == -1) {
-			$scope.tagSelected.push(a);
+		if ($scope.tagSelected.indexOf(a.toLowerCase()) == -1) {
+			$scope.tagSelected.push(a.toLowerCase());
 		}
 		$scope.tagInput = '';
 		$scope.showTags = false;
@@ -212,38 +233,24 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		})
 	}
 	$scope.onFileSelect = function($files, item){
-		var files = $files; // FileList object
-		var imageSelected = false;
-	    // Loop through the FileList and render image files as thumbnails.
+		var files = $files; 
 	    for (var i = 0, f; f = files[i]; i++) {
-
-	      // Only process image files.
 	      if (!f.type.match('image.*')) {
 	        continue;
 	      }
-
 	      var reader = new FileReader();
-
-	      // Closure to capture the file information.
-	      reader.onload = (function(theFile) {
-	        return function(e) {
-	          // Render thumbnail.
-	          	var url = e.target.result;
-	          	$scope.memeObj.image = url;
-				$scope.imageUrl = url;
-				imageSelected = true;
-				$scope.instantiateGuillotine(url);
-	        };
-	      })(f);
-
-	      // Read in the image file as a data URL.
+	      reader.onloadend = function(e) {
+	          	var url =  reader.result;
+	          	$scope.$apply(function () {
+            		$scope.memeObj.image = url;
+					$scope.imageUrl = url;
+					$scope.instantiateGuillotine(url);
+					$scope.hideOverlay();
+	    			$scope.selectMemeTheme($scope.selectedTheme);
+        		});
+	      };
 	      reader.readAsDataURL(f);
 	    }
-	    // if(imageSelected){
-	    	$scope.hideOverlay();
-	    	$scope.selectMemeTheme($scope.selectedTheme);
-	    	// console.log('hide called');
-	    // }
 	}
 	$scope.closeProgressBar = function() {
 		angular.element('#progress').addClass('hidden');
@@ -318,13 +325,14 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 					var file = dataURL;
 					$scope.saveMsg = 'Please wait';
 					$scope.saveStatus = true;
-					$http.post('http://edroot.com/shudhdesimemes/upload.php', {
+					var imguploadserver = "http://edroot.com/shudhdesimemes/";
+					$http.post(imguploadserver + 'upload.php', {
 				        	img: dataURL
 				      }).then(function(data) {
 				        // file is uploaded successfully
 				        if(data.data.status){
 				        	$http.post(serverSideURL, {
-								filepath: data.data.filename,
+								filepath: imguploadserver + 'images/'+ data.data.filename,
 								title: $scope.memeObj.title,
 								tags: $scope.tagSelected,
 								doNotSave: $scope.privateSavedImg
@@ -361,9 +369,19 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 			$scope.errors.image.text = 'Please add Image first';
 			return false;
 		}
-		$scope.showOverlay();
-		$scope.showSaveFormDialog = true;
-		$scope.showBrowseImgDialog = false;
+		$scope.askForDetailsClicked = true;
+		$http.post('/api/auth').then(function(data){
+			if(data.data.userfb){
+				$scope.askForDetailsClicked = false;
+				var user = data.data.userfb;
+				$scope.createUser(user.id, user.name, user.img);
+				$scope.showOverlay();
+				$scope.showSaveFormDialog = true;
+				$scope.showBrowseImgDialog = false;
+			}else{
+				$scope.showFBlogin = true;
+			}
+		})
 	}
 	$scope.showImgSelector = function() {
 		$scope.showOverlay();
@@ -401,6 +419,9 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		angular.element('#thepicture').removeAttr('src');
 		$scope.holderInitiate();
 		$scope.setTextSize();
+		if(!$scope.user || !$scope.user.id){
+			$scope.checkFBLogin();
+		}
 	}
 	$scope.setTextColor = function(){
 		angular.element('.text-box').css('color',$scope.fgcolor);
@@ -450,10 +471,35 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 			angular.element('.text-box').css('font-size',textSizeVW);
 		}
 	}
-	$scope.setTextColor();
-	$scope.holderInitiate();
-	$scope.setTextSize();
+	$scope.getFBPicStyle = function(){
+		// if($scope.user && $scope.user.image){
+			return {
+				'background-image': 'url('+$scope.user.image+')',
+			}
+		// }
+	}
+	$scope.fblogin = function(){
+		window.open("/auth/facebook", "FacebookLogin", "width=640, height=480");
+	}
+	$scope.checkFBLogin = function(){
+		$http.post('/api/auth').then(function(data){
+			if(data.data.userfb){
+				var user = data.data.userfb;
+				$scope.showFBlogin = false;
+				$scope.createUser(user.id, user.name, user.img);
+				$scope.loggedIn = true;
+				$compile(angular.element('#login-info'));
+
+				if($scope.askForDetailsClicked){
+					$scope.askForDetails();
+				}
+			}})
+	}
+
+	$scope.initCreateMeme();
 	$scope.$on('colorpicker-selected', function(){
 		$scope.setTextColor();
 	})
 }])
+
+

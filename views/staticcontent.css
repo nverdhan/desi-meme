@@ -54,7 +54,25 @@ body{
 	right: 0;
 	margin: 0 auto;
 	width: 800px;
+    padding-bottom: 30px;
 }
 p{
 	text-align: justify;
+}
+.footer{
+    position: fixed;
+    width: 100%;
+    height: 20px;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255,255,255,0);
+}
+.footer a{
+    font-size: 0.7em;
+    margin: 0 10px;
+    float: right;
+    color: #00adef;
+}
+.footer a:hover{
+    color: #ed1c24;
 }
