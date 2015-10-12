@@ -79,7 +79,10 @@ MemeSchema.statics.hot = function(limit, callback) {
 		var rand = 0;
 		var top = limit - rand;
 		var randfound = 0;
-		this.find({})
+		if(limit==0){
+			callback([]);	
+		}else{
+			this.find({})
 			.sort({views: -1})
 			.limit(limit)
 			.exec(function(err, memes){
@@ -88,6 +91,7 @@ MemeSchema.statics.hot = function(limit, callback) {
 						updateHot(memes[i]);
 					};
 				});
+		}
 	})
 	// while(randfound < rand){
 		// console.log("less");

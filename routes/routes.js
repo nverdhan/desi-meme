@@ -309,6 +309,7 @@ module.exports = function(app, passport) {
 		    	updateUserInMemes(updatedMemes, function(updatedMemes){
 			    	getTopTags(10, function(toptags){
 			    		Meme.hot(10, function(hotmemes){
+			    			console.log(hotmemes);
 			    			updateUserInMemes(hotmemes, function(hotmemes){
 						    	res.format({
 							      html: function() {
