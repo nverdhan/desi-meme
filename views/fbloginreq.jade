@@ -1,0 +1,67 @@
+html
+	head
+		style.
+			.img{
+				position: absolute;
+				left: 0;
+				right: 0;
+				margin: 0 auto;
+				top: 10px;
+				text-align: center;
+			}
+			h1{
+				color: #00adef;
+			}
+			.sdm-logo {
+				width: 200px;
+				left:0;
+				top:0;
+				margin: 0 auto;
+			}
+			.fblogin {
+				position: fixed;
+				top: 20%;
+				left: 0;
+				right: 0;
+				margin: 0 auto;
+				text-align: center;
+				font-size: 1em;
+				padding: 20px;
+				background-color: #fff;
+				color: #424242;
+				z-index: 100;
+				width: 600px;
+				height: 270px;
+				box-shadow: 2px 2px 10px #111;
+			}
+			.fblogin a{
+				color: white;
+				margin-top: 10px;
+			}
+			.fblogin .small{
+				font-size: 0.8em;
+			}
+		style
+			include ../assets/socialshare1.0.6/css/social-share-kit.css
+	body
+		script(src="../assets/js/ga.js")
+		script(src="../public/js/jquery/jquery-1.10.2.min.js")
+		div.img
+			img.sdm-logo(src="../assets/img/sdm-logo.svg")
+			h1
+				|Facebook Login Required!
+		div.fblogin
+			div.fb-message
+				p
+					|To visit this page, you need to be logged in to
+					br
+					|Shudh Desi Memes
+					br 
+					|via Facebook.
+				br
+				p
+					|Click on the button below to login
+				p.small
+					|Note: This permission does not allow us to post to your Facebook wall)
+			a.ssk.ssk-text.ssk-facebook(href="" onClick="window.open('/auth/facebook', 'facebookauth', 'width=640, height=480')") Sign in with Facebook
+		script(src="../assets/js/loginuser.js")

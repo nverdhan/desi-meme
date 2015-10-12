@@ -137,8 +137,12 @@ module.exports = function(app, passport) {
 			});
 		});
 
-		app.get('/abc', function(req, res) {
-			res.render('abctry');
+		app.get('/facebook-login-required', function(req, res) {
+			if (req.isAuthenticated()){
+				res.redirect('/');
+			}else{
+				res.render('fbloginreq');
+			}
 		});
 
 		app.get('/privacy-policy', function(req, res) {
@@ -499,7 +503,7 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	// if they aren't redirect them to the home page
-	res.redirect('/abc');
+	res.redirect('/facebook-login-required');
 }
 function isModerator(req, res, next) {
 	// console.log(req);
@@ -508,10 +512,10 @@ function isModerator(req, res, next) {
 		if(req.user.facebook.id == "10153106392356889"){
 			return next();	
 		}else{
-			res.redirect('/abc');
+			res.redirect('/facebook-login-required');
 		}
 	}
 	// if they aren't redirect them to the home page
-	res.redirect('/abc');
+	res.redirect('/facebook-login-required');
 }
 

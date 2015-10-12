@@ -7,7 +7,7 @@ var request = require('request');
 var timestamps = require('mongoose-timestamp');
 var Schema = mongoose.Schema;
 var URLSlugs = require('mongoose-url-slugs');
-var baseUrl = 'http://127.0.0.1:3000/'
+var baseUrl = 'http://www.shudhdesimemes.com/'
 var MemeSchema = new Schema({
 	title: String,
 	path: String,

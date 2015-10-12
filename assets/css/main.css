@@ -403,19 +403,35 @@ body{
 	color: #ed1c24;
 	/*text-shadow: 1px 1px 2px white;*/
 }
+.fb-overlay{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255,255,255,0.4);
+    opacity: 1;
+    z-index: 999;
+}
 .fblogin {
-	position: fixed;
-	top: 40%;
-	left:0;
-	right: 0;
-	margin: 0 auto;
-	text-align: center;
-	font-size: 3em;
-	padding: 4px;
-	background-color: blue;
+    position: fixed;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1em;
+    padding: 20px;
+    background-color: #fff;
+    color: #424242;
+    z-index: 100;
+    width: 600px;
+    height: 200px;
+    box-shadow: 2px 2px 10px #111;
+}
+.fblogin a{
 	color: white;
-	z-index: 100;
-	width: 400px; 
+	margin-top: 10px;
 }
 div#login-info {
     position: fixed;
@@ -433,6 +449,11 @@ div#login-info {
 	height : 50px;
 	border-radius: 50%;
 	transition: all 0.2s ease;
+}
+.save-form h2 {
+    font-size: 2em;
+    font-weight: 200;
+    color: #00adef;
 }
 .login-info:hover .fb-photo, .login-info:focus .fb-photo{
 	border: 1px solid #00adef;

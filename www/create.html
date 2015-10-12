@@ -16,12 +16,22 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/colorpicker.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/jquery.qtip.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/socialshare1.0.6/css/social-share-kit.css">
 	<link rel="stylesheet" type="text/css" href="node_modules/guillotine/css/jquery.guillotine.css">
 
 </head>
 <body ng-controller="CreateMemeController" ng-cloak>
 	<div class="meme-header"><a href="/"><img src="assets/img/sdm-logo.svg" class="sdm-logo"></a><div class="header-link"><a href="/create" class="create-link">Create meme</a><a href="/" class="browse-link">Browse</a><hr></div></div>
-	<div ng-if="showFBlogin" class="fblogin" ng-click = "fblogin()">Login via Facebook</div>
+	<div ng-if="showFBlogin" class="fb-overlay">
+		<div class="fblogin">
+			<div class="fb-message">
+				<p>To create your own meme, you need to be logged in to <br>Shudh Desi Memes<br> via Facebook. </p>
+				<br><p>Click on the button below to login.</p>
+				<p style="font-size:0.8em;">(Note: This permission does not allow us to post to your Facebook wall)</p>
+			</div>
+			<a href="" class="ssk ssk-text ssk-facebook" ng-click="fblogin()">Sign in with Facebook</a>
+		</div>
+	</div>
 	<div class="login-info" id="login-info" >
 		<div ng-if="loggedIn" class="loggedIn" ng-class="{loggedInFull: hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false">
 			<div class="vertical-1">
@@ -100,6 +110,7 @@
 			</div>
 			<div ng-show="showSaveFormDialog" class="save-form">
 				<div class="col-md-12 create-slide-form form-signin">
+					<h2> Save your meme now! </h2>
 					<i class="fa fa-close fa-2x close-button" ng-click="hideSaveMemeSelector()"></i>
 					<form name="createMemeForm" role="form" method="post" ng-submit="submitSlideForm($event)" novalidate="" class="ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse">
 						<input class="slide-input slide-heading ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse" id="slide-heading" type="text" autocomplete="off" ng-model="memeObj.title" name="title" placeholder="enter a title" required="" ng-minlength="6" ng-maxlength="48" tabindex="0" aria-required="true" aria-invalid="true" ng-change="$scope.$parent.checkTitleErr()"/>
@@ -180,7 +191,7 @@
 			      <a href="#" id="zoom_in" title="Zoom in"><i class="fa fa-search-plus"></i></a>
 			      <a href="#" id="rotate_right" title="Rotate right"><i class="fa fa-rotate-right"></i></a>
 			    </div>
-			   	<span class="btn btn-default btn-ok" ng-click="askForDetails() style='margin-top:5px;'">Save and share</span>
+			   	<span class="btn btn-default btn-ok" ng-click="askForDetails()" style='margin-top:5px;'>Save and share</span>
 			 </div>
 				
 				
