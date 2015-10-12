@@ -49,7 +49,9 @@ html
                                     div.user-items
                                           ul
                                                 li#mymemeslink
-                                                      |My Memes
+                                                      |My 
+                                                li#logoutButton
+                                                      |Logout      
                         else
                               div.login-button#loginButton
                                     |Login
@@ -57,47 +59,70 @@ html
                   div.login-info#login-info
                         div.login-button#logoutButton
                               |Logout
-            div.memes-container
-                  div.user-profile
-                        div.profile-fb-photo
-                        div.profile-fb-details 
-                              div
-                                    if(loggedin)
-                                          h1
-                                                |My memes
-                                    else
-                                          h1 
-                                                |Memes by #{user.facebook.name}
-                  ul
-                        each meme in memes
-                              if(meme.ifSave || loggedin)
-                                    li.meme-li
-                                          a(href= baseUrl + meme.link)
-                                                div.meme-title-date
-                                                      div.meme-title #{meme.title} 
-                                                      if(!meme.ifSave) 
-                                                            div.private-meme-title(title="You are viewing this because you are online.") Unlisted Meme
-                                                      div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
-                                                div.meme-holder
-                                                      img.meme-img(src = meme.path)
-                                          div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
-                                                a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
-                                                a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
-                                                a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
-                                                a.ssk.ssk-email.ssk-text(href="", title="Send via email")
-                                                a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
-                                                a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
-                                          div.comment-tag
-                                                div.tag-list
-                                                      ul
-                                                            each tag in meme.tags
-                                                                  li
-                                                                        a.tag-name.oblique(href=tag.link) #{tag.name}
-                                                div.comment
-                                                      span.fb-comments-count(data-href=baseUrl + meme.link)
-                                                            |  comments
-                                          hr
+            div.daddy-container
+                  div.memes-container
+                        div.user-profile
+                              div.profile-fb-photo
+                              div.profile-fb-details 
+                                    div
+                                          if(loggedin)
+                                                h1
+                                                      |My memes
+                                          else
+                                                h1 
+                                                      |Memes by #{user.facebook.name}
+                        ul
+                              each meme in memes
+                                    if(meme.ifSave || loggedin)
+                                          li.meme-li
+                                                a(href= baseUrl + meme.link)
+                                                      div.meme-title-date
+                                                            div.meme-title #{meme.title} 
+                                                            if(!meme.ifSave) 
+                                                                  div.private-meme-title(title="You are viewing this because you are online.") Unlisted Meme
+                                                            div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
+                                                      div.meme-holder
+                                                            img.meme-img(src = meme.path)
+                                                div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
+                                                      a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
+                                                      a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
+                                                      a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+                                                      a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+                                                      a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+                                                      a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
+                                                div.comment-tag
+                                                      div.tag-list
+                                                            ul
+                                                                  each tag in meme.tags
+                                                                        li
+                                                                              a.tag-name.oblique(href=tag.link) #{tag.name}
+                                                      div.comment
+                                                            span.fb-comments-count(data-href=baseUrl + meme.link)
+                                                            |comments
+                                                hr
             include _paginate
+            div.fixed-elems
+                  div#hotmemes.hotmemes
+                        h2 Most popular memes
+                        ul
+                              each hotmeme in hotmemes
+                                    li.hot-meme-li
+                                          a(href=baseUrl + hotmeme.link)
+                                                div.hot-meme-title #{hotmeme.title}
+                                                      div.hot-meme-creator by #{hotmeme.user.facebook.name}
+                                                div.hot-meme-holder
+                                                img.hot-meme-img(src=hotmeme.path)
+                                          hr
+                  div#toptags.toptags
+                        span.bold-text Popular Tags
+                        ul
+                              each tag in toptags
+                                    li
+                                          a.oblique(href=tag.link) #{tag.name} (#{tag.usage})
+                              li.space-above
+                                    a.bold-text(href='/') Browse all
+                              li
+                                    a.bold-text(href='/create') Create your own
             div.false-space
             div.footer
                   a(href="/privacy-policy") Privacy policy

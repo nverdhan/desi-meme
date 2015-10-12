@@ -30,12 +30,22 @@
 			<div class="user-items">
 				<ul>
 					<!-- <li> Profile </li> -->
-					<li> My Memes </li>
-					<!-- <li> Logout </li> -->
+					<li ng-click="showMyMemes()"> My Memes </li>
+					<li ng-click="logout()"> Logout </li>
 				</ul>
 			</div>
 		</div>
 		<div ng-if="!loggedIn" class="login-button" ng-click="fblogin()">Login</div>
+	</div>
+	<div class="instructions">
+		Instructions:
+		<ul>
+			<li>To create your own meme, you need to be <a href="" ng-click="fblogin()">logged in via Facebook</a></li>
+			<li>You can select your own image or choose from our template images</li>
+			<li>From the menu above your meme, choose the text style, text color and text size</li>
+			<li>Save your meme, give it a title and appropriate tags, and share!</li>
+			<li>If this is your private meme, you can choose to keep it unlisted</li>
+		</ul>
 	</div>
 	<div id="outer-box" class="outer-box">
 		<div class="overlay" id="overlay" ng-show="OverlayVisible">
@@ -111,7 +121,7 @@
 						</ul>
 						<!-- ngIf: showTags -->
 						<input type="hidden" name="tags" value="">
-						<div class='checkbox-center'><input style="margin: 0 5px" type="checkbox" name="vehicle" ng-model="privateSavedImg" ng-change="abcd()">This is my private picture, do not save<br></div>
+						<div class='checkbox-center'><input style="margin: 0 5px" type="checkbox" name="vehicle" ng-model="privateSavedImg" ng-change="abcd()">This is my private meme, make it unlisted.<br></div>
 						<input class="btn btn-default btn-ok pull-right" type="submit" value="{{saveMsg}}" ng-click="saveFormNext()">
 						<div class="alert alert-danger ng-hide" ng-show="memeTitleReqErr" aria-hidden="true">Meme title required</div>
 						<div class="alert alert-danger ng-hide" ng-show="memeTagsReqErr" aria-hidden="true">Meme tags required</div>
@@ -136,8 +146,13 @@
 					<div class="picker-box fgcolor" colorpicker="rgba" title="Select foreground color" ng-model="fgcolor" ng-style="{'background-color':fgcolor}"> </div>	
 				</div>
 				<div class="text-sizers">
-					<div class="sizer-box smaller" title="Decrease text size" ng-click="decreaseTextSize()">T</div>
-					<div class="sizer-box larger" title="Increase text size" ng-click="increaseTextSize()">T</div>
+					<div class="sizer-T">T</div>
+					<div class="sizer-box larger" title="Increase text size" ng-click="increaseTextSize()">
+					<i class="fa fa-arrow-up"></i>
+					</div>
+					<div class="sizer-box smaller" title="Decrease text size" ng-click="decreaseTextSize()">
+					<i class="fa fa-arrow-down"></i>
+					</div>
 				</div>
 			</div>
 			<div id="meme-img-holder" class="meme-img-holder inner-box">
@@ -165,7 +180,7 @@
 			      <a href="#" id="zoom_in" title="Zoom in"><i class="fa fa-search-plus"></i></a>
 			      <a href="#" id="rotate_right" title="Rotate right"><i class="fa fa-rotate-right"></i></a>
 			    </div>
-			   	<span class="btn btn-default btn-ok" ng-click="askForDetails()">Save and share</span>
+			   	<span class="btn btn-default btn-ok" ng-click="askForDetails() style='margin-top:5px;'">Save and share</span>
 			 </div>
 				
 				
@@ -206,7 +221,6 @@ if (window.location.hash && window.location.hash == '#_=_') {
         }
 }
 var loginCallBack = function(){
-	console.log('loginCallback called');
 	var scope = $(document.body).scope();
 	scope.$apply(function(){
         scope.checkFBLogin();
@@ -221,9 +235,6 @@ window.mobileAndTabletcheck = function() {
 }
 $(document).ready(function()
  {	
- 	//  $(".loggedIn").hover(function () {
-  //   	$(this).addClass("loggedIn-full");
- 	// });
  	$('[title!=""]').qtip({style : {classes: 'qtip-blue qtip-rounded'}});
     $('#thepicture').qtip({
          content: 'Drag to reposition image',

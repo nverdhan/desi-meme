@@ -40,6 +40,9 @@ a.ssk, a:visited.ssk{
     padding-bottom: 30px;
     font-size: 0.8em; 
 }
+.content p{
+    text-align: justify;
+}
 .content h1{
     font-size: 2em;
 }
@@ -108,6 +111,9 @@ a.ssk, a:visited.ssk{
 .memes-container h1{
     color: #00adef;
 }
+.memes-container h1:hover{
+    color: #ed1c24 ;
+}
 .meme-title, .meme-title:visited{
     text-decoration: none;
     font-size: 1.3em;
@@ -119,11 +125,11 @@ a.ssk, a:visited.ssk{
     color: #00adef;
     transition: all 0.3s ease 0.1s;
 }
-.meme-title-date {
+.meme-creator-date {
     display: flex;
     flex-flow: row nowrap;
-    align-items: baseline;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: flex-start;
     font-size: 0.8em;
     margin: 12px 0;
 }
@@ -132,8 +138,25 @@ a.ssk, a:visited.ssk{
 }
 .meme-createdAt {
     font-size: 0.8em;
-    min-width: 150px;
-    text-align: right;
+    /*min-width: 150px;*/
+    text-align: left;
+}
+.p8em{
+    font-size: 0.8em;
+    margin: 0 3px;
+    text-align: center;
+}
+.memeone .p8em{
+    font-size: 1em;
+}
+.memeone .meme-createdAt {
+    font-size: 1em;
+}
+.memeone .meme-creator-name{
+    font-size: 1em;
+}
+.memeone:hover .meme-creator-name, .memeone:hover .meme-createdAt{
+    color: #ed1c24;
 }
 .meme-li hr{
     border: 0;
@@ -247,12 +270,47 @@ span.oblique:hover{
 .footer a:hover{
     color: #ed1c24;
 }
+.daddy-container{
+    display: flex;
+    margin: 100px 250px;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: space-around;
+}
 .memes-container, .pagination{
-    margin:0 auto;
-    position: relative;
+    width: 60%;
+}
+.hotmemes h2{
+    font-size: 1em;
+    margin: 5px 0;
+    font-weight: 200;
+    color: #00adef;
+}
+.hotmemes h2:hover{
+    color: #ed1c24;
+}
+div#hotmemes {
+    position: fixed;
     top: 100px;
-    left: 0;
-    right: 0;
+    right: 40px;
+    width: 200px;
+    margin: 80px 10px;
+}
+img.hot-meme-img {
+    width: 200px;
+}
+.hot-meme-title {
+    font-size: 0.8em;
+    margin: 3px 0;
+}
+.hot-meme-creator{
+    font-size: 0.8em;
+}
+.hot-meme-li:hover .hot-meme-title{
+    color: #00adef ;
+}
+.hot-meme-li:hover .hot-meme-creator{
+    color: #ed1c24;
 }
 .meme-holder{
     margin: 10px auto;
@@ -298,60 +356,217 @@ span.oblique:hover{
 .user-profile:hover h1{
     color: #ed1c24;
 }
-@media screen and (min-width: 1350px){
-    .header{
-        background-color: rgba(255,255,255,0);
-        box-shadow: none;
-    }
-    .memes-container.memeone{
-        top: 50px;
-    }
+.meme-creator{
+    position: relative;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: flex-start;
 }
-@media screen and (min-width: 950px){ 
-    .meme-img{
-        width: 600px;
+.meme-creator-img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: 50% 50%;
+    display: inline-block;
+}
+.meme-creator-name{
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 0.8em;
+}
+.meme-li:hover .meme-creator-name{
+    color: #ed1c24;
+}
+/*.header{
+    background-color: rgba(255,255,255,0);
+    box-shadow: none;
+}*/
+.meme-img{
+    width: 100%;
+}
+.toptags{
+    position: fixed;
+    top:150px;
+    left: 50px;
+    width: 200px;
+    overflow-x: hidden;
+}
+.toptags a{
+    position: relative;
+    text-align: left;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 0.8em;
+    line-height: 1.53846em;
+}
+.toptags a:hover{
+    outline: 0;
+    color: #000;
+}
+.toptags a:hover:after{
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    content: "";
+    border-bottom: 1px solid #000;
+}
+.space-above{
+    margin-top: 40px;
+}
+@media screen and (min-width: 900px) and (max-width: 1250px) and (min-device-width: 1250px){
+    div#hotmemes {
+        right: 20px;
+        width: 150px;
+        margin: 80px 10px;
     }
-    .memes-container, .pagination{
-        width: 600px;
-    }
-    .memes-container.memeone{
-        top: 100px;
+    img.hot-meme-img {
+        width: 150px;
     }
     .toptags{
-        position: fixed;
-        top:150px;
-        left: 40px;
+        left: 20px;
+        width: 150px;
     }
-    .toptags a{
-        position: relative;
-        text-align: left;
-        display: inline-block;
-        white-space: nowrap;
-        font-size: 0.8em;
-        line-height: 1.53846em;
-    }
-    .toptags a:hover{
-        outline: 0;
-        color: #000;
-    }
-    .toptags a:hover:after{
-        position: absolute;
-        top: 16px;
-        left: 0;
-        width: 100%;
-        content: "";
-        border-bottom: 1px solid #000;
-    }
-    .space-above{
-        margin-top: 40px;
-    }
-    
-}
-@media screen and (min-width: 550px) and (max-width: 949px){
-    .meme-img{
-        width: 100%;
+    .daddy-container{
+        margin: 100px 200px;    
     }
     .memes-container, .pagination{
+        width: 90%;
+    }
+}
+@media screen and (min-width: 700px) and (max-width: 900px), screen and (min-device-width: 320px) and (max-device-width: 1200px){ 
+    img.hot-meme-img {
+        width: 150px;
+    }
+    .daddy-container{
+        margin: 100px 200px; 
+        margin-left: 10px;   
+    }
+    .memes-container, .pagination{
+        width: 90%;
+    }
+    .fixed-elems{
+        position: fixed;
+        top: 100px;
+        margin: 10px;
+        right: 20px;
+        height: 80%;
+        width: 150px;
+    }
+    div#hotmemes {
+        width: 150px;
+        position: relative;
+        top: 0;
+        right: 0;
+        height: 50%;
+        margin: 0 auto;
+        overflow-y: hidden;
+    }
+    div#hotmemes ul, .toptags ul{
+        height: 80%;
+        overflow-y: auto; 
+    }
+    .toptags {
+        width: 150px;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        overflow: hidden;
+        height: 40%;
+    }
+    .ssk.ssk-download{
+        float: none;
+    }
+
+}
+@media screen and (max-width: 700px) and (min-width: 550px){
+    img.hot-meme-img {
+        width: 150px;
+    }
+    .hot-meme-creator{
+        display: none;
+    }
+    .daddy-container{
+        margin: 100px 200px; 
+        margin-left: 10px;   
+    }
+    .memes-container, .pagination{
+        width: 90%;
+    }
+    .fixed-elems{
+        position: fixed;
+        top: 100px;
+        margin: 10px;
+        right: 20px;
+        height: 80%;
+        width: 150px;
+    }
+    div#hotmemes {
+        width: 150px;
+        position: relative;
+        top: 0;
+        right: 0;
+        height: 50%;
+        margin: 0 auto;
+        overflow-y: hidden;
+    }
+    div#hotmemes ul, .toptags ul{
+        height: 80%;
+        overflow-y: auto; 
+    }
+    .toptags {
+        width: 150px;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        overflow: hidden;
+        height: 40%;
+    }
+    .ssk.ssk-download{
+        float: none;
+    }
+    a.ssk.ssk-twitter.ssk-text, a.ssk.ssk-google-plus.ssk-text, a.ssk.ssk-email.ssk-text {
+        display: none;
+    }
+}
+@media screen and (max-width: 550px), screen and (max-device-width: 319px){
+    .daddy-container{
+        margin: 100px 10px; 
+    }
+    .hot-meme-creator{
+        display: none;
+    }
+    .memes-container, .pagination{
+        width: 90%;
+    }
+    .fixed-elems{
+        display: none;
+    }
+    div#hotmemes {
+        position: relative;
+        display: none;
+    }
+    .toptags {
+        position: relative;
+        display: none;
+    }
+    .ssk.ssk-download{
+        float: none;
+    }
+    a.ssk.ssk-twitter.ssk-text, a.ssk.ssk-google-plus.ssk-text, a.ssk.ssk-email.ssk-text {
+        display: none;
+    }
+}
+@media screen and (max-width: 1000px){
+    .content{
         width: 80%;
     }
 }

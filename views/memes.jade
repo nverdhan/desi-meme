@@ -38,59 +38,89 @@ html
             ul
               li#mymemeslink
                 |My Memes
+              li#logoutButton
+                |Logout  
       else
         div.login-button#loginButton
           |Login
-    div.memes-container
-      if(req.type == "memes")
-        h1 Newest Memes
-      else if(req.type == "tag")
-        h1.bold-text Memes with tag 
-          span.oblique ##{req.name}
-        //- a(href='/') View all
-      else
-        h1 Shudh Desi Memes
-      ul
-        each meme in memes
-          if meme.ifSave
-            li.meme-li
-              a(href= baseUrl + meme.link)
-                div.meme-title-date
+    div.daddy-container      
+      div.memes-container
+        if(req.type == "memes")
+          h1 Newest Memes
+        else if(req.type == "tag")
+          h1.bold-text Memes with tag 
+            span.oblique ##{req.name}
+          //- a(href='/') View all
+        else
+          h1 Shudh Desi Memes
+        ul
+          each meme in memes
+            if meme.ifSave
+              li.meme-li
+                a(href= baseUrl + meme.link)
+                  //- div.meme-title-date
                   div.meme-title #{meme.title}
+                  div.meme-holder
+                    img.meme-img(src = meme.path)
+                div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
+                  a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
+                  a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
+                  a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+                  a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+                  a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+                  a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
+                div.comment-tag
+                  div.tag-list
+                    ul
+                      each tag in meme.tags
+                        li
+                          a.tag-name.oblique(href=tag.link) #{tag.name}
+                  div.comment
+                    span.fb-comments-count(data-href=baseUrl + meme.link)
+                    |  comments
+                div.meme-creator-date
+                  div.p8em
+                    |Created by
+                  div.creator
+                    a(href="/user/#{meme.user.slug}")
+                      div.meme-creator 
+                        div.meme-creator-img(class="img_#{meme.slug}")
+                          style.
+                            .img_#{meme.slug}{
+                              background-image: url("#{meme.user.facebook.img}")
+                            }
+                        div.meme-creator-name
+                          |#{meme.user.facebook.name}
+                  div.p8em
+                    |on
                   div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
-                div.meme-holder
-                  img.meme-img(src = meme.path)
-              div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
-                a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
-                a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
-                a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
-                a.ssk.ssk-email.ssk-text(href="", title="Send via email")
-                a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
-                a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
-              div.comment-tag
-                div.tag-list
-                  ul
-                    each tag in meme.tags
-                      li
-                        a.tag-name.oblique(href=tag.link) #{tag.name}
-                div.comment
-                  span.fb-comments-count(data-href=baseUrl + meme.link)
-                  |  comments
-              hr      
-    div#toptags.toptags
-      span.bold-text Popular Tags
-      ul
-        each tag in toptags
+                hr      
+      include _paginate
+    div.fixed-elems
+      div#hotmemes.hotmemes
+        h2 Most popular memes
+        ul
+          each hotmeme in hotmemes
+            li.hot-meme-li
+              a(href=baseUrl + hotmeme.link)
+                div.hot-meme-title #{hotmeme.title}
+                  div.hot-meme-creator by #{hotmeme.user.facebook.name}
+                div.hot-meme-holder
+                  img.hot-meme-img(src=hotmeme.path)
+            hr
+      div#toptags.toptags
+        span.bold-text Popular Tags
+        ul
+          each tag in toptags
+            li
+              if(req.type=="tag" && req.name == tag.name)
+                a.oblique.bold-text(href=tag.link) #{tag.name} (#{tag.usage})
+              else
+                a.oblique(href=tag.link) #{tag.name} (#{tag.usage})
+          li.space-above
+            a.bold-text(href='/') Browse all
           li
-            if(req.type=="tag" && req.name == tag.name)
-              a.oblique.bold-text(href=tag.link) #{tag.name} (#{tag.usage})
-            else
-              a.oblique(href=tag.link) #{tag.name} (#{tag.usage})
-        li.space-above
-          a.bold-text(href='/') Browse all
-        li
-          a.bold-text(href='/create') Create your own
-    include _paginate
+            a.bold-text(href='/create') Create your own        
     div.false-space
     div.footer
       a(href="/privacy-policy") Privacy policy

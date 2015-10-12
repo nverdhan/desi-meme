@@ -37,7 +37,69 @@ var shortenLink = function(longUrl, cb){
 	// })
 	cb(longUrl);
 }
+MemeSchema.statics.random = function(callback) {
+  this.count(function(err, count) {
+    if (err) {
+      return callback(err);
+    }
+    console.log(count);
+    var rand = Math.floor(Math.random() * count);
+    console.log(rand);
+    this.findOne().skip(rand).exec(function(err, meme){
+    	console.log(meme);
+    	callback(meme);
+    });
+  }.bind(this));
+};
+MemeSchema.statics.hot = function(limit, callback) {
+	this.count(function(err, count) {
+	    if (err) {
+	      return callback(err);
+	    }
 
+	    if(limit > count/2){
+	    	limit = Math.floor(count/2);
+	    }else{
+	    	limit = limit;
+	    }
+		var hotMemes = [];
+		var updateHot = function(meme) {
+			hotMemes.push(meme);
+			if(hotMemes.length == limit){
+				callback(hotMemes);
+			}
+		}
+		var checkUnique = function(id){
+			for (var i = 0; i < hotMemes.length; i++) {
+				if(hotMemes[i]._id.equals(id)) return false;
+			};
+			return true;
+		}
+		// var rand = Math.floor(Math.random() * limit);
+		var rand = 0;
+		var top = limit - rand;
+		var randfound = 0;
+		this.find({})
+			.sort({views: -1})
+			.limit(limit)
+			.exec(function(err, memes){
+				if(err) console.log(err);
+					for (var i = 0; i < memes.length; i++) {
+						updateHot(memes[i]);
+					};
+				});
+	})
+	// while(randfound < rand){
+		// console.log("less");
+		// this.random(function(meme){
+		// 	console.log(meme);
+		// 	// if(checkUnique(meme)){
+		// 		randfound ++;
+		// 		updateHot(meme);
+		// 	// }
+		// })
+	// }
+}
 MemeSchema.statics.saveMeme = function(memeObj, cb) {
 	var meme = new this({
 		title: memeObj.title,

@@ -93,17 +93,17 @@ userSchema.methods.addMeme = function(memeid, cb) {
 		cb();
 	})
 }
-userSchema.methods.populateMemes = function(cb){
-	this.model('User').findOne({
-			slug: this.slug
-		})
-		.populate('_memes.meme')
-		.exec(function(err, user) {
-			console.log(user);
-			// console.log(JSON.stringify(user, null, "\t"))
-			cb(JSON.stringify(user, null, "\t"));
-		});
-}
+// userSchema.methods.populateMemes = function(cb){
+// 	this.model('User').findOne({
+// 			slug: this.slug
+// 		})
+// 		.populate('_memes.meme')
+// 		.exec(function(err, user) {
+// 			console.log(user);
+// 			// console.log(JSON.stringify(user, null, "\t"))
+// 			cb(JSON.stringify(user, null, "\t"));
+// 		});
+// }
 
 
 

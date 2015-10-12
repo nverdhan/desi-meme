@@ -25,8 +25,13 @@ var fblogout = function(){
   window.location.href = "/api/logout?url="+locnow;
 }
 
+var openMyMemes = function(){
+  window.location.href = "/mymemes";
+}
+
 var loginButton = document.getElementById("loginButton");
 var logoutButton = document.getElementById("logoutButton");
+var mymemeButton = document.getElementById("mymemeslink");
 
 if(loginButton){
   loginButton.addEventListener("click", fblogin, false);
@@ -34,6 +39,10 @@ if(loginButton){
 
 if(logoutButton){
   logoutButton.addEventListener("click",fblogout, false );
+}
+
+if(mymemeButton){
+  mymemeButton.addEventListener("click",openMyMemes, false);
 }
 
 $("#loggedIn").hover(

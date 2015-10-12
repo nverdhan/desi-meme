@@ -222,6 +222,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 				picture.guillotine('remove');
 			}
 			picture.guillotine({width: 800, height: 600});
+			picture.guillotine('fit');
 			if (! picture.data('bindedBtns')) {
 				picture.data('bindedBtns', true);
 				$('#rotate_left').click(function(){ picture.guillotine('rotateLeft'); });
@@ -398,9 +399,11 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 	}
 	$scope.holderReady = function(){
 		angular.element('#meme-img-holder').css('height', 'auto');
+		angular.element('#meme-img-holder').css('border', 'none');
 	}
 	$scope.holderInitiate = function(){
-		angular.element('#meme-img-holder').css('height', '80%');
+		angular.element('#meme-img-holder').css('height', '60%');
+		angular.element('#meme-img-holder').css('border', '1px solid #00adef');
 	}
 	$scope.selectImg = function(url) {
 		$scope.memeObj.image = url;
@@ -419,6 +422,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		angular.element('#thepicture').removeAttr('src');
 		$scope.holderInitiate();
 		$scope.setTextSize();
+		$scope.setTextColor();
 		if(!$scope.user || !$scope.user.id){
 			$scope.checkFBLogin();
 		}
@@ -494,6 +498,13 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 					$scope.askForDetails();
 				}
 			}})
+	}
+	$scope.showMyMemes = function(){
+		window.location.href = '/mymemes';
+	}
+	$scope.logout = function(){
+		locnow = encodeURIComponent(window.location.href);
+  		window.location.href = "/api/logout?url="+locnow;
 	}
 
 	$scope.initCreateMeme();
