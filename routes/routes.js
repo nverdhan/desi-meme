@@ -510,7 +510,7 @@ function isModerator(req, res, next) {
 	// console.log(req);
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated()){
-		if(req.user.facebook.id == "10153106392356889"){
+		if(req.user.facebook.id == "10153106392356889" || req.user.facebook.id == "1062348330445117"){
 			return next();	
 		}else{
 			res.redirect('/facebook-login-required');
