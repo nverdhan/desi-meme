@@ -47,12 +47,12 @@
 		</div>
 		<div ng-if="!loggedIn" class="login-button" ng-click="fblogin()">Login</div>
 	</div>
-	<div class="instructions">
+	<div ng-show="!imageUrl" class="instructions">
 		Instructions:
 		<ul>
 			<li>To create your own meme, you need to be <a href="" ng-click="fblogin()">logged in via Facebook</a></li>
 			<li>You can select your own image or choose from our template images</li>
-			<li>From the menu above your meme, choose the text style, text color and text size</li>
+			<li>From the menu above your meme, <a href="teendopaanch://">choose</a> the text style, text color and text size</li>
 			<li>Save your meme, give it a title and appropriate tags, and share!</li>
 			<li>If this is your private meme, you can choose to keep it unlisted</li>
 		</ul>
