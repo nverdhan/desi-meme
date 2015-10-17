@@ -1,9 +1,12 @@
 var Tag = require('../models/tag');
 var Meme = require('../models/meme');
+var mongoose = require('mongoose');
 var User = require('../models/user');
 var savedImg = require('../models/savedImg');
+var ReportAbuse = require('../models/reportabuse')
 var passport = require('passport');
 var baseUrl = 'http://www.shudhdesimemes.com/';
+// var baseUrl = 'http://localhost:3000/';
 var multer = require('multer');
 	// var upload = multer({ 
 	// 	dest: 'uploads/', 
@@ -289,6 +292,7 @@ module.exports = function(app, passport) {
 										tags: memeTags,
 										toptags: toptags,
 										hotmemes: hotmemes,
+										baseUrl: baseUrl,
 										loggedinuser: loggedinuser
 									});
 								});
@@ -309,7 +313,6 @@ module.exports = function(app, passport) {
 		    	updateUserInMemes(updatedMemes, function(updatedMemes){
 			    	getTopTags(10, function(toptags){
 			    		Meme.hot(10, function(hotmemes){
-			    			console.log(hotmemes);
 			    			updateUserInMemes(hotmemes, function(hotmemes){
 						    	res.format({
 							      html: function() {
@@ -367,36 +370,41 @@ module.exports = function(app, passport) {
 					    updateTagsInMemes(memes, function(updatedMemes){
 					    	updateUserInMemes(updatedMemes, function(updatedMemes){
 							    getTopTags(10, function(toptags){
-							    	res.format({
-								      html: function() {
-								      	if(req.user){
-											var loggedinuser = req.user.facebook;
-										}else{
-											var loggedinuser = false;
-										}
-								        res.render('memes', {
-								          memes: updatedMemes,
-								          baseUrl: baseUrl,
-								          picBaseUrl: "http://www.edroot.com/shudhdesimemes/images/",
-								          pageCount: pageCount,
-								          itemCount: itemCount,
-								          toptags: toptags,
-								          loggedinuser: loggedinuser,
-								          req: {
-								          	type: 'tag',
-								          	name: name
-								          }
-								        });
-								      },
-								      json: function() {
-								        // inspired by Stripe's API response for list objects
-								        res.json({
-								          object: 'list',
-								          has_more: paginate.hasNextPages(req)(pageCount),
-								          data: memes
-								        });
-								      }
-								    });	
+							    	Meme.hot(10, function(hotmemes){
+			    						updateUserInMemes(hotmemes, function(hotmemes){
+									    	res.format({
+										      html: function() {
+										      	if(req.user){
+													var loggedinuser = req.user.facebook;
+												}else{
+													var loggedinuser = false;
+												}
+										        res.render('memes', {
+										          memes: updatedMemes,
+										          baseUrl: baseUrl,
+										          picBaseUrl: "http://www.edroot.com/shudhdesimemes/images/",
+										          pageCount: pageCount,
+										          itemCount: itemCount,
+										          toptags: toptags,
+										          hotmemes: hotmemes,
+										          loggedinuser: loggedinuser,
+										          req: {
+										          	type: 'tag',
+										          	name: name
+										          }
+										        });
+										      },
+										      json: function() {
+										        // inspired by Stripe's API response for list objects
+										        res.json({
+										          object: 'list',
+										          has_more: paginate.hasNextPages(req)(pageCount),
+										          data: memes
+										        });
+										      }
+										    });	
+										});
+									});
 							    });
 							});
 						});
@@ -409,7 +417,31 @@ module.exports = function(app, passport) {
 				filename: req.file.filename
 			});
 		});
-		
+		app.post('/report', isLoggedIn, function(req, res) {
+			var report = {
+				memeid : req.body.memeid,
+				type : req.body.reporttype,
+				details : req.body.details
+			}
+			if(mongoose.Types.ObjectId.isValid(report.memeid) && report.type){
+				if(!report.details){
+					report.details = null;
+				}
+				var abuse = new ReportAbuse({
+					reporttype: report.type,
+					details: report.details,
+					meme: report.memeid,
+					user: req.user._id
+				})
+				abuse.save(function(err){
+					if(err) console.log(err);
+
+					res.status('200').send('OK');
+				});	
+			}else{
+				res.status('404').send('error');
+			}
+		})
 		app.post('/mcconaughey', isModerator, upload.single('savedImg'), function(req, res){
     		img = new savedImg({
     			path: req.file.path,
@@ -450,7 +482,9 @@ module.exports = function(app, passport) {
 				tags: req.body.tags,
 				userid: req.user.id,
 				path: req.body.filepath,
-				ifSave: !req.body.doNotSave
+				ifSave: !req.body.doNotSave,
+				searchStr: req.body.searchStr,
+				ifAnon: req.body.ifAnon
 			};
 			Meme.saveMeme(memeObj, function(link) {
 					res.json({

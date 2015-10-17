@@ -29,6 +29,7 @@ html
                   include ../assets/socialshare1.0.6/css/social-share-kit.css
                   include style.css
       body
+            div#fb-root
             script(src="../assets/socialshare1.0.6/js/social-share-kit.js")
             script(src="../public/js/jquery/jquery-1.10.2.min.js")
             script(src="../assets/js/socialshare.js")
@@ -49,12 +50,12 @@ html
                                     div.user-items
                                           ul
                                                 li#mymemeslink
-                                                      |My 
+                                                      |My Memes
                                                 li#logoutButton
-                                                      |Logout      
+                                                      |Logout   
                         else
                               div.login-button#loginButton
-                                    |Login
+                                    img(src="../assets/img/flogin.png")
             else
                   div.login-info#login-info
                         div.login-button#logoutButton
@@ -73,23 +74,23 @@ html
                                                       |Memes by #{user.facebook.name}
                         ul
                               each meme in memes
-                                    if(meme.ifSave || loggedin)
+                                    if((meme.ifSave && !meme.ifAnon) || loggedin)
                                           li.meme-li
                                                 a(href= baseUrl + meme.link)
                                                       div.meme-title-date
                                                             div.meme-title #{meme.title} 
-                                                            if(!meme.ifSave) 
-                                                                  div.private-meme-title(title="You are viewing this because you are online.") Unlisted Meme
                                                             div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")
                                                       div.meme-holder
                                                             img.meme-img(src = meme.path)
-                                                div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
-                                                      a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
-                                                      a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
-                                                      a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
-                                                      a.ssk.ssk-email.ssk-text(href="", title="Send via email")
-                                                      a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
-                                                      a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
+                                                      div.like-share
+                                                            div.fb-like(data-href=baseUrl+meme.link, data-width="100", data-layout="button", data-action="like", data-show-faces="false", data-share="false")
+                                                            div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
+                                                                  a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
+                                                                  a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
+                                                                  a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+                                                                  a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+                                                                  a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+                                                                  a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
                                                 div.comment-tag
                                                       div.tag-list
                                                             ul
@@ -98,7 +99,13 @@ html
                                                                               a.tag-name.oblique(href=tag.link) #{tag.name}
                                                       div.comment
                                                             span.fb-comments-count(data-href=baseUrl + meme.link)
-                                                            |comments
+                                                            |  comments
+                                                if(!meme.ifSave && !meme.ifAnon) 
+                                                      div.private-meme-title(title="You are viewing this because you are online.") Unlisted
+                                                if(meme.ifAnon && meme.ifSave) 
+                                                      div.private-meme-title(title="You are viewing this because you are online.") Anonymous
+                                                if(meme.ifAnon && !meme.ifSave)
+                                                      div.private-meme-title(title="You are viewing this because you are online.") Anonymous and Unlisted
                                                 hr
             include _paginate
             div.fixed-elems

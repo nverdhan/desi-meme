@@ -1391,8 +1391,8 @@ cursor: pointer;
 	height: 100%;
     top: 0;
     left: 0;
-	/*background: rgba(3,3,3,0.95);*/
-    background : rgba(255,255,255,1);
+	background: rgba(3,3,3,0.7);
+    /*background : rgba(255,255,255,1);*/
 	opacity: 1;
 	z-index:999;
 }

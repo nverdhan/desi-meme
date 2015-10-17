@@ -18,6 +18,7 @@ html
       include ../assets/socialshare1.0.6/css/social-share-kit.css
       include ../assets/css/loginuser.css
   body
+    div#fb-root
     script(src="../assets/socialshare1.0.6/js/social-share-kit.js")
     script(src="../public/js/jquery/jquery-1.10.2.min.js")
     script(src="../assets/js/socialshare.js")
@@ -42,7 +43,7 @@ html
                 |Logout  
       else
         div.login-button#loginButton
-          |Login
+          img(src="../assets/img/flogin.png")
     div.daddy-container      
       div.memes-container
         if(req.type == "memes")
@@ -62,13 +63,15 @@ html
                   div.meme-title #{meme.title}
                   div.meme-holder
                     img.meme-img(src = meme.path)
-                div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
-                  a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
-                  a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
-                  a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
-                  a.ssk.ssk-email.ssk-text(href="", title="Send via email")
-                  a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
-                  a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
+                div.like-share
+                  div.fb-like(data-href=baseUrl+meme.link, data-width="100", data-layout="button", data-action="like", data-show-faces="false", data-share="false")
+                  div.ssk-group.ssk-sm(data-url=baseUrl+meme.link, data-text=meme.title)
+                    a.ssk.ssk-facebook.ssk-text(href="") Share on facebook
+                    a.ssk.ssk-twitter.ssk-text(href="", data-text="") Twitter
+                    a.ssk.ssk-google-plus.ssk-text(href="", title="Share on Google Plus")
+                    a.ssk.ssk-email.ssk-text(href="", title="Send via email")
+                    a.ssk.ssk-whatsapp.ssk-text(href="whatsapp://send?text=Ye dekh yaar! "+baseUrl+meme.link+" via ShudhDesiMemes.COM", data-action="share/whatsapp/share", title="WhatsApp Share, works on mobile only!")
+                    a.ssk.ssk-download.ssk-text(href=meme.path, download, title="Download this meme as image")
                 div.comment-tag
                   div.tag-list
                     ul
@@ -79,18 +82,22 @@ html
                     span.fb-comments-count(data-href=baseUrl + meme.link)
                     |  comments
                 div.meme-creator-date
-                  div.p8em
-                    |Created by
-                  div.creator
-                    a(href="/user/#{meme.user.slug}")
-                      div.meme-creator 
-                        div.meme-creator-img(class="img_#{meme.slug}")
-                          style.
-                            .img_#{meme.slug}{
-                              background-image: url("#{meme.user.facebook.img}")
-                            }
-                        div.meme-creator-name
-                          |#{meme.user.facebook.name}
+                  if(meme.ifAnon)
+                    div.p8em
+                      |Created
+                  else
+                    div.p8em
+                      |Created by
+                    div.creator
+                      a(href="/user/#{meme.user.slug}")
+                        div.meme-creator 
+                          div.meme-creator-img(class="img_#{meme.slug}")
+                            style.
+                              .img_#{meme.slug}{
+                                background-image: url("#{meme.user.facebook.img}")
+                              }
+                          div.meme-creator-name
+                            |#{meme.user.facebook.name}
                   div.p8em
                     |on
                   div.meme-createdAt=moment(meme._createdAt).format("Do MMM, YYYY")

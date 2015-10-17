@@ -19,6 +19,30 @@ MemeApp.filter('unsafe', ['$sce', function ($sce) {
         return $sce.trustAsHtml(val);
     };
 }]);
+MemeApp.directive('ngTab', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 9) {
+                    scope.$apply(function(){
+                        scope.$eval(attrs.ngTab, {'event': event});
+                    });
+                    event.preventDefault();
+                }
+            });
+        };
+});
+MemeApp.directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                    scope.$apply(function(){
+                        scope.$eval(attrs.ngEnter, {'event': event});
+                    });
+                    event.preventDefault();
+                }
+            });
+        };
+});
 MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$upload', 'TagService', '$window', '$compile', function($scope, $rootScope, $http, $upload, TagService, $window, $compile) {
 
 	/**This section is copy pasted -- Start*/
@@ -82,6 +106,9 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 			$scope.mobileOrTablet = false;	
 		}
 		$scope.askForDetailsClicked = false;
+		$scope.ifAnon = true;
+		$scope.searchStr = '';
+		$scope.uploadMsg = "Redirecting you to your meme";
 	}
 	$scope.shareUrl = '';
 	$scope.initMemeVars();
@@ -177,6 +204,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		$scope.checkTagErr();
 	}
 	$scope.addTag = function(a) {
+		console.log("aaa");
 		if ($scope.tagSelected.indexOf(a.toLowerCase()) == -1) {
 			$scope.tagSelected.push(a.toLowerCase());
 		}
@@ -213,6 +241,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		
 	// }
 	$scope.instantiateGuillotine = function(url){
+		angular.element('#outer-box').css('top','180px');
 		angular.element('#thepicture').attr('src', url);
 		$compile(angular.element('#thepicture'));
 		var picture = $('#thepicture');  // Must be already loaded or cached! 
@@ -248,6 +277,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 					$scope.instantiateGuillotine(url);
 					$scope.hideOverlay();
 	    			$scope.selectMemeTheme($scope.selectedTheme);
+	    			$scope.searchStr = null;
         		});
 	      };
 	      reader.readAsDataURL(f);
@@ -294,6 +324,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 	}
 	$scope.saveFormNext = function() {
 		if (!$scope.checkTitleErr() && !$scope.checkTagErr() && !$scope.saveStatus) {
+			angular.element('#overlay').css("background", "rgba(3,3,3,1)");
 			angular.element('#outer-box').css('width',400+'%');
 			$scope.textSize*=8;
 			$scope.setTextSize();
@@ -308,6 +339,8 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 			angular.element('#watermark').removeClass('invisible');
 			html2canvas(c3, {
 				onrendered: function(canvas) {
+					$scope.uploadMsg = "Your meme has been rendered. Now uploading";
+					angular.element('#overlay').css("background", "rgba(3,3,3,0.7)");
 					angular.element('#uploading-msg').removeClass('invisible');
 					var extra_canvas = document.createElement("canvas");
 	                extra_canvas.setAttribute('width',800);
@@ -326,21 +359,34 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 					var file = dataURL;
 					$scope.saveMsg = 'Please wait';
 					$scope.saveStatus = true;
+
+					// // Remove
+					// $scope.saveMsg = 'Done!';
+					// window.open(dataURL);
+					// $scope.initCreateMeme();
+					// angular.element('.fa-picture-o').removeClass('invisible');
+					// angular.element('#uploading-msg').addClass('invisible');
+					// // Remove
+
 					var imguploadserver = "http://edroot.com/shudhdesimemes/";
 					$http.post(imguploadserver + 'upload.php', {
 				        	img: dataURL
 				      }).then(function(data) {
-				        // file is uploaded successfully
+				        $scope.uploadMsg = "Image uploaded. Saving other details...";
 				        if(data.data.status){
 				        	$http.post(serverSideURL, {
 								filepath: imguploadserver + 'images/'+ data.data.filename,
 								title: $scope.memeObj.title,
 								tags: $scope.tagSelected,
+								ifAnon: $scope.ifAnon,
+								searchStr: $scope.searchStr,
 								doNotSave: $scope.privateSavedImg
 							}).then( function(data) {
 							// cons
+								$scope.uploadMsg = "Done!";
 								$scope.saveMsg = 'Done!';
 								$scope.initCreateMeme();
+								$scope.showOverlay();
 								angular.element('.fa-picture-o').removeClass('invisible');
 								angular.element('#uploading-msg').addClass('invisible');
 								document.location.href=data.data.redirectUrl;
@@ -405,9 +451,10 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		angular.element('#meme-img-holder').css('height', '60%');
 		angular.element('#meme-img-holder').css('border', '1px solid #00adef');
 	}
-	$scope.selectImg = function(url) {
+	$scope.selectImg = function(url, searchStr) {
 		$scope.memeObj.image = url;
 		$scope.imageUrl = url;
+		$scope.searchStr = searchStr;
 		$scope.OverlayVisible = false;
 		$scope.instantiateGuillotine(url);
 		$scope.selectMemeTheme($scope.selectedTheme);
@@ -423,6 +470,7 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 		$scope.holderInitiate();
 		$scope.setTextSize();
 		$scope.setTextColor();
+		angular.element('#outer-box').css('top','260px');
 		if(!$scope.user || !$scope.user.id){
 			$scope.checkFBLogin();
 		}
@@ -514,3 +562,18 @@ MemeApp.controller('CreateMemeController', ['$scope', '$rootScope', '$http', '$u
 }])
 
 
+// MemeApp.directive('draggable', function () {
+// 	return {
+// 		restrict: 'A',
+// 		link: function (scope, element, attrs) {
+// 			element.draggable({
+// 				cursor: "move",
+// 				stop: function (event, ui) {
+// 					scope[attrs.xpos] = ui.position.left;
+//           scope[attrs.ypos] = ui.position.top;
+//           scope.$apply();
+// 				}
+// 			});
+// 		}
+// 	};
+// });

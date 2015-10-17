@@ -17,8 +17,10 @@
 // module.exports = mongoose.model('User', UserSchema);
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+var timestamps = require('mongoose-timestamp');
 var Schema = mongoose.Schema;
 var URLSlugs = require('mongoose-url-slugs');
+var baseUrl = "http://www.shudhdesimemes.com/"
 var userSchema = mongoose.Schema({
 		local : {
 			id : String,
@@ -56,7 +58,7 @@ var userSchema = mongoose.Schema({
 	});
 
 userSchema.plugin(URLSlugs('facebook.name', {field: 'slug', maxLength: 50}));
-
+userSchema.plugin(timestamps);
 userSchema.methods.generateHash = function (password) {
 	// body...
 	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -78,9 +80,21 @@ userSchema.statics.findBySlug = function(slug, cb){
 	}, cb);
 }
 userSchema.statics.populateMeme = function(meme, cb){
+	var anonuser = {
+		_id: null,
+		facebook:{
+				id: null,
+				name: 'Anonymous',
+				img: baseUrl + "assets/img/anon.jpg"
+			}
+	};
 	return this.find({_memes: {$elemMatch: {meme: meme._id}}})
 				.exec(function(err, users){
-					meme.user = users[0];
+					if(meme.ifAnon){
+						meme.user = anonuser;
+					}else{
+						meme.user = users[0];
+					}
 					cb(meme);
 				});
 }

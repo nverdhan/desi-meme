@@ -18,7 +18,11 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/jquery.qtip.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/socialshare1.0.6/css/social-share-kit.css">
 	<link rel="stylesheet" type="text/css" href="node_modules/guillotine/css/jquery.guillotine.css">
-
+	<style type="text/css">
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    	display: none !important;
+	}
+	</style>
 </head>
 <body ng-controller="CreateMemeController" ng-cloak>
 	<div class="meme-header"><a href="/"><img src="assets/img/sdm-logo.svg" class="sdm-logo"></a><div class="header-link"><a href="/create" class="create-link">Create meme</a><a href="/" class="browse-link">Browse</a><hr></div></div>
@@ -97,8 +101,8 @@
 							<div class="itemsContainer">
 								<div ng-if="results" style="display:block;width: 160px; height:160px;float:left" ng-repeat="img in results" class="shadow">
 									 <div class="media">
-						                    <a class="pull-left results-body-pic" ng-click="selectImg(img.path)">
-						                        <img src=" {{ img.path }}" width="100%" height="100%"/>
+						                    <a class="pull-left results-body-pic" ng-click="selectImg(img.path, img.searchStr)">
+						                        <img id="searchResultImg" ng-src=" {{ img.path }}" width="100%" height="100%"/>
 						                    </a>
 						                </div>
 								</div>
@@ -111,6 +115,7 @@
 			<div ng-show="showSaveFormDialog" class="save-form">
 				<div class="col-md-12 create-slide-form form-signin">
 					<h2> Save your meme now! </h2>
+					<div class='checkbox-center'><input style="margin: 0 5px" type="checkbox" name="ifAnon" ng-model="ifAnon">Post this as anonymous (Your identity won't be revealed anywhere) <br></div>
 					<i class="fa fa-close fa-2x close-button" ng-click="hideSaveMemeSelector()"></i>
 					<form name="createMemeForm" role="form" method="post" ng-submit="submitSlideForm($event)" novalidate="" class="ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse">
 						<input class="slide-input slide-heading ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-valid-parse" id="slide-heading" type="text" autocomplete="off" ng-model="memeObj.title" name="title" placeholder="enter a title" required="" ng-minlength="6" ng-maxlength="48" tabindex="0" aria-required="true" aria-invalid="true" ng-change="$scope.$parent.checkTitleErr()"/>
@@ -124,7 +129,7 @@
 								<span class="tag-name">{{ tag }}&nbsp;<i class="fa fa-times tag-remove" ng-click="removeTag(tag)"></i></span>
 							</span>
 						</div>
-						<input id="slide-tags" class="slide-input ng-pristine ng-untouched ng-valid" autocomplete="off" name="enter tags" placeholder="tags" ng-model="tagInput" ng-keyup="getTags()" value="" tabindex="0" aria-invalid="false">
+						<input id="slide-tags" class="slide-input ng-pristine ng-untouched ng-valid" autocomplete="off" name="enter tags" placeholder="tags" ng-model="tagInput" ng-keyup="getTags()" ng-tab="addTag(tagInput)" value="" tabindex="0" aria-invalid="false">
 						<div class="alert alert-danger relative ng-hide" ng-show="invalidTag" aria-hidden="true">tag can be only alphanumeric</div>
 						<ul class="ul-tags" ng-if="showTags">
 							<li ng-click = "addTag(tagInput)">add "{{ tagInput }}"</li>
@@ -132,7 +137,7 @@
 						</ul>
 						<!-- ngIf: showTags -->
 						<input type="hidden" name="tags" value="">
-						<div class='checkbox-center'><input style="margin: 0 5px" type="checkbox" name="vehicle" ng-model="privateSavedImg" ng-change="abcd()">This is my private meme, make it unlisted.<br></div>
+						<div class='checkbox-center'><input style="margin: 0 5px" type="checkbox" name="ifSave" ng-model="privateSavedImg">This is my private meme, make it unlisted.<br></div>
 						<input class="btn btn-default btn-ok pull-right" type="submit" value="{{saveMsg}}" ng-click="saveFormNext()">
 						<div class="alert alert-danger ng-hide" ng-show="memeTitleReqErr" aria-hidden="true">Meme title required</div>
 						<div class="alert alert-danger ng-hide" ng-show="memeTagsReqErr" aria-hidden="true">Meme tags required</div>
@@ -180,7 +185,7 @@
 					<img src="assets/img/created-using.svg">
 				</div>
 				<div id="uploading-msg" class="upload-msg invisible">
-					Patience... <br> Your meme is being uploaded!
+					<span>Patience... <br> {{uploadMsg}}</span>
 				</div>
 			</div>
 			<div id="form-options" class="meme-form-options inner-box text-center">
@@ -211,7 +216,6 @@
 <script type="text/javascript" src="public/js/ngProgress.min.js"></script>
 <script type="text/javascript" src="public/js/angular-ui-router.min.js"></script>
 <script type="text/javascript" src="public/js/html2canvas.min.js"></script>
-<!-- <script type="text/javascript" src="node_modules/rasterizehtml/dist/rasterizeHTML.allinone.js"></script> -->
 
 
 

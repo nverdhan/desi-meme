@@ -13,6 +13,7 @@ html
 	body
 		script(src="../public/js/jquery/jquery-1.10.2.min.js")
 		script(src="../assets/js/ga.js")
+		script(src="../assets/js/socialshare.js")
 		div.header
 			a(href="/")
 				img.sdm-logo(src="../assets/img/sdm-logo.svg")
@@ -29,9 +30,11 @@ html
 						ul
 							li#mymemeslink
 								|My Memes
+							li#logoutButton
+								|Logout
 			else
 				div.login-button#loginButton
-					|Login
+					img(src="../assets/img/flogin.png")
 		div.content
 			h1
 				|Terms of Use

@@ -12,7 +12,9 @@ var MemeSchema = new Schema({
 	title: String,
 	path: String,
 	ifSave: Boolean,
+	ifAnon: Boolean,
 	link: String,
+	searchStr: String,
 	shortenedLink: String,
 	views: {type: Number, default: 0}
 });
@@ -82,7 +84,7 @@ MemeSchema.statics.hot = function(limit, callback) {
 		if(limit==0){
 			callback([]);	
 		}else{
-			this.find({})
+			this.find({ ifSave: { $ne: false } })
 			.sort({views: -1})
 			.limit(limit)
 			.exec(function(err, memes){
@@ -109,7 +111,8 @@ MemeSchema.statics.saveMeme = function(memeObj, cb) {
 		title: memeObj.title,
 		path: memeObj.path,
 		ifSave: memeObj.ifSave,
-		likes: 0
+		ifAnon: memeObj.ifAnon,
+		searchStr: memeObj.searchStr
 	});
 	var redirectTo = function(link){
 		cb(link);
