@@ -4,16 +4,7 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="217.367px" height="28.389px" viewBox="0 0 217.367 28.389" enable-background="new 0 0 217.367 28.389"
 	 xml:space="preserve">
-<path opacity="0.3" fill="#E5E5E5" stroke="#000000" stroke-width="0.5" stroke-miterlimit="10" enable-background="new    " d="
-	M214.966,13.99c0,6.507-5.001,11.783-11.17,11.783H13.749c-6.169,0-11.17-5.275-11.17-11.783l0,0c0-6.507,5.001-11.783,11.17-11.783
-	h190.047C209.965,2.207,214.966,7.482,214.966,13.99L214.966,13.99z"/>
-<g>
-	<g>
-		
-			<text transform="matrix(1 0 0 1 15.1852 18.1693)" opacity="0.8" fill="#424242" stroke="#000000" stroke-width="0.2" stroke-miterlimit="10" enable-background="new    " font-family="'TFFFranklinGothicDemi'" font-size="10">Created using</text>
-		
-			<text transform="matrix(1 0 0 1 178.7856 18.1695)" opacity="0.8" fill="#424242" stroke="#000000" stroke-width="0.2" stroke-miterlimit="10" enable-background="new    " font-family="'TFFFranklinGothicDemi'" font-size="10">.com</text>
-	</g>
-</g>
-<text transform="matrix(1 0 0 1 80.3952 19.2436)"><tspan x="0" y="0" fill="#FFBD20" font-family="'Phosphate-Inline'" font-size="12">SHUDH</tspan><tspan x="35.208" y="0" font-family="'Phosphate-Inline'" font-size="12"> </tspan><tspan x="37.608" y="0" fill="#4380ED" font-family="'Phosphate-Inline'" font-size="12">DESI</tspan><tspan x="59.7" y="0" font-family="'Phosphate-Inline'" font-size="12"> </tspan><tspan x="62.099" y="0" fill="#72BD52" font-family="'Phosphate-Inline'" font-size="12">MEME</tspan><tspan x="91.595" y="0" fill="#72BD52" font-family="'Phosphate-Inline'" font-size="12">S</tspan></text>
+<path fill="#F9F9F9" d="M214.74,20.644c0,1.816-1.897,3.289-4.238,3.289H8.46c-2.341,0-4.238-1.472-4.238-3.289V9.461
+	c0-1.816,1.897-3.289,4.238-3.289h202.042c2.341,0,4.238,1.472,4.238,3.289V20.644z"/>
+<text transform="matrix(1 0 0 1 17.876 19.3101)"><tspan x="0" y="0" font-family="'ArialMT'" font-size="10.2979">Created using </tspan><tspan x="66.977" y="0" fill="#FFBD20" font-family="'Phosphate-Inline'" font-size="12">SHUDH</tspan><tspan x="102.184" y="0" font-family="'Phosphate-Inline'" font-size="12"> </tspan><tspan x="104.584" y="0" fill="#4380ED" font-family="'Phosphate-Inline'" font-size="12">DESI</tspan><tspan x="126.676" y="0" font-family="'Phosphate-Inline'" font-size="12"> </tspan><tspan x="129.076" y="0" fill="#72BD52" font-family="'Phosphate-Inline'" font-size="12">MEME</tspan><tspan x="158.572" y="0" fill="#72BD52" font-family="'Phosphate-Inline'" font-size="12" letter-spacing="-1">S</tspan><tspan x="162.292" y="0" font-family="'ArialMT'" font-size="10.2979"> .com</tspan></text>
 </svg>
