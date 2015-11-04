@@ -29,10 +29,10 @@ body{
     left: 160px;
 }
 .header-link .create-link, .header-link .browse-link:hover, .header-link:hover .browse-link{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .header-link .browse-link, .header-link .create-link:hover, .header-link:hover .create-link{
-    color: #00adef;
+    color: #4380ed;
 }
 .create-link{
     margin: 0 10px;
@@ -63,7 +63,7 @@ body{
 	margin: 0 auto;
 	top: 40%;
 	cursor: pointer;
-	color: #00adef;
+	color: #4380ed;
 }
 .instructions {
     width: 50%;
@@ -85,10 +85,10 @@ body{
 }
 .instructions a{
     margin: 0 1px;
-    color: #00adef;
+    color: #4380ed;
 }
 .instructions a:hover{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .instructions ul
 {
@@ -222,7 +222,7 @@ body{
 .selected-theme:after {
 	display: block;
 	content: "";
-	background-color: #00adef;
+	background-color: #4380ed;
 	opacity: 0.6;
 	position: absolute;
 	top: 0;
@@ -407,7 +407,7 @@ body{
 	font-size: 3vw;
 	font-weight: 400;
 	text-align: center;
-	color: #ed1c24;
+	color: #de4f3d;
 	/*text-shadow: 1px 1px 2px white;*/
 }
 .upload-msg span{
@@ -457,7 +457,7 @@ div#login-info {
 	left: 10px;
 	top: 10px;
 	position: relative;
-	border: 1px solid #ed1c24;
+	border: 1px solid #de4f3d;
 	background-size: cover;
 	background-position: 50% 50%;
 	width : 50px;
@@ -468,10 +468,10 @@ div#login-info {
 .save-form h2 {
     font-size: 2em;
     font-weight: 200;
-    color: #00adef;
+    color: #4380ed;
 }
 .login-info:hover .fb-photo, .login-info:focus .fb-photo{
-	border: 1px solid #00adef;
+	border: 1px solid #4380ed;
 }
 .loggedIn{
 	width: 70px;
@@ -546,5 +546,5 @@ div#login-info {
     text-decoration: none;
 }
 .login-button:hover, .login-button:focus{
-	color: #00adef;
+	color: #4380ed;
 }

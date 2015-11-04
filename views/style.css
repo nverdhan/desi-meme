@@ -6,7 +6,7 @@ body{
 }
 h1{
     font-size: 1.5em;
-    font-weight: 300;
+    font-weight: 600;
     color: #424242;
 }
 h2.by-sdm{
@@ -48,10 +48,10 @@ a.ssk, a:visited.ssk{
 }
 .content a{
     margin: 0 4px;
-    color: #00adef;
+    color: #4380ed;
 }
 .content a:hover{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .content ul
 {
@@ -83,11 +83,25 @@ a.ssk, a:visited.ssk{
     top: -55px;
     left: 160px;
 }
-.header-link .create-link, .header-link .browse-link:hover, .header-link:hover .browse-link{
-    color: #ed1c24;
+.header-link .create-link, .header-link .browse-link{
+    color: #424242;
+    font-weight: 500;
 }
-.header-link .browse-link, .header-link .create-link:hover, .header-link:hover .create-link{
-    color: #00adef;
+.header-link .create-link:hover:after{
+    position: absolute;
+    top: 20px;
+    left: 11px;
+    width: 99px;
+    content: "";
+    border-bottom: 1px solid #444;
+}
+.header-link .browse-link:hover:after{
+    position: absolute;
+    top: 20px;
+    left: 119px;
+    width: 56px;
+    content: "";
+    border-bottom: 1px solid #444;
 }
 .create-link{
     margin: 0 10px;
@@ -95,24 +109,24 @@ a.ssk, a:visited.ssk{
 .header .sdm-logo{
     width: 150px;
 }
-.header hr {
+/*.header hr {
     width: 200px;
     position: absolute;
     left: -5px;
     top: 15px;
     border: 0;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(237, 28, 36, 0.8), rgba(0, 173, 239, 0.8), rgba(0, 0, 0, 0));
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(114, 189, 82, 0.8), rgba(67, 128, 237, 0.8), rgba(0, 0, 0, 0));
     height: 1px;
     margin: 0.5em auto;
 }
 .header-link:hover hr{
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 173, 239, 0.8), rgba(237, 28, 36, 0.8), rgba(0, 0, 0, 0));
-}
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(67, 128, 237, 0.8), rgba(114, 189, 82, 0.8), rgba(0, 0, 0, 0));
+}*/
 .memes-container h1{
-    color: #00adef;
+    color: #4380ed;
 }
 .memes-container h1:hover{
-    color: #ed1c24 ;
+    color: #de4f3d ;
 }
 .meme-title, .meme-title:visited{
     text-decoration: none;
@@ -122,7 +136,7 @@ a.ssk, a:visited.ssk{
     /*padding: 20px 0;*/
 }
 .meme-title:hover, .meme-title:focus, .meme-li:hover .meme-title{
-    color: #00adef;
+    color: #4380ed;
     transition: all 0.3s ease 0.1s;
 }
 .meme-creator-date {
@@ -134,7 +148,7 @@ a.ssk, a:visited.ssk{
     margin: 12px 0;
 }
 .meme-li:hover .meme-createdAt{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .meme-createdAt {
     font-size: 0.8em;
@@ -156,7 +170,7 @@ a.ssk, a:visited.ssk{
     font-size: 1em;
 }
 .memeone:hover .meme-creator-name, .memeone:hover .meme-createdAt{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .meme-li hr{
     border: 0;
@@ -189,7 +203,7 @@ a.ssk, a:visited.ssk{
     text-align: right;
 }
 .comment:hover, .comment:focus, .meme-li:hover .comment{
-    color: #ed1c24;
+    color: #de4f3d;
     transition: all 0.3s ease 0.1s;
 }
 .comment-tag {
@@ -245,10 +259,10 @@ div.tag-list{
     font-style: oblique;
 }
 span.oblique{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 span.oblique:hover{
-    color: #00adef;
+    color: #4380ed;
 }
 .pagination ul{
     height: 20px;
@@ -266,10 +280,10 @@ span.oblique:hover{
     font-size: 0.7em;
     margin: 0 10px;
     float: right;
-    color: #00adef;
+    color: #4380ed;
 }
 .footer a:hover{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .daddy-container{
     display: flex;
@@ -284,11 +298,11 @@ span.oblique:hover{
 .hotmemes h2{
     font-size: 1em;
     margin: 5px 0;
-    font-weight: 200;
-    color: #00adef;
+    font-weight: 400;
+    color: #4380ed;
 }
 .hotmemes h2:hover{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 div#hotmemes {
     position: fixed;
@@ -316,17 +330,17 @@ img.hot-meme-img {
     font-size: 0.8em;
 }
 .hot-meme-li:hover .hot-meme-title{
-    color: #00adef ;
+    color: #4380ed ;
 }
 .hot-meme-li:hover .hot-meme-creator{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .meme-holder{
     margin: 10px auto;
 }
 .private-meme-title {
     padding: 2px;
-    color: #ed1c24;
+    color: #de4f3d;
     font-size: 0.9em;
     text-align: center;
     width: 500px;
@@ -336,7 +350,7 @@ img.hot-meme-img {
     width: 70px;
 }
 .meme-li:hover .private-meme-title {
-    color: #00adef;
+    color: #4380ed;
     background-color: white;
     transition: all 0.3s ease 0.1s;
 }
@@ -347,7 +361,7 @@ img.hot-meme-img {
     background-size: cover;
     border-radius: 50%;
     display: inline-block;
-    border: 1px solid #00adef;
+    border: 1px solid #4380ed;
 }
 .user-profile {
     position: relative;
@@ -362,10 +376,10 @@ img.hot-meme-img {
     margin: 5px 10px; 
 }
 .user-profile:hover .profile-fb-photo{
-    border: 1px solid #ed1c24;
+    border: 1px solid #de4f3d;
 }
 .user-profile:hover h1{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 .meme-creator{
     position: relative;
@@ -390,7 +404,7 @@ img.hot-meme-img {
     font-size: 0.8em;
 }
 .meme-li:hover .meme-creator-name{
-    color: #ed1c24;
+    color: #de4f3d;
 }
 /*.header{
     background-color: rgba(255,255,255,0);
@@ -488,7 +502,7 @@ img.hot-meme-img {
     width: 80px;
     min-height: 32px;
     display: block;
-    background-color: #00adef;
+    background-color: #4380ed;
     border-radius: 8px;
     margin: 6px 8px;
     cursor: pointer;

@@ -442,29 +442,38 @@ module.exports = function(app, passport) {
 				res.status('404').send('error');
 			}
 		})
-		app.post('/mcconaughey', isModerator, upload.single('savedImg'), function(req, res){
+		app.post('/mcconaughey', function(req, res){
+			var uploadimgpath = "http://www.edroot.com/shudhdesimemes/savedimgs/"
     		img = new savedImg({
-    			path: req.file.path,
+    			path: uploadimgpath + req.body.path,
     			searchStr: req.body.searchStr
     		});
-    		img.save(function(err){
-    			if(err) {
-    				console.log(err);
-    				res.render('uploadsaveimg', {
-						uploadSuccess: "errorinsave",
-						msgColor: "red"
-						});
+    		savedImg.getImgByPath(img.path, function(err, imgs){
+    			if(err) console.log(err);
+    			if(imgs.length == 0){
+    				img.save(function(err){
+		    			if(err) {
+		    				console.log(err);
+		    				res.render('uploadsaveimg', {
+								uploadSuccess: "errorinsave",
+								msgColor: "red"
+								});
+		    			}else{
+		    				res.render('uploadsaveimg', {
+								uploadSuccess: "success",
+								msgColor: "green"
+								});
+		    			}
+		    		})
     			}else{
     				res.render('uploadsaveimg', {
-						uploadSuccess: "success",
-						msgColor: "green"
-						});
+								uploadSuccess: "errorinsave",
+								msgColor: "red"
+								});
     			}
-
-    			
     		})
 		});
-		app.get('/mcconaughey', isModerator, function(req,res){
+		app.get('/mcconaughey', function(req,res){
 			if(req.user){
 				var user = req.user.facebook;
 			}else{

@@ -13,6 +13,11 @@ savedImgSchema.statics.getImgById = function(_id, cb) {
 		_id: _id
 	}, cb);
 }
+savedImgSchema.statics.getImgByPath = function(path, cb) {
+	return this.find({
+		path: path
+	}, cb);
+}
 savedImgSchema.statics.getImgBySearchStr = function(searchStr, cb) {
 	return this.find({
 		searchStr: new RegExp(searchStr, 'i')

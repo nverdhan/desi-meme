@@ -7,6 +7,7 @@ html
 				color: #{msgColor};
 			}
 	body
+		script(src="../public/js/jquery/jquery-1.10.2.min.js")
 		script(src="../assets/js/loginuser.js")
 		div.message
 			if(uploadSuccess == "new")
@@ -17,10 +18,11 @@ html
 				| File uploaded but not saved to database. Was your searchstring alright?
 		div.container
 			div#output.output
-			form(method="post" enctype="multipart/form-data" action="/mcconaughey")
-				input.textinp(type="text", name="searchStr", autofocus, placeholder="Enter search string separated by commas")
-				input.files#files(type="file", name="savedImg", single)
-				input.submit(type="submit", value="Upload")
+			input.files#files(type="file", name="savedImg", single)
+			form#uploadform(method="post" enctype="application/json" action="/mcconaughey")
+				input#url.textinp2(type="text", name="path", placeholder="URL" readonly required)
+				input.textinp(type="text", name="searchStr", autofocus, placeholder="Enter search string separated by commas" required)
+				input.submit#upload(type="submit", value="SAVE")
 			button#reload.reload Reload
 		script(src="../assets/js/uploadimgs.js")
 		script(src="../assets/js/ga.js")

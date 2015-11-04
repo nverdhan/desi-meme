@@ -12,7 +12,7 @@
 	height: 450px;
 	background-color: #ddd;
 	position: absolute;
-	top: 60px;
+	top: 95px;
 	left: 0;
 	z-index: 5;
 }
@@ -29,6 +29,18 @@
 .textinp {
 	position: absolute;
 	top: 0;
+	left: 0;
+	right: 0;
+	margin: 10px auto;
+	width: 600px;
+	height: 40px;
+	font-size: 1em;
+	padding: 5px;
+	z-index: 15;
+}
+.textinp2 {
+	position: absolute;
+	top: 42px;
 	left: 0;
 	right: 0;
 	margin: 10px auto;
